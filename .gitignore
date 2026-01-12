@@ -26,5 +26,4 @@ venv/
 *.out
 *.synctex.gz
 *.toc
-*.pdf
 !reports/**/*.pdf  # Exception: On veut quand même garder les PDF finaux dans reports
