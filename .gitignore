@@ -1,22 +1,18 @@
-# Python basics
+# Python
 __pycache__/
 *.pyc
 .env
 .venv/
 venv/
 
-# Data (Ignorer les fichiers lourds, garder les fichiers de tracking)
+# Data (On ignore les gros fichiers, mais on force l'acceptation des .dvc)
 /data/*
-!/data/*.dvc
+!*.dvc
 !/data/.gitignore
 
 # IDE
 .vscode/
 .idea/
 
-# Models
-*.pt
-*.bin
-
-# DVC (L'exception critique pour que ça marche)
+# DVC Config
 !/.dvc/
