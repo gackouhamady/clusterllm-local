@@ -1,24 +1,22 @@
-# Python & Bytecode
+# Python basics
 __pycache__/
 *.pyc
+.env
 .venv/
 venv/
-.env
 
-# Data (Géré par DVC)
-/data/raw/*
-/data/processed/*
-!/data/raw/.gitkeep
-!/data/processed/.gitkeep
-*.dvc
-
-# Models & Checkpoints
-*.pt
-*.bin
-*.ckpt
-outputs/
-mlruns/  # Logs MLflow locaux
+# Data (Ignorer les fichiers lourds, garder les fichiers de tracking)
+/data/*
+!/data/*.dvc
+!/data/.gitignore
 
 # IDE
 .vscode/
 .idea/
+
+# Models
+*.pt
+*.bin
+
+# DVC (L'exception critique pour que Ã§a marche)
+!/.dvc/
