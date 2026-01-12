@@ -1,0 +1,24 @@
+# Python & Bytecode
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Data (Géré par DVC)
+/data/raw/*
+/data/processed/*
+!/data/raw/.gitkeep
+!/data/processed/.gitkeep
+*.dvc
+
+# Models & Checkpoints
+*.pt
+*.bin
+*.ckpt
+outputs/
+mlruns/  # Logs MLflow locaux
+
+# IDE
+.vscode/
+.idea/
