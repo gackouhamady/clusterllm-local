@@ -5,7 +5,7 @@ for dataset in banking77
 do
     for k in 1 3
     do
-        python sample_pairs.py \
+        python src/clusterllm/granularity/sample_pairs.py \
             --dataset $dataset \
             --data_path ../datasets/${dataset}/${scale}.jsonl \
             --feat_path ../perspective/2_finetune/checkpoints/finetune-pretrain-1024-gpt-noprior/instructor-large-${dataset}-d=${d}-epoch=15/checkpoint-3840/${scale}_embeds.hdf5 \

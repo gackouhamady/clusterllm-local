@@ -30,7 +30,7 @@ def generate(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
     data = load_data(args)
-    inp = [d['input'] for d in data]
+    inp = [d['text'] for d in data]
     # for analyzing purpose only
     labels = [d['label'] for d in data]
     X = load_feat(args)

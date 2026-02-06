@@ -1,42 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FT_DIR="$(cd "${DIR}/.." && pwd)"
-REPO_ROOT="$(cd "${DIR}/../../../../.." && pwd)"
+# 1. Trouve la racine du projet
+REPO_ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 
-if [ -d "${REPO_ROOT}/datasets" ]; then
-  DATASETS_DIR="${REPO_ROOT}/datasets"
-elif [ -d "${REPO_ROOT}/data/datasets" ]; then
-  DATASETS_DIR="${REPO_ROOT}/data/datasets"
-elif [ -d "${REPO_ROOT}/data" ]; then
-  DATASETS_DIR="${REPO_ROOT}/data"
-else
-  echo "[ERROR] Cannot find datasets directory under ${REPO_ROOT}."
-  exit 1
-fi
+# 2. Ajoute src au PYTHONPATH
+export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
 
-echo "[INFO] REPO_ROOT=${REPO_ROOT}"
-echo "[INFO] DATASETS_DIR=${DATASETS_DIR}"
+# 3. Se déplace dans le dossier finetuning
+WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/finetuning"
+echo "Déplacement vers : $WORK_DIR"
+cd "$WORK_DIR"
 
-for dataset in banking77
-do
-  for scale in small
-  do
-    data_path="${DATASETS_DIR}/${dataset}/${scale}.jsonl"
-    result_file="${DATASETS_DIR}/${dataset}/${scale}_embeds.hdf5"
+# 4. Variables
+TASK_NAME="banking77"
+DATA_PATH="${REPO_ROOT}/datasets/banking77/test.jsonl"
+RESULT_FILE="${REPO_ROOT}/datasets/banking77/embeddings.pkl"
+# CORRECTION : On définit un modèle précis pour éviter l'erreur "None"
+MODEL_NAME="sentence-transformers/all-mpnet-base-v2"
 
-    if [ ! -f "${data_path}" ]; then
-      echo "[ERROR] Missing data_path: ${data_path}"
-      exit 1
-    fi
+echo "----------------------------------------------------------------"
+echo "Tâche      : $TASK_NAME"
+echo "Entrée     : $DATA_PATH"
+echo "Modèle     : $MODEL_NAME"
+echo "Sortie     : $RESULT_FILE"
+echo "----------------------------------------------------------------"
 
-    CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 python "${FT_DIR}/get_embedding.py" \
-      --model_name hkunlp/instructor-large \
-      --scale "${scale}" \
-      --task_name "${dataset}" \
-      --data_path "${data_path}" \
-      --result_file "${result_file}" \
-      --measure
-  done
-done
+# 5. Exécution avec l'argument --model_name AJOUTÉ
+python get_embedding.py \
+    --task_name "$TASK_NAME" \
+    --data_path "$DATA_PATH" \
+    --result_file "$RESULT_FILE" \
+    --model_name "$MODEL_NAME" \
+    --batch_size 32 \
+    --overwrite
+

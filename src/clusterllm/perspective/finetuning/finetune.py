@@ -29,7 +29,7 @@ from transformers import (
     set_seed,
 )
 from transformers.trainer_utils import get_last_checkpoint
-from transformers.utils import check_min_version, is_offline_mode
+from transformers.utils import check_min_version; is_offline_mode = lambda: False
 from torch.utils.data import Dataset, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 from transformers.utils.versions import require_version
@@ -65,7 +65,7 @@ def has_length(dataset):
         return False
 
 class InstructorTrainer(Seq2SeqTrainer):
-    def _get_train_sampler(self) :
+    def _get_train_sampler(self, dataset=None):
         if self.train_dataset is None or not has_length(self.train_dataset):
             return None
 
@@ -94,7 +94,7 @@ class InstructorTrainer(Seq2SeqTrainer):
                 seed=seed,
             )
 
-    def compute_loss(self, model, inputs, return_outputs=False):
+    def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
         for task_id in inputs['task_name']:
             assert task_id==inputs['task_name'][0],f"Examples in the same batch should come from the same task, " \
                                                  f"but task {task_id} and task {inputs['task_name'][0]} are found"
@@ -559,7 +559,7 @@ def main():
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=None,
-        tokenizer=tokenizer,
+        
         data_collator=data_collator,
         compute_metrics=None,
     )

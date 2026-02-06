@@ -29,3 +29,10 @@ D[Cluster]/
 .dvc/tmp/gdrive-user-credentials.json
 .dvc/tmp/gdrive-user-credentials.json
 .dvc/tmp/gdrive-user-credentials.json
+datasets/
+sampled_triplet_results/
+src/clusterllm/perspective/finetuning/converted_triplet_results/
+src/clusterllm/perspective/triplet_prediction/predicted_triplet_results/
+src/clusterllm/perspective/triplet_prediction/sampled_triplet_results/
+__pycache__/
+*.pyc

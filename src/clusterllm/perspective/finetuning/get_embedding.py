@@ -32,7 +32,7 @@ with open(args.data_path, 'r') as f:
 
 texts, labels = [], []
 for datum in data:
-    texts.append(datum['input'])
+    texts.append(datum['text'])
     if args.measure and 'label' in datum:
         labels.append(datum['label'])
     elif args.measure and 'label' not in datum:

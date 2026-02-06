@@ -33,16 +33,16 @@ for pd in pred_data:
         print(pd)
         continue
     if pd['prediction'][0] == ' 1':
-        pos = inp_data[pd['choice1_idx']]['input']
-        neg = inp_data[pd['choice2_idx']]['input']
+        pos = inp_data[pd['choice1_idx']]['text']
+        neg = inp_data[pd['choice2_idx']]['text']
     elif pd['prediction'][0] == ' 2':
-        neg = inp_data[pd['choice1_idx']]['input']
-        pos = inp_data[pd['choice2_idx']]['input']
+        neg = inp_data[pd['choice1_idx']]['text']
+        pos = inp_data[pd['choice2_idx']]['text']
     else:
         print(pd)
         continue
     out_data.append({
-        'query': [prompt, inp_data[pd['query_idx']]['input']],
+        'query': [prompt, inp_data[pd['query_idx']]['text']],
         'pos': [prompt, pos],
         'neg': [prompt, neg],
         'task_name': args.dataset,
@@ -55,7 +55,7 @@ print(out_data[0])
 print(out_data[-10])
 
 output_path = os.path.join(args.output_path, args.pred_path.split("/")[-1].replace("-pred.json", "-train.json"))
-assert not os.path.exists(output_path)
+# assert not os.path.exists(output_path)
 print(output_path)
 with open(output_path, 'w') as f:
     json.dump(out_data, f)

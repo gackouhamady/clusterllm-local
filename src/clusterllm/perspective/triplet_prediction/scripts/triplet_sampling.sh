@@ -1,71 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Absolute path to this script directory: .../triplet_prediction/scripts
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# 1. Trouve la racine du projet
+REPO_ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 
-# triplet_prediction directory
-TP_DIR="$(cd "${DIR}/.." && pwd)"
+# 2. Ajoute src au PYTHONPATH
+export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
 
-# repo root (scripts -> triplet_prediction -> perspective -> clusterllm -> src -> repo)
-REPO_ROOT="$(cd "${DIR}/../../../../.." && pwd)"
+# 3. Se déplace dans le dossier de travail
+WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/triplet_prediction"
+echo "Déplacement vers : $WORK_DIR"
+cd "$WORK_DIR"
 
-# ---- Detect datasets directory (STRICT) ----
-# Your repo has "data/" at root, sometimes "datasets/" exists in other repos.
-# We try common locations, otherwise fail with a clear message.
-if [ -d "${REPO_ROOT}/datasets" ]; then
-  DATASETS_DIR="${REPO_ROOT}/datasets"
-elif [ -d "${REPO_ROOT}/data/datasets" ]; then
-  DATASETS_DIR="${REPO_ROOT}/data/datasets"
-elif [ -d "${REPO_ROOT}/data" ]; then
-  # fallback: if your datasets are directly under data/<dataset>/
-  DATASETS_DIR="${REPO_ROOT}/data"
-else
-  echo "[ERROR] Cannot find datasets directory."
-  echo "Tried: ${REPO_ROOT}/datasets, ${REPO_ROOT}/data/datasets, ${REPO_ROOT}/data"
-  echo "Please create one of these or set DATASETS_DIR manually."
-  exit 1
-fi
+# 4. Variables
+DATASET="banking77"
+DATA_PATH="${REPO_ROOT}/datasets/banking77/test.jsonl"
+# CORRECTION 1: On utilise FEAT_PATH pour pointer vers les embeddings
+FEAT_PATH="${REPO_ROOT}/datasets/banking77/embeddings.pkl"
+# CORRECTION 2: On définit le dossier de sortie
+OUT_DIR="${WORK_DIR}/sampled_triplet_results"
 
-echo "[INFO] REPO_ROOT=${REPO_ROOT}"
-echo "[INFO] DATASETS_DIR=${DATASETS_DIR}"
+# Création du dossier de résultats
+mkdir -p "$OUT_DIR"
 
-# ===== instructor-large =====
-scale=small
-for dataset in banking77 few_rel_nat stackexchange go_emotion
-do
-  for max_query in 1024
-  do
-    for embed in instructor
-    do
-      feat_path="${DATASETS_DIR}/${dataset}/${scale}_embeds.hdf5"
-      data_path="${DATASETS_DIR}/${dataset}/${scale}.jsonl"
+echo "----------------------------------------------------------------"
+echo "Échantillonnage (Sampling)"
+echo "Embeddings : $FEAT_PATH"
+echo "Sortie     : $OUT_DIR"
+echo "----------------------------------------------------------------"
 
-      if [ ! -f "${feat_path}" ]; then
-        echo "[ERROR] Missing feat_path: ${feat_path}"
-        exit 1
-      fi
-      if [ ! -f "${data_path}" ]; then
-        echo "[ERROR] Missing data_path: ${data_path}"
-        exit 1
-      fi
+# 5. Exécution avec les arguments CORRIGÉS (--feat_path, --out_dir, --max_query)
+python sampling.py \
+    --dataset "$DATASET" \
+    --data_path "$DATA_PATH" \
+    --feat_path "$FEAT_PATH" \
+    --out_dir "$OUT_DIR" \
+    --max_query 500 \
+    --seed 42
 
-      python "${TP_DIR}/random_triplet_sampling.py" \
-        --data_path "${data_path}" \
-        --feat_path "${feat_path}" \
-        --dataset "${dataset}" \
-        --embed_method "${embed}" \
-        --max_query "${max_query}" \
-        --filter_first_prop 0.0 \
-        --large_ent_prop 0.2 \
-        --out_dir "${TP_DIR}/sampled_triplet_results" \
-        --max_distance 67 \
-        --scale "${scale}" \
-        --shuffle_inds \
-        --seed 100
-    done
-  done
-done
-
-# ===== e5-large =====
-# (same structure; enable if needed)

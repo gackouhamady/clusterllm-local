@@ -1,33 +1,32 @@
-epoch=15
-scale=small
-d="67.0"
-seed=100
-dataset=banking77
+#!/usr/bin/env bash
+set -euo pipefail
 
-# ===== gpt =====
-CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 python finetune.py \
-    --model_name_or_path hkunlp/instructor-large \
-    --output_dir checkpoints/finetune-pretrain-1024-gpt-noprior/instructor-large-${dataset}-d=${d}-epoch=${epoch} \
-    --train_file converted_triplet_results/${dataset}_embed=instructor_s=${scale}_m=1024_d=${d}_sf_choice_seed=${seed}-gpt-3.5-turbo-0301-train.json \
-    --cache_dir cache \
-    --max_source_length 512 \
-    --num_train_epochs $epoch \
-    --per_device_train_batch_size 4 \
-    --learning_rate 2e-6 \
-    --save_steps 3840 \
-    --cl_temperature 0.01 \
-    --overwrite_output_dir
+# 1. Racine du projet
+REPO_ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
 
-# ===== self =====
-CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 python finetune.py \
-    --model_name_or_path hkunlp/instructor-large \
-    --output_dir checkpoints/finetune-pretrain-1024-self-noprior/instructor-large-${dataset}-d=${d}-epoch=${epoch} \
-    --train_file converted_triplet_results/${dataset}_embed=instructor_s=${scale}_m=1024_d=${d}_sf_choice_seed=100-self-train.json \
-    --cache_dir cache \
-    --max_source_length 512 \
-    --num_train_epochs $epoch \
-    --per_device_train_batch_size 4 \
-    --learning_rate 2e-6 \
-    --save_steps 3840 \
-    --cl_temperature 0.01 \
-    --overwrite_output_dir
+# 2. Dossier de travail
+WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/finetuning"
+echo "Déplacement vers : $WORK_DIR"
+cd "$WORK_DIR"
+
+# 3. Variables
+TRAIN_FILE="${WORK_DIR}/converted_triplet_results/banking77_embed=instructor_s=small_m=500_d=67_choice_seed=42-llama3_q4km-train.json"
+MODEL_NAME="sentence-transformers/all-mpnet-base-v2"
+OUTPUT_DIR="${WORK_DIR}/checkpoints/banking77_finetuned"
+
+mkdir -p "$OUTPUT_DIR"
+
+echo "----------------------------------------------------------------"
+echo "Lancement du Finetuning (Stratégique)"
+echo "----------------------------------------------------------------"
+
+# 4. Exécution (Argument --max_seq_length RETIRÉ)
+python finetune.py \
+    --train_file "$TRAIN_FILE" \
+    --model_name "$MODEL_NAME" \
+    --output_dir "$OUTPUT_DIR" \
+    --num_train_epochs 1 \
+    --per_device_train_batch_size 16 \
+    --learning_rate 2e-5
+
