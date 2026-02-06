@@ -1,0 +1,9 @@
+client_config_backend: settings
+save_credentials: true
+save_credentials_backend: file
+save_credentials_file: .dvc/tmp/gdrive-user-credentials.json
+get_refresh_token: true
+oauth_scope:
+  - https://www.googleapis.com/auth/drive
+  - https://www.googleapis.com/auth/drive.appdata
+auth_method: command_line

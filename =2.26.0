@@ -1,0 +1,20 @@
+The following packages are already present in the pyproject.toml and will be skipped:
+
+  - rich
+
+If you want to update it to the latest compatible version, you can use `poetry update package`.
+If you prefer to upgrade it to the latest available version, you can use `poetry add package@latest`.
+
+Using version ^4.67.3 for tqdm
+Using version ^2.32.5 for requests
+Using version ^4.0.0 for jsonlines
+
+Updating dependencies
+Resolving dependencies...
+
+Package operations: 1 install, 1 update, 0 removals
+
+  - Updating tqdm (4.67.1 -> 4.67.3)
+  - Installing jsonlines (4.0.0)
+
+Writing lock file

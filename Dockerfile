@@ -1,6 +1,3 @@
-# =============================================================================
-# ClusterLLM-Local - Dockerfile (CUDA 12.x, Python 3.11, Poetry)
-# =============================================================================
 FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -9,11 +6,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=false
 
-# --- System deps + Python 3.11 (NO source build)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.11 \
     python3.11-venv \
-    python3.11-distutils \
     python3-pip \
     build-essential \
     git \
@@ -21,33 +16,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-# --- Make python point to 3.11
-RUN ln -sf /usr/bin/python3.11 /usr/local/bin/python \
- && python --version
-
-# --- Upgrade pip tooling (on py3.11)
+RUN ln -sf /usr/bin/python3.11 /usr/local/bin/python && python --version
 RUN python -m pip install --upgrade pip setuptools wheel
-
-# --- Install Poetry (pinned = reproducible)
 RUN python -m pip install "poetry==1.8.3"
 
-# --- App
 WORKDIR /workspace
-
-# Copy manifests first (better caching)
 COPY pyproject.toml poetry.lock ./
-
-# Install deps (no source build unless absolutely required)
 RUN poetry install --no-root --no-ansi
 
-# Copy project files
 COPY src ./src
 COPY configs ./configs
 COPY tests ./tests
 COPY dvc.yaml ./
 COPY README.md ./
 
-# Cache dirs (optional)
 ENV HF_HOME=/root/.cache/huggingface \
     DVC_CACHE_DIR=/root/.cache/dvc
 

@@ -26,3 +26,6 @@ D[Cluster]/
 
 # Caches
 .mypy_cache/
+.dvc/tmp/gdrive-user-credentials.json
+.dvc/tmp/gdrive-user-credentials.json
+.dvc/tmp/gdrive-user-credentials.json

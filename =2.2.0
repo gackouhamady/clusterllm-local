@@ -1,0 +1,13 @@
+The following packages are already present in the pyproject.toml and will be skipped:
+
+  - datasets
+  - numpy
+
+If you want to update it to the latest compatible version, you can use `poetry update package`.
+If you prefer to upgrade it to the latest available version, you can use `poetry add package@latest`.
+
+Using version ^5.2.2 for sentence-transformers
+Using version ^1.17.0 for scipy
+
+Updating dependencies
+Resolving dependencies...
