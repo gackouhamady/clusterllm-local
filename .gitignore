@@ -36,3 +36,7 @@ src/clusterllm/perspective/triplet_prediction/predicted_triplet_results/
 src/clusterllm/perspective/triplet_prediction/sampled_triplet_results/
 __pycache__/
 *.pyc
+src/clusterllm/granularity/predicted_pair_results/
+src/clusterllm/granularity/sampled_pair_results/
+src/clusterllm/perspective/finetuning/checkpoints/
+__pycache__/

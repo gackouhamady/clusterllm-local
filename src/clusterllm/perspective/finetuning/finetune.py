@@ -117,11 +117,11 @@ class InstructorTrainer(Seq2SeqTrainer):
         for i in range(0, num):
             anchor_emb = embeddings_query[i].unsqueeze(0)
             pos_emb = embeddings_pos[i].unsqueeze(0)
-            cur_score = similarity_fct(anchor_emb, pos_emb) / self.args.cl_temperature
+            cur_score = similarity_fct(anchor_emb, pos_emb) / (self.args.cl_temperature or 0.05)
 
             for j in range(0, num):
                 one_neg_emb = embeddings_neg[j].unsqueeze(0)
-                one_neg_score = similarity_fct(anchor_emb, one_neg_emb) / self.args.cl_temperature
+                one_neg_score = similarity_fct(anchor_emb, one_neg_emb) / (self.args.cl_temperature or 0.05)
                 cur_score = torch.cat([cur_score, one_neg_score], dim=-1)
             if all_scores is None:
                 all_scores = cur_score.unsqueeze(0)
@@ -135,13 +135,13 @@ class InstructorTrainer(Seq2SeqTrainer):
         for i in range(0, num):
             anchor_emb = embeddings_pos[i].unsqueeze(0)
             pos_emb = embeddings_query[i].unsqueeze(0)
-            cur_score = similarity_fct(anchor_emb, pos_emb) / self.args.cl_temperature
+            cur_score = similarity_fct(anchor_emb, pos_emb) / (self.args.cl_temperature or 0.05)
 
             for j in range(0, num):
                 if i == j:
                     continue
                 one_neg_emb = embeddings_query[j].unsqueeze(0)
-                one_neg_score = similarity_fct(anchor_emb, one_neg_emb) / self.args.cl_temperature
+                one_neg_score = similarity_fct(anchor_emb, one_neg_emb) / (self.args.cl_temperature or 0.05)
                 cur_score = torch.cat([cur_score, one_neg_score], dim=-1)
             if all_another_scores is None:
                 all_another_scores = cur_score.unsqueeze(0)

@@ -61,14 +61,14 @@ def main(args):
     for pair in pairs_pos:
         assert data[pair['sent1_idx']]['label'] == data[pair['sent2_idx']]['label']
         pair['label'] = data[pair['sent1_idx']]['label']
-        pair['sent1'] = data[pair['sent1_idx']]['input']
-        pair['sent2'] = data[pair['sent2_idx']]['input']
+        pair['sent1'] = data[pair['sent1_idx']]['text']
+        pair['sent2'] = data[pair['sent2_idx']]['text']
     for pair in pairs_neg:
         assert data[pair['sent1_idx']]['label'] != data[pair['sent2_idx']]['label']
         pair['label1'] = data[pair['sent1_idx']]['label']
         pair['label2'] = data[pair['sent2_idx']]['label']
-        pair['sent1'] = data[pair['sent1_idx']]['input']
-        pair['sent2'] = data[pair['sent2_idx']]['input']
+        pair['sent1'] = data[pair['sent1_idx']]['text']
+        pair['sent2'] = data[pair['sent2_idx']]['text']
     
     final_prompt = prepare_prompt(pairs_pos, pairs_neg, dataset2lp[args.dataset])
     all_prompts[args.dataset] = final_prompt

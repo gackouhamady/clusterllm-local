@@ -1,0 +1,4 @@
+Are the following two sentences in the same cluster?
+Sentence 1: {text_a}
+Sentence 2: {text_b}
+Answer (Yes/No):

@@ -1,3 +1,4 @@
+import pickle
 # instead of looking at just the closest
 # we look at pairs in multiple granularities
 import os
@@ -16,6 +17,12 @@ def load_data(args):
 
 def load_feat(args):
     feat_path = args.feat_path
+    
+    # PATCH HYBRIDE (PKL + HDF5)
+    if feat_path.endswith('.pkl'):
+        with open(feat_path, 'rb') as f:
+            return pickle.load(f)
+    # Fallback HDF5 d'origine
     with h5py.File(feat_path, 'r') as f:
         X = f['embeds']
         X = np.asarray(X)
@@ -29,7 +36,7 @@ def generate(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
     data = load_data(args)
-    inp = [d['input'] for d in data]
+    inp = [d['text'] for d in data]
     # for analyzing purpose only
     labels = [d['label'] for d in data]
     X = load_feat(args)
