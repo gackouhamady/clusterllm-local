@@ -3,7 +3,7 @@ name = "clusterllm-local"
 version = "0.1.0"
 description = "ClusterLLM core orchestration"
 authors = [
-  { name = "Hamady Gackou", email = "hamadygackou777@gmail.com" }
+  { name = "Hamady GACKOU", email = "hamadygackou777@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
@@ -27,9 +27,10 @@ build-backend = "poetry.core.masonry.api"
 name = "clusterllm-local"
 version = "0.1.0"
 description = ""
-authors = ["Hamady Gackou <hamadygackou777@gmail.com>"]
+authors = ["Hamady GACKOU <hamadygackou777@gmail.com>"]
 readme = "README.md"
 package-mode = false
+packages = [{ include = "clusterllm", from = "src" }]
 
 
 [dependency-groups]

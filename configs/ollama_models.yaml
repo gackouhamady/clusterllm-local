@@ -1,0 +1,6 @@
+ollama:
+  host: "http://localhost:11434"
+  models:
+    judge_strict: "llama3.1:8b-instruct-q8_0"
+    judge_moe: "mixtral:8x7b-instruct-v0.1-q4_0"
+    judge_fast: "qwen2.5:7b"
