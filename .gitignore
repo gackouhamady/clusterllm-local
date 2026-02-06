@@ -1,29 +1,28 @@
 # Python
 __pycache__/
 *.pyc
-.env
+*.pyo
+*.pyd
 .venv/
-venv/
+.env
 
-# Data (On ignore les gros fichiers, mais on force l'acceptation des .dvc)
-/data/*
-!*.dvc
-!/data/.gitignore
+# Tests
+.pytest_cache/
 
-# IDE
+# Docs
+docs/build/
+
+# Editors
 .vscode/
 .idea/
 
-# DVC Config
-!/.dvc/
+# OS
+.DS_Store
 
+# Experiment outputs
+B[Embeddings]/
+C[Clustering]/
+D[Cluster]/
 
-# LaTeX build artifacts
-*.aux
-*.fdb_latexmk
-*.fls
-*.log
-*.out
-*.synctex.gz
-*.toc
-!reports/**/*.pdf  # Exception: On veut quand même garder les PDF finaux dans reports
+# Caches
+.mypy_cache/

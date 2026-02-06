@@ -1,11 +1,16 @@
+.PHONY: install lint test docs check
+
 install:
-	pip install poetry && poetry install
+	poetry install --with dev
 
-run_baseline:
-	poetry run python src/main.py config=model_gpt
-
-run_local:
-	poetry run python src/main.py config=model_local
+lint:
+	poetry run flake8 src tests
 
 test:
-	poetry run pytest tests/
+	poetry run pytest -q
+
+docs:
+	poetry run sphinx-apidoc -o docs/source/api src/clusterllm -f
+	poetry run sphinx-build -b html docs/source docs/build/html
+
+check: install lint test docs
