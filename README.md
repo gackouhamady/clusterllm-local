@@ -99,25 +99,25 @@ bash scripts/get_embedding.sh
 
 # 9) Pair sampling (Granularity)
 ```bash
-cd ~/clusterllm-local/src/clusterllm/granularity/scripts/sample_pairs.sh
+cd ~/clusterllm-local/src/clusterllm/granularity
 bash scripts/sample_pairs.sh
 ```
 
 
 
 ```bash
-cd ~/clusterllm-local/src/clusterllm/granularity/scripts/sample_pairs_for_prompt.sh
+cd ~/clusterllm-local/src/clusterllm/granularity
 bash scripts/sample_pairs_for_prompt.sh
 ```
 
 # 10) Predict pairs (Ollama) and final cluster count
 ```bash
-cd ~/clusterllm-local/src/clusterllm/granularity/scripts/predict_pairs.sh
+cd ~/clusterllm-local/src/clusterllm/granularity
 bash  scripts/predict_pairs.sh
 ```
 
 ```bash
-cd ~/clusterllm-local/src/clusterllm/granularity/scripts/predict_num_clusters.sh
+cd ~/clusterllm-local/src/clusterllm/granularity
 bash  scripts/predict_num_clusters.sh
 ```
 
