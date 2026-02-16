@@ -97,13 +97,153 @@ make run_local
 
 ```
 
-**To run the Baseline (requires OpenAI Key):**
+**To run the Baseline (Local Mode):**
+# 0) Setup (run from repo root)
+```bash
+cd ~/clusterllm-local
+export REPO_ROOT="$(pwd)"
+export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
+export DATASET="banking77"
+export DATA_DIR="${REPO_ROOT}/datasets/${DATASET}"
+export OLLAMA_MODEL="mistral_q4km"
+export OLLAMA_URL="http://localhost:11434"
+```
+
+# 1) Create required directories
 
 ```bash
-export OPENAI_API_KEY="sk-..."
-make run_baseline
-
+mkdir -p "${DATA_DIR}" \
+  "${REPO_ROOT}/src/clusterllm/granularity/prompts" \
+  "${REPO_ROOT}/src/clusterllm/granularity/sampled_pair_results" \
+  "${REPO_ROOT}/src/clusterllm/granularity/predicted_pair_results" \
+  "${REPO_ROOT}/src/clusterllm/granularity/predicted_num_clusters_results" \
+  "${REPO_ROOT}/src/clusterllm/perspective/finetuning/checkpoints" \
+  "${REPO_ROOT}/src/clusterllm/perspective/predict_triplet/sampled_triplet_results" \
+  "${REPO_ROOT}/src/clusterllm/perspective/predict_triplet/predicted_triplet_results" \
+  "${REPO_ROOT}/src/clusterllm/perspective/finetuning/converted_triplet_results"
 ```
+
+# 2) Initial embeddings (Perspective)
+```bash
+cd "${REPO_ROOT}/src/clusterllm/perspective/finetuning"
+python get_embedding.py \
+  --task_name "${DATASET}" \
+  --data_path "${DATA_DIR}/test.jsonl" \
+  --result_file "${DATA_DIR}/embeddings.pkl" \
+  --model_name "sentence-transformers/all-mpnet-base-v2" \
+  --batch_size 32 \
+  --overwrite
+```
+
+# 3) Triplet sampling
+
+```bash
+cd "${REPO_ROOT}/src/clusterllm/perspective/predict_triplet"
+python triplet_sampling.py \
+  --dataset "${DATASET}" \
+  --data_path "${DATA_DIR}/test.jsonl" \
+  --feat_path "${DATA_DIR}/embeddings.pkl" \
+  --out_dir "sampled_triplet_results" \
+  --k 5
+```
+# 4) Triplet prediction (robust simulation: copy input to predicted)
+
+```bash
+cd "${REPO_ROOT}/src/clusterllm/perspective/predict_triplet"
+TRIPLET_INPUT=$(ls -t sampled_triplet_results/${DATASET}*.json | head -n 1)
+cp "${TRIPLET_INPUT}" "predicted_triplet_results/$(basename "${TRIPLET_INPUT}")"
+TRIPLET_PRED=$(ls -t predicted_triplet_results/${DATASET}*.json | head -n 1)
+```
+# 5) Convert triplets for finetuning
+```bash
+cd "${REPO_ROOT}/src/clusterllm/perspective/finetuning"
+python convert_triplet.py \
+  --dataset "${DATASET}" \
+  --data_path "${REPO_ROOT}/src/clusterllm/perspective/predict_triplet/${TRIPLET_PRED}" \
+  --out_dir "converted_triplet_results"
+CONVERTED_FILE=$(ls -t converted_triplet_results/${DATASET}*.json | head -n 1)
+```
+# 6) Finetune (create checkpoint)
+```bash
+python finetune.py \
+  --model_name "sentence-transformers/all-mpnet-base-v2" \
+  --train_data "${PWD}/${CONVERTED_FILE}" \
+  --output_dir "checkpoints/${DATASET}_finetuned" \
+  --num_epochs 1 \
+  --batch_size 16
+```
+# 7) Patch checkpoint config.json (avoid MPNet loading issues)
+```bash
+CHECKPOINT_DIR="${REPO_ROOT}/src/clusterllm/perspective/finetuning/checkpoints/${DATASET}_finetuned"
+python3 - <<PY
+import json, os
+p = os.path.join("${CHECKPOINT_DIR}", "config.json")
+if os.path.exists(p):
+    d = json.load(open(p))
+    d["model_type"] = "mpnet"
+    json.dump(d, open(p, "w"))
+    print("patched", p)
+else:
+    print("missing", p)
+PY
+```
+# 8) Finetuned embeddings (for Granularity)
+```bash
+cd "${REPO_ROOT}/src/clusterllm/perspective/finetuning"
+python get_embedding.py \
+  --task_name "${DATASET}" \
+  --data_path "${DATA_DIR}/test.jsonl" \
+  --result_file "${DATA_DIR}/embeddings_finetuned.h5" \
+  --model_name "${CHECKPOINT_DIR}" \
+  --batch_size 32 \
+  --overwrite
+```
+# 9) Pair sampling (Granularity)
+```bash
+cd "${REPO_ROOT}/src/clusterllm/granularity"
+python sample_pairs.py \
+  --dataset "${DATASET}" \
+  --data_path "${DATA_DIR}/test.jsonl" \
+  --feat_path "${DATA_DIR}/embeddings_finetuned.h5" \
+  --scale "small" \
+  --embed_method "finetuned" \
+  --k 1 \
+  --out_dir "sampled_pair_results" \
+  --min_clusters 2 \
+  --max_clusters 200 \
+  --seed 100
+PAIRS_INPUT=$(ls -t sampled_pair_results/${DATASET}*.json | head -n 1)
+```
+# 10) Predict pairs (Ollama) and final cluster count
+```bash
+cd "${REPO_ROOT}/src/clusterllm/granularity"
+echo "{\"${DATASET}\": \"Are the following two sentences in the same cluster?\\nSentence 1: {text_a}\\nSentence 2: {text_b}\\nAnswer (Yes/No):\"}" \
+  > prompts/pair_prediction.json
+```
+```bash
+python predict_pairs.py \
+  --dataset "${DATASET}" \
+  --data_path "${PWD}/${PAIRS_INPUT}" \
+  --prompt_file "prompts/pair_prediction.json" \
+  --temperature 0.0 \
+  --ollama-model "${OLLAMA_MODEL}"
+```
+```bash
+PAIRS_PRED=$(ls -t predicted_pair_results/${DATASET}*.json | head -n 1)
+```
+```bash
+python predict_num_clusters.py \
+  --dataset "${DATASET}" \
+  --data_path "${DATA_DIR}/test.jsonl" \
+  --clustering_results "${PWD}/${PAIRS_PRED}" \
+  --pred_path "predicted_num_clusters_results/FINAL_${DATASET}.json" \
+  --embed_method "finetuned" \
+  --scale "small"
+```
+```bash
+cat predicted_num_clusters_results/FINAL_${DATASET}.json
+```
+
 
 ---
 
