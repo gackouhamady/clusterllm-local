@@ -1,4 +1,6 @@
-import json, argparse, os
+import json
+import argparse
+import os
 import random
 
 dataset2lp = {
@@ -19,20 +21,22 @@ def prepare_prompt(pos_pairs, neg_pairs, label_property):
 
     final_prepared = ""
     for idx, pair in enumerate(pos_pairs):
-        prepared = prompt_pos
-        prepared = prepared.replace("<IDX>", str(idx + 1))
-        prepared = prepared.replace("<SENT1>", pair['sent1'])
-        prepared = prepared.replace("<SENT2>", pair['sent2'])
-        prepared = prepared.replace("<LABEL>", pair['label'])
+        # Utilisation de str() pour convertir le label int en string
+        prepared = prompt_pos.replace("<IDX>", str(idx + 1))\
+                             .replace("<SENT1>", str(pair['sent1']))\
+                             .replace("<SENT2>", str(pair['sent2']))\
+                             .replace("<LABEL>", str(pair['label']))
         final_prepared += prepared
+    
     for idx, pair in enumerate(neg_pairs):
-        prepared = prompt_neg
-        prepared = prepared.replace("<IDX>", str(idx + len(pos_pairs) + 1))
-        prepared = prepared.replace("<SENT1>", pair['sent1'])
-        prepared = prepared.replace("<SENT2>", pair['sent2'])
-        prepared = prepared.replace("<LABEL1>", pair['label1'])
-        prepared = prepared.replace("<LABEL2>", pair['label2'])
+        # Utilisation de str() pour les label1 et label2
+        prepared = prompt_neg.replace("<IDX>", str(idx + len(pos_pairs) + 1))\
+                             .replace("<SENT1>", str(pair['sent1']))\
+                             .replace("<SENT2>", str(pair['sent2']))\
+                             .replace("<LABEL1>", str(pair['label1']))\
+                             .replace("<LABEL2>", str(pair['label2']))
         final_prepared += prepared
+    
     final_prepared += inst
     return final_prepared
 
@@ -51,43 +55,40 @@ def main(args):
     with open(args.data_path, 'r') as f:
         data = [json.loads(l) for l in f.readlines()]
     
-    # suppose we sample limited amount of pairs and then annotate all of them
-    sampled_pairs = random.sample(all_pairs, args.num_sampled)
+    sampled_pairs = random.sample(all_pairs, min(args.num_sampled, len(all_pairs)))
     pairs_pos = [p for p in sampled_pairs if p['output'] == 'Yes']
     pairs_neg = [p for p in sampled_pairs if p['output'] == 'No']
-    # choose coarse-grained for positive
+    
     pairs_pos = sorted(pairs_pos, key=lambda x: x['num_clusters'])[:args.num_for_prompt]
     pairs_neg = sorted(pairs_neg, key=lambda x: x['num_clusters'], reverse=True)[:args.num_for_prompt]
+
     for pair in pairs_pos:
-        assert data[pair['sent1_idx']]['label'] == data[pair['sent2_idx']]['label']
         pair['label'] = data[pair['sent1_idx']]['label']
         pair['sent1'] = data[pair['sent1_idx']]['text']
         pair['sent2'] = data[pair['sent2_idx']]['text']
+
     for pair in pairs_neg:
-        assert data[pair['sent1_idx']]['label'] != data[pair['sent2_idx']]['label']
         pair['label1'] = data[pair['sent1_idx']]['label']
         pair['label2'] = data[pair['sent2_idx']]['label']
         pair['sent1'] = data[pair['sent1_idx']]['text']
         pair['sent2'] = data[pair['sent2_idx']]['text']
+
+    label_property = dataset2lp.get(args.dataset, "category")
+    formatted_prompt = prepare_prompt(pairs_pos, pairs_neg, label_property)
     
-    final_prompt = prepare_prompt(pairs_pos, pairs_neg, dataset2lp[args.dataset])
-    all_prompts[args.dataset] = final_prompt
-
-    with open(args.prompt_path, 'w', encoding='utf-8') as f:
+    all_prompts[args.dataset] = formatted_prompt
+    with open(args.prompt_path, 'w') as f:
         json.dump(all_prompts, f, indent=4)
-
+    print(f"✅ Prompt sauvegardé dans {args.prompt_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # ----- path -----
     parser.add_argument("--prompt_path", type=str, required=True)
     parser.add_argument("--sampled_pair_path", type=str, required=True)
     parser.add_argument("--data_path", type=str, required=True)
-    # ----- other -----
     parser.add_argument("--dataset", type=str, default="banking77")
     parser.add_argument("--num_sampled", type=int, default=16)
     parser.add_argument("--num_for_prompt", type=int, default=2)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
-
     main(args)

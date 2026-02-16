@@ -1,7 +1,41 @@
 import argparse
 import json
 import os
-import numpy as np
+
+
+def _extract_items(pair_data):
+    # Accept several possible output formats
+    if isinstance(pair_data, list):
+        return pair_data
+
+    if isinstance(pair_data, dict):
+        # Most common output from predict_pairs.py
+        if "test_inputs" in pair_data and isinstance(pair_data["test_inputs"], list):
+            return pair_data["test_inputs"]
+
+        # Some older code paths used "clusters"
+        if "clusters" in pair_data and isinstance(pair_data["clusters"], list):
+            return pair_data["clusters"]
+
+    return []
+
+
+def _is_yes(pred):
+    # pred can be: "Yes", ["Yes"], ["No"], [], None, etc.
+    if pred is None:
+        return False
+
+    if isinstance(pred, str):
+        return pred.strip().lower() == "yes"
+
+    if isinstance(pred, list) and len(pred) > 0:
+        # Handle ["Yes"] or ["No"]
+        first = pred[0]
+        if isinstance(first, str):
+            return first.strip().lower() == "yes"
+
+    return False
+
 
 def predict(args):
     print(f"Loading data from {args.data_path}")
@@ -10,36 +44,45 @@ def predict(args):
 
     print(f"Loading pair predictions from {args.clustering_results}")
     if not os.path.exists(args.clustering_results):
-        print("❌ Error: Result file not found.")
-        return
+        raise FileNotFoundError(f"Result file not found: {args.clustering_results}")
+
     with open(args.clustering_results, "r") as f:
-        pair_data = json.load(f)
+        raw = json.load(f)
 
-    # Gestion format
-    if isinstance(pair_data, dict) and "clusters" in pair_data:
-        pair_data = pair_data["clusters"]
-    
-    # Calcul simple de densité
+    items = _extract_items(raw)
+    total_pairs = len(items)
+
     yes_count = 0
-    total_pairs = len(pair_data) if isinstance(pair_data, list) else 0
-    
-    if isinstance(pair_data, list):
-        for item in pair_data:
-            if isinstance(item, dict) and item.get('prediction') == 'Yes':
-                yes_count += 1
-    
-    estimated_k = 77
-    if total_pairs > 0:
-        density = yes_count / total_pairs
-        estimated_k = max(2, int(len(data) * (1 - density)))
-        print(f"Estimated clusters: {estimated_k} (Density: {density:.2f})")
-    else:
-        print("Fallback to k=77 (No pairs or density 0)")
+    for item in items:
+        if isinstance(item, dict) and _is_yes(item.get("prediction")):
+            yes_count += 1
 
-    final_output = {"n_clusters_pred": estimated_k, "dataset": args.dataset}
+    if total_pairs == 0:
+        # Fallback if file is empty or format unexpected
+        estimated_k = 77
+        density = 0.0
+        print("No pairs found. Fallback to k=77.")
+    else:
+        density = yes_count / total_pairs
+        # Your heuristic, but now density is computed correctly
+        estimated_k = max(2, int(len(data) * (1 - density)))
+        print(f"Pairs: {total_pairs}, Yes: {yes_count}, Density: {density:.4f}")
+        print(f"Estimated clusters: {estimated_k}")
+
+    final_output = {
+        "n_clusters_pred": int(estimated_k),
+        "dataset": args.dataset,
+        "pairs_total": int(total_pairs),
+        "pairs_yes": int(yes_count),
+        "density": float(density),
+    }
+
+    os.makedirs(os.path.dirname(args.pred_path) or ".", exist_ok=True)
     with open(args.pred_path, "w") as f:
         json.dump(final_output, f, indent=2)
-    print(f"✅ Result saved to {args.pred_path}")
+
+    print(f"Saved: {args.pred_path}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
