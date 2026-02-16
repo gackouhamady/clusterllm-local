@@ -44,7 +44,7 @@ Text clustering often lacks user-specified granularity and perspective. While **
 Clone the repo and install dependencies via Poetry or Docker:
 
 ```bash
-git clone [https://github.com/YOUR_USERNAME/clusterllm-local.git](https://github.com/YOUR_USERNAME/clusterllm-local.git)
+git clone [https://github.com/gackouhamady/clusterllm-local.git](https://github.com/gackouhamady/clusterllm-local.git)
 cd clusterllm-local
 make install
 
@@ -59,19 +59,7 @@ We use DVC to version control datasets (Bank77, FewRel, etc.) and cached embeddi
 dvc pull
 
 ```
-
-### 3. Running the Pipeline
-
-You can switch between the original implementation (GPT) and the local version using Hydra configs.
-
-**To run with Local LLM (Llama-3):**
-
-```bash
-# Make sure Ollama is running: ollama run llama3
-make run_local
-
-```
-
+# Run  :
 # 1) Initial embeddings (Perspective)
 ```bash
 cd ~/clusterllm-local/src/clusterllm/perspective/finetuning
