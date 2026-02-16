@@ -1,8 +1,6 @@
-# the model takes in a pair of datapoints
 import argparse
 import json
 import os
-
 from tqdm import tqdm
 
 from tools import (
@@ -11,15 +9,16 @@ from tools import (
     delayed_completion,
 )
 
-
 def prepare_data(prompt, datum):
     postfix = "\n\nPlease respond with 'Yes' or 'No' without explanation."
     input_txt = datum["input"]
-    return prompt + input_txt + postfix
-
+    return prompt + "\n" + input_txt + postfix
 
 def post_process(completion):
-    content = completion["choices"][0]["message"]["content"].strip()
+    try:
+        content = completion["choices"][0]["message"]["content"].strip()
+    except (KeyError, IndexError):
+        content = ""
     result = []
     if "Yes" in content and "No" not in content:
         result.append("Yes")
@@ -27,73 +26,39 @@ def post_process(completion):
         result.append("No")
     return content, result
 
-
 def predict(args):
-    # ---- STRICT LOCAL: build Ollama client from CLI/env ----
+    # This now uses the recognized 'llama3_q4km' nickname
     client = build_ollama_client_from_args(args)
-
+    
+    # Safely get the model nickname for the filename
+    # argparse converts '--ollama-model' to 'ollama_model'
+    model_nick = getattr(args, 'ollama_model', 'ollama')
+    
     prompt_file_name = args.prompt_file.split("/")[-1].split(".")[0]
-
-    # name output using ollama model tag (instead of args.model_name)
-    model_tag = args.ollama_model or os.getenv("CLUSTERLLM_OLLAMA_MODEL_KEY", "ollama")
-    pred_path = args.data_path.split("/")[-1].replace(".json", f"-{model_tag}-{prompt_file_name}.json")
+    pred_path = args.data_path.split("/")[-1].replace(".json", f"-{model_nick}-{prompt_file_name}.json")
     pred_path = os.path.join("predicted_pair_results", pred_path)
+    os.makedirs("predicted_pair_results", exist_ok=True)
 
-    print("Save in:", pred_path)
+    print(f"Saving results to: {pred_path}")
 
-    num_clusters = None
-
-    # ---- load data (resume if exists) ----
-    if os.path.exists(pred_path):
-        with open(pred_path, "r") as f:
-            data = json.load(f)
-            if isinstance(data, dict):
-                if "num_clusters" in data:
-                    num_clusters = data["num_clusters"]
-                data = data["test_inputs"]
-    else:
-        with open(args.data_path, "r") as f:
-            data = json.load(f)
-            if isinstance(data, dict):
-                if "num_clusters" in data:
-                    num_clusters = data["num_clusters"]
-                data = data["test_inputs"]
-
-    # ---- load previous predictions if provided ----
-    if args.previous_path is not None:
-        with open(args.previous_path, "r") as f:
-            prev_data = json.load(f)
-            if isinstance(prev_data, dict):
-                prev_data = prev_data["test_inputs"]
-        prev_inputs = {d["input"]: d for d in prev_data}
-    else:
-        prev_inputs = {}
-
-    # ---- load prompts ----
     with open(args.prompt_file, "r") as f:
         prompts = json.load(f)
         task_prompt = prompts[args.dataset]
 
-    # ---- prepare prompts ----
-    for d in data:
-        if "prepared" not in d:
-            d["prepared"] = prepare_data(task_prompt, d)
+    with open(args.data_path, "r") as f:
+        raw_data = json.load(f)
+        data = raw_data["test_inputs"] if isinstance(raw_data, dict) else raw_data
 
-    # ---- inference loop ----
     for idx, datum in tqdm(enumerate(data), total=len(data)):
+        if "prediction" in datum and not args.overwrite:
+            continue
+
+        prompt = prepare_data(task_prompt, datum)
+        
         if idx == 0:
-            print(datum["prepared"])
-
-        if "prediction" in datum:
-            continue
-
-        # reuse previous predictions if same input exists
-        if datum["input"] in prev_inputs:
-            data[idx]["content"] = prev_inputs[datum["input"]]["content"]
-            data[idx]["prediction"] = prev_inputs[datum["input"]]["prediction"]
-            continue
-
-        prompt = datum["prepared"]
+            print("\n--- FIRST PROMPT PREVIEW ---")
+            print(prompt)
+            print("----------------------------\n")
 
         completion, error = delayed_completion(
             client=client,
@@ -103,56 +68,33 @@ def predict(args):
         )
 
         if completion is None:
-            print(f"Saving data after {idx + 1} inference.")
-            with open(pred_path, "w") as f:
-                out = data
-                if num_clusters is not None:
-                    out = {"num_clusters": num_clusters, "test_inputs": data}
-                json.dump(out, f)
-            print(error)
-            raise RuntimeError(f"Ollama completion failed at idx={idx}") from error
+            print(f"Error at index {idx}: {error}")
+            continue
 
         content, results = post_process(completion)
         data[idx]["content"] = content
         data[idx]["prediction"] = results
 
-        if idx % args.save_every == 0 and idx > 0:
-            print(f"Saving data after {idx + 1} inference.")
+        if idx % args.save_every == 0:
             with open(pred_path, "w") as f:
-                out = data
-                if num_clusters is not None:
-                    out = {"num_clusters": num_clusters, "test_inputs": data}
-                json.dump(out, f)
+                json.dump({"test_inputs": data}, f, indent=4)
 
-    # ---- final save ----
     with open(pred_path, "w") as f:
-        out = data
-        if num_clusters is not None:
-            out = {"num_clusters": num_clusters, "test_inputs": data}
-        json.dump(out, f)
-
-    print("Done")
-
+        json.dump({"test_inputs": data}, f, indent=4)
+    print("✅ Completed!")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", default=None, type=str, required=True)
-    parser.add_argument("--data_path", default=None, type=str, required=True)
-
-    # STRICT LOCAL: remove OpenAI args
-    # parser.add_argument("--openai_org", ...)  # removed
-    # parser.add_argument("--model_name", ...)  # removed
-
-    parser.add_argument("--delay", type=float, default=1.0)
-    parser.add_argument("--max_trials", type=int, default=10)
-    parser.add_argument("--save_every", type=int, default=50)
-    parser.add_argument("--num_responses", type=int, default=1)
-    parser.add_argument("--temperature", type=float, default=0.0)  # kept for compatibility, not used by local client
-    parser.add_argument("--previous_path", type=str, default=None)
-    parser.add_argument("--prompt_file", type=str, required=True)
-
-    # Add LOCAL Ollama flags
+    parser.add_argument("--dataset", required=True)
+    parser.add_argument("--data_path", required=True)
+    parser.add_argument("--prompt_file", required=True)
+    parser.add_argument("--delay", type=float, default=0.1)
+    parser.add_argument("--max_trials", type=int, default=3)
+    parser.add_argument("--save_every", type=int, default=10)
+    parser.add_argument("--overwrite", action="store_true")
+    
+    # Use the helper from tools.py to add --ollama-model and others
     add_ollama_cli_args(parser)
-
+    
     args = parser.parse_args()
     predict(args)

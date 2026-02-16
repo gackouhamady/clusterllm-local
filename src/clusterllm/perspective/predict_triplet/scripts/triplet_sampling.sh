@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
 
 # 3. Se déplace dans le dossier de travail
-WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/triplet_prediction"
+WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/predict_triplet"
 echo "Déplacement vers : $WORK_DIR"
 cd "$WORK_DIR"
 

@@ -40,3 +40,5 @@ src/clusterllm/granularity/predicted_pair_results/
 src/clusterllm/granularity/sampled_pair_results/
 src/clusterllm/perspective/finetuning/checkpoints/
 __pycache__/
+*.hdf5
+*.pkl

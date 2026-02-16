@@ -1,0 +1,7 @@
+{
+  "n_clusters_pred": 2131,
+  "dataset": "banking77",
+  "pairs_total": 198,
+  "pairs_yes": 61,
+  "density": 0.30808080808080807
+}
