@@ -80,7 +80,7 @@ bash scripts/get_embedding.sh
 # 2) Triplet sampling
 
 ```bash
-cd ~/clusterllm-local/src/clusterllm/perspective/finetuning/predict_triplet
+cd ~/clusterllm-local/src/clusterllm/perspective/predict_triplet
 bash  scripts/triplet_sampling.sh
 ```
 # 3) Triplet prediction (robust simulation: copy input to predicted)
