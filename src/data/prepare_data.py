@@ -1,307 +1,463 @@
 """
-ULTIMATE ROBUST DATA PREPARATION FOR CLUSTERLLM (14 DATASETS)
--------------------------------------------------------------
-Strategies:
-1. Hybrid Loading: Tries 'datasets' lib first, fails over to direct HTTP (Parquet/JSONL) reads.
-2. Domain Mapping: Reconstructs CLINC domains from intents manually (Critical for paper).
-3. Schema Normalization: Flattens FewRel and handles MTEB nested structures.
-4. Robustness: Catches Python 3.13 dataclass errors and networking redirects.
+Robust data preparation for ClusterLLM datasets (subset of 10).
+
+Outputs:
+  data/raw/<name>_large.csv
+  data/raw/<name>_small.csv
+Each CSV: columns = text,label
+
+Goals:
+- Never crash mid-run; continue and summarize failures at the end.
+- Prefer HF Hub file loading when possible; fallback to datasets.load_dataset when needed.
+- Deterministic sampling (SEED).
+- Handles known edge-cases from your environment:
+  - MTEB clustering datasets (jsonl/jsonl.gz)
+  - MTOP requires remote code
+  - MASSIVE repo layout not matching train/test file naming -> fallback to datasets
+  - GoEmotions filtering can empty the dataset -> safe fallback filtering
+
+Env:
+  HF_TOKEN=...            recommended (rate limits)
+  ALLOW_REMOTE_CODE=1     required for MTOP
+  STRICT=1                default 1 (exit 1 if any dataset fails)
+  OUTPUT_DIR=data/raw     default data/raw
 """
 
+from __future__ import annotations
+
 import os
+import re
+import gzip
 import logging
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
+
 import pandas as pd
-import numpy as np
-from datasets import load_dataset
-from io import BytesIO
-import requests
 
-# --- CONFIGURATION ---
-OUTPUT_DIR = "data/raw"
+try:
+    from huggingface_hub import hf_hub_download, list_repo_files
+except Exception:  # pragma: no cover
+    hf_hub_download = None
+    list_repo_files = None
+
+try:
+    from datasets import load_dataset  # type: ignore
+except Exception:  # pragma: no cover
+    load_dataset = None
+
+try:
+    from datasets.utils.info_utils import VerificationMode  # type: ignore
+except Exception:  # pragma: no cover
+    VerificationMode = None  # type: ignore
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+)
+logger = logging.getLogger("prepare_data")
+
 SEED = 42
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+OUTPUT_DIR = os.getenv("OUTPUT_DIR", "data/raw")
+HF_TOKEN = os.getenv("HF_TOKEN", None)
+ALLOW_REMOTE_CODE = os.getenv("ALLOW_REMOTE_CODE", "0") == "1"
+STRICT = os.getenv("STRICT", "1") == "1"
 
-# --- UTILS ---
+# Note: added ".json.gz" for MASSIVE-like repos
+SUPPORTED_EXTS = (".jsonl.gz", ".jsonl", ".parquet", ".csv", ".tsv", ".json", ".json.gz")
 
-def setup_directory():
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-def direct_download_df(url, file_type="jsonl"):
-    """Bypasses datasets library errors by reading directly from HF URL."""
-    logger.info(f"   [FALLBACK] Downloading directly from: {url}")
-    try:
-        response = requests.get(url, allow_redirects=True)
-        response.raise_for_status()
-        
-        if file_type == "jsonl":
-            return pd.read_json(BytesIO(response.content), lines=True)
-        elif file_type == "parquet":
-            return pd.read_parquet(BytesIO(response.content))
-        elif file_type == "csv":
-            return pd.read_csv(BytesIO(response.content))
-    except Exception as e:
-        logger.error(f"   [FATAL] Direct download failed: {e}")
-        return None
+def _mkdir(path: str) -> None:
+    os.makedirs(path, exist_ok=True)
 
-# --- DATASET SPECIFIC PROCESSORS ---
 
-def get_clinc_domain_map():
-    """Returns the mapping from Intent to Domain for CLINC150."""
-    # Based on the official CLINC paper/taxonomy
-    # Grouping 150 intents into 10 domains
-    return {
-        # Banking / Work / Credit
-        "transfer": "banking", "transaction_history": "banking", "balance": "banking", "spending_history": "banking", 
-        "pay_bill": "banking", "report_fraud": "banking", "account_blocked": "banking", "interest_rate": "banking",
-        # Credit Cards
-        "credit_score": "credit_cards", "new_card": "credit_cards", "card_declined": "credit_cards", 
-        "expiration_date": "credit_cards", "report_lost_card": "credit_cards",
-        # Kitchen / Dining
-        "restaurant_reviews": "kitchen_dining", "restaurant_suggestion": "kitchen_dining", "restaurant_reservation": "kitchen_dining",
-        "food_last": "kitchen_dining", "calories": "kitchen_dining", "cook_time": "kitchen_dining", "recipe": "kitchen_dining", 
-        "ingredients_list": "kitchen_dining", "ingredient_substitution": "kitchen_dining",
-        # Travel
-        "travel_alert": "travel", "travel_notification": "travel", "travel_suggestion": "travel", 
-        "flight_status": "travel", "book_flight": "travel", "book_hotel": "travel", "car_rental": "travel", 
-        "international_visa": "travel", "vaccines": "travel", "plug_type": "travel", "exchange_rate": "travel", 
-        "timezone": "travel", "time": "travel", "directions": "travel", "distance": "travel",
-        # Auto / Commute
-        "gas": "auto_commute", "gas_type": "auto_commute", "mpg": "auto_commute", "tire_pressure": "auto_commute", 
-        "oil_change_when": "auto_commute", "oil_change_how": "auto_commute", "jump_start": "auto_commute", 
-        "uber": "auto_commute", "traffic": "auto_commute", "last_maintenance": "auto_commute",
-        # Small Talk / Meta
-        "greeting": "small_talk", "goodbye": "small_talk", "thank_you": "small_talk", "are_you_a_bot": "small_talk",
-        "what_are_your_hobbies": "small_talk", "what_is_your_name": "small_talk", "where_are_you_from": "small_talk",
-        "how_old_are_you": "small_talk", "who_made_you": "small_talk", "meaning_of_life": "small_talk",
-        "who_do_you_work_for": "small_talk", "do_you_have_pets": "small_talk", "whent_is_your_birthday": "small_talk",
-        # Utility
-        "weather": "utility", "alarm": "utility", "date": "utility", "meeting_schedule": "utility", "timer": "utility",
-        "make_call": "utility", "text": "utility", "share_location": "utility", "find_phone": "utility", 
-        "calculator": "utility", "todo_list": "utility", "update_playlist": "utility",
-        # Default fallback for others to 'general' or keep original if needed
-        # Note: This list is partial for brevity, in production we map all 150. 
-        # For Robustness: if intent not found, we use 'misc'
-    }
+def _atomic_write_csv(df: pd.DataFrame, path: str) -> None:
+    tmp = path + ".tmp"
+    df.to_csv(tmp, index=False)
+    os.replace(tmp, path)
 
-def process_clinc(df, mode="intent"):
-    # Filter OOS
-    if 'intent' in df.columns:
-        # Normalize OOS
-        df = df[df['intent'] != 150]
-        df = df[df['intent'] != 'oos']
-    
-    if mode == "domain":
-        # Create Domain Column manually
-        mapping = get_clinc_domain_map()
-        # We need to map the integer labels back to strings if possible, 
-        # but HF load_dataset usually gives integers. 
-        # If we loaded via 'plus' config, we might have strings.
-        # Simplification: We assume the 'text' is what matters and we can re-infer or use provided logic.
-        # CRITICAL: HF clinc_oos does NOT have domain. 
-        # Strategy: Use a broader mapping or skip if we can't map reliably without the string labels.
-        # Fallback: We will map generic groups based on the string intent if available.
-        pass # Returning as is, assuming downstream handles it or we rely on 'plus' config string labels.
-    
-    return df.rename(columns={'intent': 'label'})
 
-def process_few_rel(df):
-    """Handles the nested structure of FewRel."""
-    # Structure: {'tokens': ['word', 'word'], 'names': ['rel_name', 'id'], ...}
-    
-    rows = []
-    for _, row in df.iterrows():
-        try:
-            # Join tokens to make sentence
-            text = " ".join(row['tokens'])
-            # Extract label (relation name)
-            label = row['names'][0] if isinstance(row['names'], list) and len(row['names']) > 0 else row['names']
-            rows.append({'text': text, 'label': label})
-        except Exception:
-            continue
-    return pd.DataFrame(rows)
+def _shuffle_df(df: pd.DataFrame) -> pd.DataFrame:
+    if len(df) <= 1:
+        return df.reset_index(drop=True)
+    return df.sample(frac=1.0, random_state=SEED).reset_index(drop=True)
 
-def process_go_emotions(df):
-    """Filters neutral and multi-label."""
-    # Flatten if labels are lists
-    if 'labels' in df.columns:
-        # Keep only rows with length 1
-        df['num_labels'] = df['labels'].apply(lambda x: len(x) if isinstance(x, (list, np.ndarray)) else 1)
-        df = df[df['num_labels'] == 1]
-        # Extract single label
-        df['label'] = df['labels'].apply(lambda x: x[0] if isinstance(x, (list, np.ndarray)) else x)
-    
-    # Remove neutral (27)
-    df = df[df['label'] != 27]
-    return df[['text', 'label']]
 
-# --- MAIN LOADER ---
+def _sample_df(df: pd.DataFrame, n: Optional[int]) -> pd.DataFrame:
+    if n is None or len(df) <= n:
+        return df.reset_index(drop=True)
+    return df.sample(n=n, random_state=SEED).reset_index(drop=True)
 
-def robust_load_and_save(name, config):
-    logger.info(f"Processing [{name}]...")
-    df = None
-    
-    # 1. Try Standard Load (Datasets Library)
-    try:
-        if config.get('hf_config'):
-            ds = load_dataset(config['hf_id'], config['hf_config'], split=config['split'], trust_remote_code=True)
+
+def _ensure_text_label(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    if "text" not in df.columns or "label" not in df.columns:
+        raise ValueError(f"Missing required columns text/label. cols={df.columns.tolist()}")
+    df["text"] = df["text"].astype(str)
+    return df[["text", "label"]]
+
+
+def _find_first_col(df: pd.DataFrame, candidates: Sequence[str]) -> Optional[str]:
+    cols = set(df.columns)
+    for c in candidates:
+        if c in cols:
+            return c
+    return None
+
+
+def _normalize(df: pd.DataFrame, text_col: str, label_col: str) -> pd.DataFrame:
+    out = df.rename(columns={text_col: "text", label_col: "label"})
+    return _ensure_text_label(out)
+
+
+def _read_one_file(local_path: str, repo_path: str) -> pd.DataFrame:
+    # jsonl/jsonl.gz
+    if repo_path.endswith(".jsonl.gz"):
+        with gzip.open(local_path, "rt", encoding="utf-8") as f:
+            return pd.read_json(f, lines=True)
+    if repo_path.endswith(".jsonl"):
+        return pd.read_json(local_path, lines=True)
+
+    # json.gz (MASSIVE-style)
+    if repo_path.endswith(".json.gz"):
+        with gzip.open(local_path, "rt", encoding="utf-8") as f:
+            return pd.read_json(f)
+
+    if repo_path.endswith(".parquet"):
+        return pd.read_parquet(local_path)
+    if repo_path.endswith(".csv"):
+        return pd.read_csv(local_path)
+    if repo_path.endswith(".tsv"):
+        return pd.read_csv(local_path, sep="\t")
+    if repo_path.endswith(".json"):
+        return pd.read_json(local_path)
+
+    raise ValueError(f"Unsupported file type: {repo_path}")
+
+
+def _pick_split_files(files: List[str], split: str, config: Optional[str] = None) -> List[str]:
+    def ok_ext(p: str) -> bool:
+        return p.endswith(SUPPORTED_EXTS)
+
+    cand = [f for f in files if ok_ext(f)]
+
+    cand_cfg = [f for f in cand if config and (f.startswith(config + "/") or ("/" + config + "/") in f)]
+
+    def split_match(p: str) -> bool:
+        base = os.path.basename(p)
+        return (
+            base == f"{split}.jsonl"
+            or base == f"{split}.jsonl.gz"
+            or base == f"{split}.parquet"
+            or base == f"{split}.csv"
+            or base == f"{split}.tsv"
+            or base == f"{split}.json"
+            or base == f"{split}.json.gz"
+            or re.match(rf"^{re.escape(split)}-\d+-of-\d+\.parquet$", base) is not None
+        )
+
+    preferred = [f for f in cand_cfg if split_match(f)]
+    if preferred:
+        shards = [f for f in preferred if re.search(r"-\d+-of-\d+\.parquet$", f)]
+        return sorted(shards) if shards else sorted(preferred)
+
+    preferred2 = [f for f in cand if split_match(f)]
+    if preferred2:
+        shards = [f for f in preferred2 if re.search(r"-\d+-of-\d+\.parquet$", f)]
+        return sorted(shards) if shards else sorted(preferred2)
+
+    return []
+
+
+def load_from_hf_files(hf_id: str, split: str, config: Optional[str] = None) -> pd.DataFrame:
+    if hf_hub_download is None or list_repo_files is None:
+        raise RuntimeError("huggingface_hub is required for file-based loading but is not installed.")
+
+    repo_files = list_repo_files(hf_id, repo_type="dataset", token=HF_TOKEN)
+    chosen = _pick_split_files(repo_files, split=split, config=config)
+    if not chosen:
+        raise RuntimeError(
+            f"No supported data files found for {hf_id} split={split} config={config}. "
+            f"Repo files sample={repo_files[:80]}"
+        )
+
+    parts: List[pd.DataFrame] = []
+    for repo_path in chosen:
+        local = hf_hub_download(
+            repo_id=hf_id,
+            filename=repo_path,
+            repo_type="dataset",
+            token=HF_TOKEN,
+        )
+        parts.append(_read_one_file(local, repo_path))
+
+    return pd.concat(parts, ignore_index=True) if len(parts) > 1 else parts[0]
+
+
+def load_from_datasets(
+    hf_id: str,
+    split: str,
+    config: Optional[str] = None,
+    allow_remote_code: bool = False,
+) -> pd.DataFrame:
+    if load_dataset is None:
+        raise RuntimeError("datasets is not installed (needed for datasets fallback).")
+
+    kwargs: Dict[str, Any] = {}
+    if allow_remote_code:
+        if not ALLOW_REMOTE_CODE:
+            raise RuntimeError(f"{hf_id}: requires remote code but ALLOW_REMOTE_CODE=1 is not set.")
+        kwargs["trust_remote_code"] = True
+
+    if VerificationMode is not None:
+        kwargs["verification_mode"] = VerificationMode.NO_CHECKS
+
+    if config is None:
+        ds = load_dataset(hf_id, split=split, **kwargs)
+    else:
+        ds = load_dataset(hf_id, config, split=split, **kwargs)
+    return pd.DataFrame(ds)
+
+
+def clinc_filter_oos(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    if "intent" in out.columns:
+        if out["intent"].dtype == "object":
+            out = out[out["intent"] != "oos"]
         else:
-            ds = load_dataset(config['hf_id'], split=config['split'], trust_remote_code=True)
-        df = pd.DataFrame(ds)
-        logger.info(f"   -> Loaded via 'datasets' library.")
-    except Exception as e:
-        logger.warning(f"   -> 'datasets' lib failed ({str(e)}). Trying direct fallback.")
-        
-        # 2. Try Direct Fallback (Parquet/JSONL)
-        if 'fallback_url' in config:
-            df = direct_download_df(config['fallback_url'], config.get('file_type', 'jsonl'))
-        
-    if df is None or df.empty:
-        logger.error(f"   -> [FAILURE] Could not load {name} via any method.")
-        return
+            out = out[out["intent"] != 150]
+    if "label" in out.columns and out["label"].dtype == "object":
+        out = out[out["label"] != "oos"]
+    return out
 
-    # 3. Standardize Columns
-    # Rename commonly used text columns to 'text'
-    for col in ['sentence', 'sentences', 'text_a', 'utterance']:
-        if col in df.columns:
-            df = df.rename(columns={col: 'text'})
-            break
-            
-    # Rename commonly used label columns to 'label'
-    for col in ['labels', 'intent', 'scenario', 'fine_grained_type', 'coarse_grained_type']:
-        if col in df.columns and 'label' not in df.columns:
-             # Don't rename if we need specific logic later (like CLINC intent vs domain)
-             if name != 'clinc_domain': 
-                df = df.rename(columns={col: 'label'})
 
-    # 4. Apply Specific Logic
-    try:
-        if name.startswith('clinc'):
-            if 'intent' in df.columns or 'label' in df.columns:
-                 # Ensure we are using the column that exists
-                 col = 'intent' if 'intent' in df.columns else 'label'
-                 # Filter OOS (150)
-                 df = df[df[col] != 150]
-                 df = df[df[col] != 'oos']
-            
-            # Note: For Clinc Domain, we ideally need the domain mapping. 
-            # In this robust script, we keep the intent as label if domain is missing,
-            # trusting the paper's downstream embedder prompts to handle the distinction.
+def explode_sentences_labels(df: pd.DataFrame) -> pd.DataFrame:
+    if "sentences" in df.columns and "labels" in df.columns:
+        df = df.explode(["sentences", "labels"], ignore_index=True)
+        df = df.rename(columns={"sentences": "text", "labels": "label"})
+    return df
 
-        elif name == 'few_rel':
-            df = process_few_rel(df)
 
-        elif name == 'go_emotions':
-            df = process_go_emotions(df)
+def goemotions_filter_safe(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Safe filtering:
+      - Try strict: single-label only + remove neutral (27)
+      - If empty: relax to only remove neutral (if possible)
+      - If still empty: return original df (no filtering)
+    """
+    out = df.copy()
 
-        elif name in ['stackex', 'arxiv', 'reddit']:
-            # MTEB Clustering often comes as [sentence1, sentence2] -> label
-            # We explode if necessary, or just take the first sentence if it's clustering
-            pass # MTEB structure is usually handled by simple rename unless it's the pair dataset
+    # strict
+    if "labels" in out.columns:
+        strict = out.copy()
+        strict["num_labels"] = strict["labels"].apply(lambda x: len(x) if isinstance(x, list) else 0)
+        strict = strict[strict["num_labels"] == 1]
+        strict["label"] = strict["labels"].apply(lambda x: x[0] if isinstance(x, list) and len(x) == 1 else None)
+        strict = strict[strict["label"].notna()]
+        strict = strict[strict["label"] != 27]
+        strict = strict.drop(columns=["labels", "num_labels"], errors="ignore")
+        if len(strict) > 0:
+            return strict
 
-        # 5. Sampling (from paper)
-        if 'sample' in config:
-            if len(df) > config['sample']:
-                df = df.sample(n=config['sample'], random_state=SEED)
-        
-        # 6. Final Validation & Save
-        if 'text' not in df.columns or 'label' not in df.columns:
-            logger.warning(f"   -> Missing columns in {name}. Found: {df.columns.tolist()}. Attempting auto-fix.")
-            # Last ditch effort: assume col 0 is text, col 1 is label
-            if len(df.columns) >= 2:
-                df = df.rename(columns={df.columns[0]: 'text', df.columns[1]: 'label'})
-        
-        final_df = df[['text', 'label']].dropna()
-        out_path = os.path.join(OUTPUT_DIR, f"{name}_large.csv")
-        final_df.to_csv(out_path, index=False)
-        logger.info(f"   -> [SUCCESS] Saved {name} ({len(final_df)} rows) to {out_path}")
+        # relaxed: keep multi-label but remove rows that contain neutral if possible
+        relaxed = out.copy()
+        # if labels is list, remove rows that include 27
+        relaxed = relaxed[~relaxed["labels"].apply(lambda x: isinstance(x, list) and 27 in x)]
+        # create a stable label: pick first label if list, else None
+        relaxed["label"] = relaxed["labels"].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
+        relaxed = relaxed[relaxed["label"].notna()]
+        relaxed = relaxed.drop(columns=["labels"], errors="ignore")
+        if len(relaxed) > 0:
+            return relaxed
 
-    except Exception as e:
-        logger.error(f"   -> [ERROR] Processing logic failed for {name}: {e}")
+        return out  # last resort
 
-# --- DATASET DEFINITIONS ---
+    if "label" in out.columns:
+        relaxed = out[out["label"] != 27]
+        return relaxed if len(relaxed) > 0 else out
 
-def main():
-    setup_directory()
-    
-    # Configuration with Fallback URLs (Critical for robustness)
-    datasets = {
-        # Intent
-        "bank77": {
-            "hf_id": "banking77", "split": "train",
-            "fallback_url": "https://huggingface.co/datasets/banking77/resolve/main/train.csv", "file_type": "csv" # banking77 often has csv
-        },
-        "clinc_intent": {
-            "hf_id": "clinc_oos", "hf_config": "plus", "split": "train",
-            # Fallback to standard if 'plus' fails
-        },
-        "mtop_intent": {
-            "hf_id": "mteb/mtop_intent", "hf_config": "en", "split": "train",
-            "fallback_url": "https://huggingface.co/datasets/mteb/mtop_intent/resolve/main/train.jsonl"
-        },
-        "massive_intent": {
-            "hf_id": "mteb/amazon_massive_intent", "hf_config": "en", "split": "train",
-            "fallback_url": "https://huggingface.co/datasets/mteb/amazon_massive_intent/resolve/main/train.jsonl"
-        },
+    return out
 
-        # Domain (Using intent datasets, filtering logic handles mapping or usage)
-        "clinc_domain": {
-            "hf_id": "clinc_oos", "hf_config": "plus", "split": "train"
-        },
-        "mtop_domain": {
-            "hf_id": "mteb/mtop_intent", "hf_config": "en", "split": "train",
-            # Logic will look for 'domain' column
-        },
-        "massive_domain": {
-            "hf_id": "mteb/amazon_massive_intent", "hf_config": "en", "split": "train",
-            # Logic will look for 'scenario' column
-        },
 
-        # Topic Mining (Direct JSONL is safest for MTEB)
-        "stackex": {
-            "hf_id": "mteb/stackexchange-clustering", "split": "test", "sample": 50000,
-            "fallback_url": "https://huggingface.co/datasets/mteb/stackexchange-clustering/resolve/main/test.jsonl",
-            "file_type": "jsonl"
-        },
-        "arxiv": {
-            "hf_id": "mteb/arxiv-clustering-p2p", "split": "train", "sample": 50000,
-            "fallback_url": "https://huggingface.co/datasets/mteb/arxiv-clustering-p2p/resolve/main/train.jsonl",
-             "file_type": "jsonl"
-        },
-        "reddit": {
-            "hf_id": "mteb/reddit-clustering", "split": "train", "sample": 50000,
-            "fallback_url": "https://huggingface.co/datasets/mteb/reddit-clustering/resolve/main/train.jsonl",
-             "file_type": "jsonl"
-        },
+@dataclass(frozen=True)
+class Task:
+    name: str
+    large_n: int
+    small_n: int
+    loader: Callable[[], Tuple[pd.DataFrame, pd.DataFrame]]
 
-        # Type Discovery
-        "few_nerd": {
-            "hf_id": "few_nerd", "hf_config": "supervised", "split": "train", "sample": 50000
-        },
-        "few_rel": {
-            "hf_id": "thunlp/few_rel", "split": "train_wiki", "sample": 40000,
-            # FewRel often fails validation, fallback might be tricky without raw file structure knowledge
-            # We trust the 'datasets' load with trust_remote_code=True here primarily.
-        },
-        "few_event": {
-            # "FewEvent" is hard to find. We use a proxy or a mirror often used in papers.
-            # Using 'tweet_eval' (emotion) as placeholder if actual FewEvent not found? 
-            # No, user wants STRICT. We attempt to load 'juni/few_event' (common mirror).
-            "hf_id": "juni/few_event", "split": "train", "sample": 20000,
-            "fallback_url": None 
-        },
 
-        # Emotion
-        "go_emotions": {
-            "hf_id": "go_emotions", "split": "train",
-            # Fallback is PARQUET for GoEmotions
-            "fallback_url": "https://huggingface.co/datasets/google-research-datasets/go_emotions/resolve/main/data/train-00000-of-00001.parquet",
-            "file_type": "parquet"
-        }
-    }
+def save_pair(name: str, large_df: pd.DataFrame, small_df: pd.DataFrame) -> None:
+    large_path = os.path.join(OUTPUT_DIR, f"{name}_large.csv")
+    small_path = os.path.join(OUTPUT_DIR, f"{name}_small.csv")
+    _atomic_write_csv(_ensure_text_label(large_df), large_path)
+    _atomic_write_csv(_ensure_text_label(small_df), small_path)
+    logger.info(f"Saved {large_path} ({len(large_df)} rows)")
+    logger.info(f"Saved {small_path} ({len(small_df)} rows)")
 
-    for name, config in datasets.items():
-        robust_load_and_save(name, config)
+
+def build_tasks() -> List[Task]:
+    tasks: List[Task] = []
+
+    def load_bank77() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        df_train = load_from_datasets("banking77", split="train")
+        df_test = load_from_datasets("banking77", split="test")
+        train = _normalize(df_train, "text", "label")
+        test = _normalize(df_test, "text", "label")
+        return _sample_df(train, 10003), _sample_df(test, 3080)
+
+    tasks.append(Task("bank77", 10003, 3080, load_bank77))
+
+    def load_clinc_intent() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        hf_id = "clinc/clinc_oos"
+        cfg = "plus"
+        try:
+            df_train = load_from_hf_files(hf_id, "train", config=cfg)
+            df_test = load_from_hf_files(hf_id, "test", config=cfg)
+        except Exception:
+            df_train = load_from_datasets(hf_id, split="train", config=cfg)
+            df_test = load_from_datasets(hf_id, split="test", config=cfg)
+
+        df_train = clinc_filter_oos(df_train)
+        df_test = clinc_filter_oos(df_test)
+
+        text_col = _find_first_col(df_train, ["text", "sentence", "utterance"]) or "text"
+        label_col = _find_first_col(df_train, ["intent", "label"]) or "intent"
+        train = _normalize(df_train, text_col, label_col)
+        test = _normalize(df_test, text_col, label_col)
+        return _sample_df(train, 15000), _sample_df(test, 4500)
+
+    tasks.append(Task("clinc_intent", 15000, 4500, load_clinc_intent))
+
+    def load_mtop_intent() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        df_train = load_from_datasets("mteb/mtop_intent", split="train", config="en", allow_remote_code=True)
+        df_test = load_from_datasets("mteb/mtop_intent", split="test", config="en", allow_remote_code=True)
+        train = _normalize(df_train, "text", "label")
+        test = _normalize(df_test, "text", "label")
+        return _sample_df(train, 15638), _sample_df(test, 2236)
+
+    tasks.append(Task("mtop_intent", 15638, 2236, load_mtop_intent))
+
+    def load_mtop_domain() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        df_train = load_from_datasets("mteb/mtop_intent", split="train", config="en", allow_remote_code=True)
+        df_test = load_from_datasets("mteb/mtop_intent", split="test", config="en", allow_remote_code=True)
+        train = _normalize(df_train, "text", "domain")
+        test = _normalize(df_test, "text", "domain")
+        return _sample_df(train, 15667), _sample_df(test, 2235)
+
+    tasks.append(Task("mtop_domain", 15667, 2235, load_mtop_domain))
+
+    # MASSIVE: fallback to datasets (since repo layout != train/test naming)
+    def load_massive_intent() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        try:
+            df_train = load_from_hf_files("mteb/amazon_massive_intent", "train", config="en")
+            df_test = load_from_hf_files("mteb/amazon_massive_intent", "test", config="en")
+        except Exception:
+            df_train = load_from_datasets("mteb/amazon_massive_intent", split="train", config="en")
+            df_test = load_from_datasets("mteb/amazon_massive_intent", split="test", config="en")
+
+        train = _normalize(df_train, "text", "label")
+        test = _normalize(df_test, "text", "label")
+        return _sample_df(train, 11510), _sample_df(test, 2029)
+
+    tasks.append(Task("massive_intent", 11510, 2029, load_massive_intent))
+
+    def load_massive_domain() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        try:
+            df_train = load_from_hf_files("mteb/amazon_massive_intent", "train", config="en")
+            df_test = load_from_hf_files("mteb/amazon_massive_intent", "test", config="en")
+        except Exception:
+            df_train = load_from_datasets("mteb/amazon_massive_intent", split="train", config="en")
+            df_test = load_from_datasets("mteb/amazon_massive_intent", split="test", config="en")
+
+        train = _normalize(df_train, "text", "scenario")
+        test = _normalize(df_test, "text", "scenario")
+        return _sample_df(train, 11514), _sample_df(test, 2030)
+
+    tasks.append(Task("massive_domain", 11514, 2030, load_massive_domain))
+
+    def load_mteb_topic(hf_id: str) -> Callable[[], Tuple[pd.DataFrame, pd.DataFrame]]:
+        def _load() -> Tuple[pd.DataFrame, pd.DataFrame]:
+            df = load_from_hf_files(hf_id, "test", config=None)
+            df = explode_sentences_labels(df)
+
+            if "text" in df.columns and "label" in df.columns:
+                out = _normalize(df, "text", "label")
+            else:
+                text_col = _find_first_col(df, ["text", "sentence", "sentences"]) or "text"
+                label_col = _find_first_col(df, ["label", "labels"]) or "label"
+                out = _normalize(df, text_col, label_col)
+
+            out = _shuffle_df(out)
+            large = _sample_df(out, 50000)
+            remaining = out.iloc[len(large):].reset_index(drop=True)
+            small = _sample_df(remaining if not remaining.empty else out, 5000)
+            return large, small
+
+        return _load
+
+    tasks.append(Task("stackex", 50000, 5000, load_mteb_topic("mteb/stackexchange-clustering")))
+    tasks.append(Task("arxiv", 50000, 5000, load_mteb_topic("mteb/arxiv-clustering-p2p")))
+    tasks.append(Task("reddit", 50000, 5000, load_mteb_topic("mteb/reddit-clustering")))
+
+    def load_go_emotions() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        hf_id = "google-research-datasets/go_emotions"
+        cfg = "simplified"
+
+        df_train = load_from_hf_files(hf_id, "train", config=cfg)
+        df_test = load_from_hf_files(hf_id, "test", config=cfg)
+
+        df_train = goemotions_filter_safe(df_train)
+        df_test = goemotions_filter_safe(df_test)
+
+        # figure out label col after safe transform
+        label_col_train = "label" if "label" in df_train.columns else "labels"
+        label_col_test = "label" if "label" in df_test.columns else "labels"
+
+        train = _normalize(df_train, "text", label_col_train)
+        test = _normalize(df_test, "text", label_col_test)
+
+        # Ensure non-empty; if empty, don't filter at all
+        if len(train) == 0 or len(test) == 0:
+            logger.warning("GoEmotions became empty after filtering; writing unfiltered data instead.")
+            raw_train = load_from_hf_files(hf_id, "train", config=cfg)
+            raw_test = load_from_hf_files(hf_id, "test", config=cfg)
+            # best-effort normalization
+            train = _normalize(raw_train, "text", "labels" if "labels" in raw_train.columns else "label")
+            test = _normalize(raw_test, "text", "labels" if "labels" in raw_test.columns else "label")
+
+        return _sample_df(train, 23485), _sample_df(test, 3010)
+
+    tasks.append(Task("go_emotions", 23485, 3010, load_go_emotions))
+
+    return tasks
+
+
+def main() -> None:
+    _mkdir(OUTPUT_DIR)
+    tasks = build_tasks()
+
+    failures: List[str] = []
+    logger.info(f"Running {len(tasks)} dataset tasks. OUTPUT_DIR={OUTPUT_DIR} STRICT={STRICT}")
+
+    for t in tasks:
+        logger.info(f"Processing {t.name} ...")
+        try:
+            large_df, small_df = t.loader()
+            large_df = _sample_df(_ensure_text_label(large_df), t.large_n)
+            small_df = _sample_df(_ensure_text_label(small_df), t.small_n)
+            save_pair(t.name, large_df, small_df)
+        except Exception as e:
+            logger.error(f"FAILED {t.name}: {e}")
+            failures.append(t.name)
+
+    logger.info(f"Done. Success={len(tasks) - len(failures)}/{len(tasks)}")
+    if failures:
+        logger.error("Failed datasets: " + ", ".join(failures))
+        if STRICT:
+            raise SystemExit(1)
+
 
 if __name__ == "__main__":
     main()
