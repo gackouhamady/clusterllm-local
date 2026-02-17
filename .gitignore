@@ -44,3 +44,7 @@ __pycache__/
 *.pkl
 .gdrive/
 .dvc/tmp/
+
+# secrets (DO NOT COMMIT)
+creds.json
+cellular-effect-451211-f5-*.json
