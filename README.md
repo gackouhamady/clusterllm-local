@@ -32,14 +32,20 @@ Text clustering often lacks user-specified granularity and perspective. While **
 ---
 ## Cross__Val__Strategy
 
+```markdown 
 | Dataset Category | Dataset Name (Large-Scale) | Optimal Stage 1 (Triplet Task) | Optimal Stage 2 (Pairwise Task) | Auxiliary/Baseline Models (Other LLMs) | Selection Rationale |
 | --- | --- | --- | --- | --- | --- |
 | **Intent Discovery** | Bank77, CLINC(I), MTOP(I), Massive(I)  | **deepseek-r1:32b** | **qwen2.5:32b** | llama3.1:8b-instruct-q8_0, llama3.2:3b-instruct-q8_0 | DeepSeek-R1 handles fine-grained intent logic; Qwen excels at pairwise consistency. |
-
+| --- | --- | --- | --- | --- | --- |
 | **Type Discovery** | FewRel, FewNerd, FewEvent | **qwen2.5:32b** | **llama3.3:70b-instruct-q2_K** | mixtral:8x7b-instruct-v0.1-q4_0, llama3:latest | High-parameter models are required to capture nuanced entity and relation types. |
+| --- | --- | --- | --- | --- | --- |
 | **Topic Mining** | StackEx, ArxivS2S, Reddit | **llama3.3:70b-instruct-q2_K** | **llama3.3:70b-instruct-q2_K** | qwen2.5:7b, gemma:7b-instruct-q4_K_M | Broad knowledge models are necessary for clustering complex academic and social topics. |
+| --- | --- | --- | --- | --- | --- |
 | **Emotion Detection** | GoEmo | **deepseek-r1:32b** | **qwen2.5:32b** | mistral:7b-instruct-q4_K_M, llama3:8b-instruct-q4_K_M | Reasoning-based models are better at distinguishing subtle emotional variances. |
+| --- | --- | --- | --- | --- | --- |
 | **Domain Discovery** | CLINC(D), MTOP(D), Massive(D) | **mixtral:8x7b-instruct-v0.1-q4_0** | **llama3.3:70b-instruct-q2_K** | llama3.1:8b-instruct-q8_0, gemma:7b-instruct-q4_K_M | Large models prevent over-segmentation in coarse-grained domain clustering. |
+| --- | --- | --- | --- | --- | --- |
+```
 
 ## Getting Started
 ### Prerequisites
