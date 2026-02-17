@@ -25,7 +25,11 @@ D[Cluster]/
 datasets/
 sampled_triplet_results/
 src/clusterllm/perspective/finetuning/converted_triplet_results/
-src/clusterllm/perspective/triplet_prediction/predicted_triplet_results/
+# generated results (keep DVC metadata)
+src/clusterllm/granularity/predicted_num_clusters_results/**/*
+!src/clusterllm/granularity/predicted_num_clusters_results/**/*.dvc
+!src/clusterllm/granularity/predicted_num_clusters_results/**/.gitignore
+
 src/clusterllm/perspective/triplet_prediction/sampled_triplet_results/
 src/clusterllm/granularity/predicted_pair_results/
 src/clusterllm/granularity/sampled_pair_results/
@@ -40,3 +44,6 @@ cellular-effect-451211-f5-*.json
 # generated results
 src/clusterllm/granularity/predicted_num_clusters_results/
 src/clusterllm/perspective/predict_triplet/predicted_triplet_results/
+
+# datasets managed by DVC inside this tree
+src/data/data/
