@@ -30,39 +30,27 @@ Text clustering often lacks user-specified granularity and perspective. While **
 | **Reproducibility**| Scripts | **Docker + DVC + Hydra** |
 
 ---
+# Comprehensive LLM Validation Matrix for ClusterLLM Framework
 
+| Dataset Category | Dataset Name (Large-Scale) | Optimal Stage 1 (Triplet Task) | Optimal Stage 2 (Pairwise Task) | Auxiliary/Baseline Models (Other LLMs) | Selection Rationale |
+| --- | --- | --- | --- | --- | --- |
+| **Intent Discovery** | Bank77, CLINC(I), MTOP(I), Massive(I) 
 
-The following table provides a comprehensive cross-validation of our  local LLMs against the 14 large datasets used in the ClusterLLM project, optimized for Stage 1 (Perspective/Triplet Task) and Stage 2 (Granularity/Pairwise Task).
+ | **deepseek-r1:32b** | **qwen2.5:32b** | llama3.1:8b-instruct-q8_0, llama3.2:3b-instruct-q8_0 | DeepSeek-R1 handles fine-grained intent logic; Qwen excels at pairwise consistency. |
+| **Type Discovery** | FewRel, FewNerd, FewEvent 
 
-## Local LLM Cross-Validation for ClusterLLM Framework
+ | **qwen2.5:32b** | **llama3.3:70b-instruct-q2_K** | mixtral:8x7b-instruct-v0.1-q4_0, llama3:latest | High-parameter models are required to capture nuanced entity and relation types. |
+| **Topic Mining** | StackEx, ArxivS2S, Reddit 
 
-| Dataset Category | Dataset Name (Large) | Stage 1: Perspective (Triplet Task) | Stage 2: Granularity (Pairwise Task) | Technical Rationale |
-| --- | --- | --- | --- | --- |
-| **Intent Discovery** | Bank77 | **deepseek-r1:32b** | **qwen2.5:32b** | R1’s chain-of-thought is optimal for disambiguating fine-grained banking intents. |
-| **Intent Discovery** | CLINC(I) | **deepseek-r1:32b** | **qwen2.5:32b** | DeepSeek excels at logical separation of diverse intents across multiple domains. |
-| **Intent Discovery** | MTOP(I) | **qwen2.5:32b** | **llama3.3:70b** | Qwen’s strong instruction following handles complex semantic parsing queries effectively. |
-| **Intent Discovery** | Massive(I) | **deepseek-r1:32b** | **llama3.3:70b** | Massive requires high reasoning capacity to guide embedders through typo-prone user utterances. |
-| **Type Discovery** | FewRel | **qwen2.5:32b** | **llama3.3:70b** | Relation type discovery benefits from Qwen’s balanced performance in structured data. |
-| **Type Discovery** | FewNerd | **qwen2.5:32b** | **llama3.3:70b** | Entity type discovery requires the high-level knowledge found in larger parameter models. |
-| **Type Discovery** | FewEvent | **deepseek-r1:32b** | **llama3.3:70b** | R1 is best suited for the logical complexity of event trigger correspondence. |
-| **Topic Mining** | StackEx | **llama3.3:70b** | **llama3.3:70b** | Llama 3.3’s vast general knowledge is crucial for clustering scientific StackExchange topics. |
-| **Topic Mining** | ArxivS2S | **llama3.3:70b** | **llama3.3:70b** | High-parameter models are necessary to identify nuanced academic research categories. |
-| **Topic Mining** | Reddit | **llama3.3:70b** | **qwen2.5:32b** | Llama 3.3 understands community context better for broader topic mining. |
-| **Emotion Detection** | GoEmo | **deepseek-r1:32b** | **qwen2.5:32b** | Reasoning models are essential for identifying subtle differences between similar emotions. |
-| **Domain Discovery** | CLINC(D) | **mixtral:8x7b** | **llama3.3:70b** | Mixtral provides a solid baseline for coarse-grained domain separation. |
-| **Domain Discovery** | MTOP(D) | **mixtral:8x7b** | **llama3.3:70b** | Llama 3.3 70b avoids over-segmentation in domain-level clustering hierarchies. |
-| **Domain Discovery** | Massive(D) | **mixtral:8x7b** | **llama3.3:70b** | Coarse-grained domains require high-capacity models to maintain consistency. |
+ | **llama3.3:70b-instruct-q2_K** | **llama3.3:70b-instruct-q2_K** | qwen2.5:7b, gemma:7b-instruct-q4_K_M | Broad knowledge models are necessary for clustering complex academic and social topics. |
+| **Emotion Detection** | GoEmo 
+
+ | **deepseek-r1:32b** | **qwen2.5:32b** | mistral:7b-instruct-q4_K_M, llama3:8b-instruct-q4_K_M | Reasoning-based models are better at distinguishing subtle emotional variances. |
+| **Domain Discovery** | CLINC(D), MTOP(D), Massive(D) 
+
+ | **mixtral:8x7b-instruct-v0.1-q4_0** | **llama3.3:70b-instruct-q2_K** | llama3.1:8b-instruct-q8_0, gemma:7b-instruct-q4_K_M | Large models prevent over-segmentation in coarse-grained domain clustering. |
 
 ---
-
-### Implementation Guidelines for Your Project
-
-* **Stage 1 (Perspective)**: Use **deepseek-r1:32b** for tasks requiring high logical precision (Intent, Emotion) and **llama3.3:70b** for knowledge-intensive clustering (Science, Topics).
-* **Stage 2 (Granularity)**: Deploy **llama3.3:70b** as the primary decision-maker for the number of clusters. Its superior instruction following ensures consistency between hierarchical levels and LLM predictions.
-* **Baseline Calibration**: Use **llama3.2:3b-instruct-q8_0** or **llama3.1:8b-instruct-q8_0** to run fast, initial tests across all 14 datasets before committing to 32b/70b models.
-
-
-
 
 
 ## Getting Started
