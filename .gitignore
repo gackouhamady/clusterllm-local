@@ -8,51 +8,35 @@ __pycache__/
 
 # Tests
 .pytest_cache/
-
 # Docs
 docs/build/
-
 # Editors
 .vscode/
 .idea/
-
 # OS
 .DS_Store
-
 # Experiment outputs
 B[Embeddings]/
 C[Clustering]/
 D[Cluster]/
-
 # Caches
 .mypy_cache/
-.dvc/tmp/gdrive-user-credentials.json
-.dvc/tmp/gdrive-user-credentials.json
 .dvc/tmp/gdrive-user-credentials.json
 datasets/
 sampled_triplet_results/
 src/clusterllm/perspective/finetuning/converted_triplet_results/
 src/clusterllm/perspective/triplet_prediction/predicted_triplet_results/
 src/clusterllm/perspective/triplet_prediction/sampled_triplet_results/
-__pycache__/
-*.pyc
 src/clusterllm/granularity/predicted_pair_results/
 src/clusterllm/granularity/sampled_pair_results/
 src/clusterllm/perspective/finetuning/checkpoints/
-__pycache__/
 *.hdf5
 *.pkl
 .gdrive/
 .dvc/tmp/
-
 # secrets (DO NOT COMMIT)
 creds.json
 cellular-effect-451211-f5-*.json
-
-# secrets (DO NOT COMMIT)
-creds.json
-cellular-effect-451211-f5-*.json
-
 # generated results
 src/clusterllm/granularity/predicted_num_clusters_results/
 src/clusterllm/perspective/predict_triplet/predicted_triplet_results/
