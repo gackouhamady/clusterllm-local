@@ -36,7 +36,7 @@ python "${PARENT_DIR}/get_embedding.py" \
     --data_path "$DATA_PATH" \
     --result_file "$RESULT_FILE" \
     --model_name "$MODEL_NAME" \
-    --batch_size 8 \
+    --batch_size 64 \
     --measure \
     --overwrite
 

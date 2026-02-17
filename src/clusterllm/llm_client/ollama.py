@@ -1,61 +1,39 @@
-# src/clusterllm/llm_client/ollama.py
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
-
 import requests
+import json
+import time
 
-MODEL_REGISTRY = {
-    "llama3_q4km": "llama3:8b-instruct-q4_K_M",
-    "mistral_q4km": "mistral:7b-instruct-q4_K_M",
-    "gemma_q4km": "gemma:7b-instruct-q4_K_M",
-    "llama31_8b_q8": "llama3.1:8b-instruct-q8_0",
-    "mixtral_8x7b_q4km": "mixtral:8x7b-instruct-q4_K_M",
-    "qwen25_7b_q5": "qwen2.5:7b-instruct-q5_K_M",
-}
-
-
-@dataclass
 class OllamaClient:
-    base_url: str = "http://localhost:11434"
-    timeout: int = 120
+    def __init__(self, model_name="qwen2.5:7b", base_url="http://localhost:11434", **kwargs):
+        """
+        Client universel pour Ollama corrigé pour ClusterLLM.
+        """
+        self.model_name = model_name
+        self.base_url = f"{base_url.rstrip('/')}/api/generate"
+        self.timeout = kwargs.get('timeout', 120)
 
-    model_key: Optional[str] = None
-    model_tag: Optional[str] = None
-
-    # paramètres de génération Ollama
-    options: Dict[str, Any] = field(default_factory=dict)
-
-    def __post_init__(self) -> None:
-        if self.model_tag:
-            self.model = self.model_tag
-            return
-
-        if self.model_key:
-            if self.model_key not in MODEL_REGISTRY:
-                raise ValueError(
-                    f"Unknown model_key='{self.model_key}'. "
-                    f"Valid keys: {sorted(MODEL_REGISTRY.keys())}"
-                )
-            self.model = MODEL_REGISTRY[self.model_key]
-            return
-
-        self.model = MODEL_REGISTRY["llama3_q4km"]
-
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt):
+        """
+        Méthode principale utilisée par predict_pairs.py
+        """
         payload = {
-            "model": self.model,
+            "model": self.model_name,
             "prompt": prompt,
             "stream": False,
+            "options": {
+                "temperature": 0.5,
+                "num_predict": 15  # Légèrement augmenté pour laisser Qwen respirer
+            }
         }
-        if self.options:
-            payload["options"] = self.options
-
-        resp = requests.post(
-            f"{self.base_url}/api/generate",
-            json=payload,
-            timeout=self.timeout,
-        )
-        resp.raise_for_status()
-        return resp.json()["response"]
+        
+        try:
+            response = requests.post(
+                self.base_url, 
+                json=payload, 
+                timeout=self.timeout
+            )
+            response.raise_for_status()
+            # On retourne la réponse brute nettoyée
+            return response.json().get("response", "").strip()
+        except Exception as e:
+            print(f"❌ Erreur Ollama ({self.model_name}): {e}")
+            return None

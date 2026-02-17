@@ -16,9 +16,11 @@ cd "$WORK_DIR"
 DATASET="banking77"
 # Fichier d'entrée (généré à l'étape précédente)
 DATA_PATH="${WORK_DIR}/sampled_triplet_results/banking77_embed=instructor_s=small_m=500_d=67_choice_seed=42.json"
-OLLAMA_MODEL="llama3_q4km"
 
-# CORRECTION CRITIQUE : Création du dossier de sortie AVANT de lancer Python
+# NOUVEAUTÉ : Prendre le modèle en argument 1, sinon utiliser "llama3:8b-instruct-q4_K_M" par défaut
+OLLAMA_MODEL="${1:-llama3:8b-instruct-q4_K_M}"
+
+# Création du dossier de sortie AVANT de lancer Python
 OUT_DIR="predicted_triplet_results"
 mkdir -p "$OUT_DIR"
 
@@ -30,7 +32,6 @@ echo "Modèle     : $OLLAMA_MODEL"
 echo "----------------------------------------------------------------"
 
 # 5. Exécution
-# Note : on lance python depuis WORK_DIR pour qu'il trouve prompts.json
 python predict.py \
     --dataset "$DATASET" \
     --data_path "$DATA_PATH" \
@@ -38,4 +39,3 @@ python predict.py \
     --ollama-model "$OLLAMA_MODEL" \
     --ollama-num-predict 64 \
     --delay 0
-
