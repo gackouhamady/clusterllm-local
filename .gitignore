@@ -52,3 +52,7 @@ cellular-effect-451211-f5-*.json
 # secrets (DO NOT COMMIT)
 creds.json
 cellular-effect-451211-f5-*.json
+
+# generated results
+src/clusterllm/granularity/predicted_num_clusters_results/
+src/clusterllm/perspective/predict_triplet/predicted_triplet_results/
