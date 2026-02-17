@@ -1,0 +1,23 @@
+schema: '2.0'
+stages:
+  prepare_data:
+    cmd: poetry run python src/data/prepare_data.py
+    deps:
+    - path: poetry.lock
+      hash: md5
+      md5: a594fb9eb8aeb88a0d023aa149373323
+      size: 595905
+    - path: pyproject.toml
+      hash: md5
+      md5: 9c38fa70a0ba7da20b4bb27b94b67bbb
+      size: 1439
+    - path: src/data/prepare_data.py
+      hash: md5
+      md5: f16a044188d3ab92ff017ebfaa194e1a
+      size: 17753
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: ed071225aaa1e934970425690c585865.dir
+      size: 71915252
+      nfiles: 20

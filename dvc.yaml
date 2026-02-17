@@ -1,0 +1,9 @@
+stages:
+  prepare_data:
+    cmd: poetry run python src/data/prepare_data.py
+    deps:
+    - poetry.lock
+    - pyproject.toml
+    - src/data/prepare_data.py
+    outs:
+    - data/raw
