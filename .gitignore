@@ -48,3 +48,7 @@ __pycache__/
 # secrets (DO NOT COMMIT)
 creds.json
 cellular-effect-451211-f5-*.json
+
+# secrets (DO NOT COMMIT)
+creds.json
+cellular-effect-451211-f5-*.json
