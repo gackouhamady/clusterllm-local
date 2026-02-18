@@ -1,50 +1,58 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1. Racine du projet (Dynamique pour être plus sûr, ou votre chemin en dur)
 REPO_ROOT="/home/hamadygackou777/clusterllm-local"
 export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
+cd "${REPO_ROOT}/src/clusterllm/perspective/finetuning"
 
-# 2. Dossier de travail
-WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/finetuning"
-echo "Déplacement vers : $WORK_DIR"
-cd "$WORK_DIR"
-
-# 3. Variables & Gestion du Modèle
+# Defaults (override via args)
 DATASET="banking77"
-
-# ==> ICI : On récupère le nom du modèle depuis la commande (comme tout à l'heure)
-# Par défaut : "llama3_q4km" si rien n'est précisé
-MODEL_NAME="${1:-llama3_q4km}"
-
-echo "----------------------------------------------------------------"
-echo "Conversion (Self) - Recherche des résultats pour : $MODEL_NAME"
-echo "----------------------------------------------------------------"
-
-# Construction du nom de fichier basé sur le modèle
-# ATTENTION : Si vous avez passé "qwen2.5:7b", vérifiez que le fichier généré contient bien "qwen2.5:7b" ou "qwen2.5_7b"
-PRED_FILE="${REPO_ROOT}/src/clusterllm/perspective/predict_triplet/predicted_triplet_results/banking77_embed=instructor_s=small_m=500_d=67_choice_seed=42-${MODEL_NAME}-pred.json"
-
+RUN_DIR="${REPO_ROOT}/runs/bank77_small/deepseek_finetuning"
+TRIPLETS_FILE="${RUN_DIR}/triplets/triplets.json"
 DATA_PATH="${REPO_ROOT}/datasets/banking77/test.jsonl"
-FEAT_PATH="${REPO_ROOT}/datasets/banking77/embeddings.pkl"
-OUT_DIR="${WORK_DIR}/converted_triplet_results"
+FEAT_PATH="${REPO_ROOT}/datasets/banking77/embeddings.hdf5"
+OUT_DIR="${RUN_DIR}/finetuning_data"
+
+usage() {
+  echo "Usage: $0 [--dataset DS] [--run_dir DIR] [--triplets_file FILE] [--data_path FILE] --feat_path FILE [--out_dir DIR]"
+  exit 1
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dataset) DATASET="$2"; shift 2;;
+    --run_dir) RUN_DIR="$2"; shift 2;;
+    --triplets_file) TRIPLETS_FILE="$2"; shift 2;;
+    --data_path) DATA_PATH="$2"; shift 2;;
+    --feat_path) FEAT_PATH="$2"; shift 2;;
+    --out_dir) OUT_DIR="$2"; shift 2;;
+    *) echo "Unknown arg: $1"; usage;;
+  esac
+done
 
 mkdir -p "$OUT_DIR"
 
-# Vérification de sécurité
-if [ ! -f "$PRED_FILE" ]; then
-    echo "❌ ERREUR : Le fichier de prédiction est introuvable !"
-    echo "   Chemin cherché : $PRED_FILE"
-    echo "   Avez-vous lancé l'étape précédente avec le modèle '$MODEL_NAME' ?"
-    exit 1
+if [[ ! -f "$TRIPLETS_FILE" ]]; then
+  echo "❌ ERREUR: triplets introuvable: $TRIPLETS_FILE"
+  exit 1
 fi
 
-# 4. Exécution
-python convert_triplet_self.py \
-    --dataset "$DATASET" \
-    --pred_path "$PRED_FILE" \
-    --data_path "$DATA_PATH" \
-    --feat_path "$FEAT_PATH" \
-    --output_path "$OUT_DIR"
+if [[ ! -f "$FEAT_PATH" ]]; then
+  echo "❌ ERREUR: embeddings introuvable: $FEAT_PATH"
+  echo "   Il faut un .h5/.hdf5 contenant la clé 'embeds'."
+  exit 1
+fi
 
-echo "✅ Conversion terminée. Fichiers disponibles dans $OUT_DIR"
+echo "🚀 Conversion Self (embeddings-based)"
+echo "  dataset       : $DATASET"
+echo "  triplets_file : $TRIPLETS_FILE"
+echo "  data_path     : $DATA_PATH"
+echo "  feat_path     : $FEAT_PATH"
+echo "  out_dir       : $OUT_DIR"
+
+python convert_triplet_self.py \
+  --dataset "$DATASET" \
+  --pred_path "$TRIPLETS_FILE" \
+  --data_path "$DATA_PATH" \
+  --feat_path "$FEAT_PATH" \
+  --output_path "$OUT_DIR"

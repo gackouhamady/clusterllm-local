@@ -1,47 +1,59 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1. Racine du projet
 REPO_ROOT="/home/hamadygackou777/clusterllm-local"
 export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
+cd "${REPO_ROOT}/src/clusterllm/perspective/finetuning"
 
-# 2. Dossier de travail
-WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/finetuning"
-echo "Déplacement vers : $WORK_DIR"
-cd "$WORK_DIR"
-
-# 3. Variables & Gestion du Modèle
+# Defaults (tu peux override via args)
 DATASET="banking77"
-
-# ==> NOUVEAUTÉ : On récupère l'argument 1 (ex: "qwen2.5:7b")
-# Si aucun argument n'est donné, on garde "llama3_q4km" par défaut
-MODEL_NAME="${1:-llama3_q4km}"
-
-echo "----------------------------------------------------------------"
-echo "Conversion (Standard) - Modèle : $MODEL_NAME"
-echo "----------------------------------------------------------------"
-
-# Construction du chemin avec le nom du modèle dynamique
-PRED_FILE="${REPO_ROOT}/src/clusterllm/perspective/predict_triplet/predicted_triplet_results/banking77_embed=instructor_s=small_m=500_d=67_choice_seed=42-${MODEL_NAME}-pred.json"
-
+RUN_DIR="${REPO_ROOT}/runs/bank77_small/deepseek_finetuning"
+MODEL_NAME="deepseek-r1_32b"
 DATA_PATH="${REPO_ROOT}/datasets/banking77/test.jsonl"
-OUT_DIR="${WORK_DIR}/converted_triplet_results"
+OUT_DIR="${RUN_DIR}/finetuning_data"
+PRED_FILE=""
+
+usage() {
+  echo "Usage: $0 [--dataset DS] [--run_dir DIR] [--model_name NAME] [--pred_file FILE] [--data_path FILE] [--out_dir DIR] [--e5]"
+  exit 1
+}
+
+E5_FLAG=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dataset) DATASET="$2"; shift 2;;
+    --run_dir) RUN_DIR="$2"; shift 2;;
+    --model_name) MODEL_NAME="$2"; shift 2;;
+    --pred_file) PRED_FILE="$2"; shift 2;;
+    --data_path) DATA_PATH="$2"; shift 2;;
+    --out_dir) OUT_DIR="$2"; shift 2;;
+    --e5) E5_FLAG="--e5"; shift 1;;
+    *) echo "Unknown arg: $1"; usage;;
+  esac
+done
 
 mkdir -p "$OUT_DIR"
 
-# Vérification de sécurité
-if [ ! -f "$PRED_FILE" ]; then
-    echo "❌ ERREUR : Le fichier de prédiction est introuvable !"
-    echo "   Chemin cherché : $PRED_FILE"
-    echo "   Astuce : Avez-vous bien lancé l'étape précédente avec le modèle '$MODEL_NAME' ?"
-    exit 1
+# Default pred file pattern (adapté à ton repo: runs/.../triplets/triplets-<model>-pred.json)
+if [[ -z "${PRED_FILE}" ]]; then
+  PRED_FILE="${RUN_DIR}/triplets/triplets-${MODEL_NAME}-pred.json"
 fi
 
-# 4. Exécution
-python convert_triplet.py \
-    --dataset "$DATASET" \
-    --pred_path "$PRED_FILE" \
-    --data_path "$DATA_PATH" \
-    --output_path "$OUT_DIR"
+if [[ ! -f "$PRED_FILE" ]]; then
+  echo "❌ ERREUR: fichier de prédiction introuvable: $PRED_FILE"
+  echo "   Indique-le explicitement avec --pred_file, ou vérifie --run_dir/--model_name."
+  exit 1
+fi
 
-echo "✅ Conversion standard terminée pour $MODEL_NAME."
+echo "🚀 Conversion Standard"
+echo "  dataset   : $DATASET"
+echo "  pred_file : $PRED_FILE"
+echo "  data_path : $DATA_PATH"
+echo "  out_dir   : $OUT_DIR"
+
+python convert_triplet.py \
+  --dataset "$DATASET" \
+  --pred_path "$PRED_FILE" \
+  --data_path "$DATA_PATH" \
+  --output_path "$OUT_DIR" \
+  $E5_FLAG

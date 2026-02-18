@@ -1,7 +1,7 @@
+# convert_triplet.py
 import json, os
 import argparse
 import random
-from copy import deepcopy
 random.seed(0)
 
 parser = argparse.ArgumentParser()
@@ -13,49 +13,127 @@ parser.add_argument("--e5", action="store_true",
                     help="E5 does not allow instructions.")
 args = parser.parse_args()
 
-with open(args.pred_path, 'r') as f:
+def get_text(ex):
+    """Dataset-agnostic: try common fields."""
+    for k in ("text", "input", "sentence", "utterance", "query"):
+        if k in ex and isinstance(ex[k], str):
+            return ex[k]
+    # last resort: stringify
+    return str(ex)
+
+def normalize_choice(pred_val):
+    """
+    Return 1 or 2 if we can parse a prediction, else None.
+    Accepts:
+      - [' 1'] / [' 2']
+      - ['Choice 1'] / ['Choice 2']
+      - ' 1' / ' 2' / '1' / '2'
+      - 'Choice 1' / 'Choice 2'
+      - sometimes LLM output like: "I choose Choice 1"
+    """
+    if pred_val is None:
+        return None
+
+    # pred can be list like ["Choice 1"]
+    if isinstance(pred_val, list):
+        if len(pred_val) != 1:
+            return None
+        pred_val = pred_val[0]
+
+    # pred can be dict depending on some pipelines
+    if isinstance(pred_val, dict):
+        # common keys
+        for k in ("content", "text", "prediction", "answer"):
+            if k in pred_val:
+                return normalize_choice(pred_val[k])
+        return None
+
+    if not isinstance(pred_val, str):
+        pred_val = str(pred_val)
+
+    s = pred_val.strip().lower()
+
+    # canonical matches
+    if s in {"1", " 1", "choice 1"}:
+        return 1
+    if s in {"2", " 2", "choice 2"}:
+        return 2
+
+    # fuzzy matches (LLM verbose)
+    if "choice 1" in s or s.endswith("1"):
+        return 1
+    if "choice 2" in s or s.endswith("2"):
+        return 2
+
+    return None
+
+# load files
+with open(args.pred_path, 'r', encoding="utf-8") as f:
     pred_data = json.load(f)
 
-with open(args.data_path, 'r') as f:
-    inp_data = [json.loads(l) for l in f.readlines()]
+with open(args.data_path, 'r', encoding="utf-8") as f:
+    inp_data = [json.loads(l) for l in f if l.strip()]
 
-# the same prompt because it is used for clustering on the same dataset
+# prompt logic identical spirit to paper, but robust fallback
 if not args.e5:
-    with open("prompts.json", 'r') as f:
-        prompt = json.load(f)[args.dataset]
+    with open("prompts.json", 'r', encoding="utf-8") as f:
+        prompts_dict = json.load(f)
+    prompt = prompts_dict.get(args.dataset)
+    if prompt is None:
+        # fallback: try common alias
+        prompt = prompts_dict.get("banking77")
+    if prompt is None and len(prompts_dict) > 0:
+        # fallback: first prompt available (keeps script usable for any dataset)
+        prompt = next(iter(prompts_dict.values()))
 else:
-    prompt = 'query: '
+    prompt = "query: "
 
 out_data = []
+skipped = 0
+
 for pd in pred_data:
-    # {'query': ['Represent the Wikipedia question for retrieving relevant documents;', 'big little lies season 2 how many episodes'], 'pos': ['Represent the Wikipedia document for retrieval;', 'Big Little Lies (TV series) series garnered several accolades. It received 16 Emmy Award nominations and won eight, including Outstanding Limited Series and acting awards for Kidman, Skarsgård, and Dern. The trio also won Golden Globe Awards in addition to a Golden Globe Award for Best Miniseries or Television Film win for the series. Kidman and Skarsgård also received Screen Actors Guild Awards for their performances. Despite originally being billed as a miniseries, HBO renewed the series for a second season. Production on the second season began in March 2018 and is set to premiere in 2019. All seven episodes are being written by Kelley'], 'neg': ['Represent the Wikipedia document for retrieval;', 'Little People, Big World final minutes of the season two-A finale, "Farm Overload". A crowd had gathered around Jacob, who was lying on the ground near the trebuchet. The first two episodes of season two-B focus on the accident, and how the local media reacted to it. The first season of "Little People, Big World" generated solid ratings for TLC (especially in the important 18–49 demographic), leading to the show\'s renewal for a second season. Critical reviews of the series have been generally positive, citing the show\'s positive portrayal of little people. Conversely, other reviews have claimed that the show has a voyeuristic bend'], 'task_name': 'NQ'}
-    if len(pd['prediction']) != 1:
-        print(pd)
+    # require indices (paper logic)
+    if not all(k in pd for k in ("query_idx", "choice1_idx", "choice2_idx")):
+        skipped += 1
         continue
-    if pd['prediction'][0] == ' 1':
-        pos = inp_data[pd['choice1_idx']]['text']
-        neg = inp_data[pd['choice2_idx']]['text']
-    elif pd['prediction'][0] == ' 2':
-        neg = inp_data[pd['choice1_idx']]['text']
-        pos = inp_data[pd['choice2_idx']]['text']
+
+    pick = normalize_choice(pd.get("prediction"))
+    if pick is None:
+        skipped += 1
+        continue
+
+    q = pd["query_idx"]
+    c1 = pd["choice1_idx"]
+    c2 = pd["choice2_idx"]
+
+    # bounds safety
+    if not (0 <= q < len(inp_data) and 0 <= c1 < len(inp_data) and 0 <= c2 < len(inp_data)):
+        skipped += 1
+        continue
+
+    if pick == 1:
+        pos = get_text(inp_data[c1])
+        neg = get_text(inp_data[c2])
     else:
-        print(pd)
-        continue
+        pos = get_text(inp_data[c2])
+        neg = get_text(inp_data[c1])
+
     out_data.append({
-        'query': [prompt, inp_data[pd['query_idx']]['text']],
-        'pos': [prompt, pos],
-        'neg': [prompt, neg],
-        'task_name': args.dataset,
-        'query_idx': pd['query_idx'],
-        'choice1_idx': pd['choice1_idx'],
-        'choice2_idx': pd['choice2_idx']
+        "query": [prompt, get_text(inp_data[q])],
+        "pos": [prompt, pos],
+        "neg": [prompt, neg],
+        "task_name": args.dataset,
+        "query_idx": q,
+        "choice1_idx": c1,
+        "choice2_idx": c2
     })
 
-print(out_data[0])
-print(out_data[-10])
+output_name = os.path.basename(args.pred_path).replace("-pred.json", "-train.json")
+output_path = os.path.join(args.output_path, output_name)
 
-output_path = os.path.join(args.output_path, args.pred_path.split("/")[-1].replace("-pred.json", "-train.json"))
-# assert not os.path.exists(output_path)
-print(output_path)
-with open(output_path, 'w') as f:
-    json.dump(out_data, f)
+os.makedirs(args.output_path, exist_ok=True)
+with open(output_path, 'w', encoding="utf-8") as f:
+    json.dump(out_data, f, ensure_ascii=False)
+
+print(f"✅ Conversion Standard réussie : {len(out_data)} triplets dans {output_path}")
+print(f"ℹ️ skipped: {skipped}")

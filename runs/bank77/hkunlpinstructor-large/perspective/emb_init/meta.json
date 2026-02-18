@@ -1,0 +1,12 @@
+{
+  "dataset": "bank77",
+  "split": "large",
+  "embed_kind": "init",
+  "seed": 42,
+  "model_name": "hkunlp/instructor-large",
+  "input_jsonl": "/home/hamadygackou777/clusterllm-local/runs/bank77/hkunlpinstructor-large/perspective/emb_init/input_bank77_large.jsonl",
+  "result_file": "/home/hamadygackou777/clusterllm-local/runs/bank77/hkunlpinstructor-large/perspective/emb_init/embeddings_init.h5",
+  "timestamp": 1771368676,
+  "ollama_host": "",
+  "ollama_model": ""
+}
