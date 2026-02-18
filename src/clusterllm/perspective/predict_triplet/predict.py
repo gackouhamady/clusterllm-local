@@ -1,7 +1,7 @@
 import argparse
 import json
 import os
-
+import glob
 from tqdm import tqdm
 
 from tools import (
@@ -12,41 +12,87 @@ from tools import (
     post_process,
 )
 
-
 def predict(args):
-    # ---- STRICT LOCAL: build Ollama client from CLI/env ----
+    # ---- 1. Handle Model Name Compatibility ----
+    # Ensure args.ollama_model is populated even if passed as --model_name
+    if not args.ollama_model and args.model_name:
+        args.ollama_model = args.model_name
+
+    # ---- 2. Build Client ----
     client = build_ollama_client_from_args(args)
 
-    # ---- output path naming: keep your old convention, but use ollama model tag ----
-    model_tag = args.ollama_model or os.getenv("CLUSTERLLM_OLLAMA_MODEL_KEY", "ollama")
-    temp_tag = f"-temp{round(args.ollama_temperature, 1)}" if args.ollama_temperature and args.ollama_temperature > 0 else ""
-    pred_path = args.data_path.split("/")[-1].replace(".json", f"-{model_tag}{temp_tag}-pred.json")
-    pred_path = os.path.join("predicted_triplet_results", pred_path)
+    # ---- 3. Resolve Input File ----
+    # If data_path is not explicitly provided, find the first json in input_dir matching the dataset
+    input_file = args.data_path
+    if not input_file and args.input_dir:
+        # Search for json files that contain the dataset name (e.g. "bank77")
+        search_pattern = os.path.join(args.input_dir, f"*{args.dataset}*.json")
+        candidates = glob.glob(search_pattern)
+        if not candidates:
+            # Fallback: take any json
+            candidates = glob.glob(os.path.join(args.input_dir, "*.json"))
+        
+        if candidates:
+            input_file = candidates[0]
+            print(f"Found input file: {input_file}")
+        else:
+            raise FileNotFoundError(f"No input JSON file found in {args.input_dir} for dataset {args.dataset}")
+    elif not input_file:
+        raise ValueError("Either --data_path or --input_dir must be provided.")
 
+    # ---- 4. Construct Output Path ----
+    # Naming convention: {original_name}-{model}-pred.json
+    model_tag = args.ollama_model or "ollama"
+    # Remove characters that might mess up filenames (like :)
+    safe_model_tag = model_tag.replace(":", "_")
+    
+    temp_tag = f"-temp{round(args.ollama_temperature, 1)}" if args.ollama_temperature and args.ollama_temperature > 0 else ""
+    
+    base_name = os.path.basename(input_file)
+    output_filename = base_name.replace(".json", f"-{safe_model_tag}{temp_tag}-pred.json")
+    
+    # Use output_dir if provided, otherwise default to "predicted_triplet_results"
+    output_dir = args.output_dir or "predicted_triplet_results"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+        
+    pred_path = os.path.join(output_dir, output_filename)
     print("Save in:", pred_path)
 
-    # resume if exists
+    # ---- 5. Resume or Load Data ----
     if os.path.exists(pred_path):
+        print("Resuming from existing prediction file...")
         with open(pred_path, "r") as f:
             data = json.load(f)
     else:
-        with open(args.data_path, "r") as f:
+        with open(input_file, "r") as f:
             data = json.load(f)
 
-    # load prompt template
-    with open("prompts.json", "r") as f:
+    # ---- 6. Load Prompts ----
+    # Ensure prompts.json is found relative to the script location
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    prompts_path = os.path.join(script_dir, "prompts.json")
+    
+    if not os.path.exists(prompts_path):
+        # Fallback for current working directory
+        prompts_path = "prompts.json"
+
+    with open(prompts_path, "r") as f:
         prompts = json.load(f)
+        if args.dataset not in prompts:
+             raise ValueError(f"Dataset '{args.dataset}' not found in prompts.json")
         task_prompt = prompts[args.dataset]
 
-    # prepare prompt once
+    # Prepare prompt once
     for d in data:
         if "prepared" not in d:
             d["prepared"] = prepare_data(task_prompt, d)
 
-    # inference loop
+    # ---- 7. Inference Loop ----
+    save_counter = 0
     for idx, datum in tqdm(enumerate(data), total=len(data)):
         if idx == 0:
-            print(datum["prepared"])
+            print(f"Sample Prompt:\n{datum['prepared']}\n")
 
         if "prediction" in datum:
             continue
@@ -58,26 +104,32 @@ def predict(args):
             prompt=prompt,
             delay_in_seconds=float(args.delay),
             max_trials=int(args.max_trials),
+            # Pass model explicitly if delayed_completion supports it, 
+            # otherwise client is already configured.
+            model=args.ollama_model 
         )
 
         if completion is None:
-            print(f"Saving data after {idx + 1} inference.")
+            print(f"Saving data after failure at index {idx}.")
             with open(pred_path, "w") as f:
-                json.dump(data, f)
-            print(error)
+                json.dump(data, f, indent=2)
+            print(f"Error: {error}")
             raise RuntimeError(f"Ollama completion failed at idx={idx}") from error
 
         content, results = post_process(completion, datum["options"])
         data[idx]["content"] = content
         data[idx]["prediction"] = results
 
-        if idx % args.save_every == 0 and idx > 0:
-            print(f"Saving data after {idx + 1} inference.")
+        save_counter += 1
+        if save_counter >= args.save_every:
+            print(f"Saving progress at index {idx}...")
             with open(pred_path, "w") as f:
-                json.dump(data, f)
+                json.dump(data, f, indent=2)
+            save_counter = 0
 
+    # Final save
     with open(pred_path, "w") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=2)
 
     print("Done")
 
@@ -85,17 +137,24 @@ def predict(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    # original args (keep dataset & data_path)
+    # Core arguments
     parser.add_argument("--dataset", default=None, type=str, required=True)
-    parser.add_argument("--data_path", default=None, type=str, required=True)
+    parser.add_argument("--data_path", default=None, type=str, help="Specific path to input json (optional if input_dir is set)")
+    
+    # New arguments for DVC path handling
+    parser.add_argument("--input_dir", default=None, type=str, help="Directory containing input json files")
+    parser.add_argument("--output_dir", default=None, type=str, help="Directory to save output json files")
+    
+    # Model name alias (for compatibility with bash script)
+    parser.add_argument("--model_name", default=None, type=str, help="Alias for ollama_model")
 
-    # remove OpenAI args (STRICT LOCAL). We keep no --openai_org and no --model_name.
-    parser.add_argument("--delay", type=float, default=1.0)
-    parser.add_argument("--max_trials", type=int, default=10)
+    # Inference settings
+    parser.add_argument("--delay", type=float, default=0.0) # Faster local inference
+    parser.add_argument("--max_trials", type=int, default=5)
     parser.add_argument("--save_every", type=int, default=50)
     parser.add_argument("--num_responses", type=int, default=1)
 
-    # add Ollama config flags
+    # Add Ollama config flags (host, model, temp, etc.)
     add_ollama_cli_args(parser)
 
     args = parser.parse_args()

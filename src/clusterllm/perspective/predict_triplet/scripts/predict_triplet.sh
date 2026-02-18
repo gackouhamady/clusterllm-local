@@ -1,41 +1,35 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
-# 1. Trouve la racine du projet
-REPO_ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# 1. Récupération des variables DVC
+# On utilise des valeurs par défaut si les variables ne sont pas définies (sécurité)
+MODEL=${OLLAMA_MODEL:-"llama3:8b-instruct-q4_K_M"}
+BASE_RUN_DIR=${RUN_DIR:-"runs/debug"}
 
-# 2. Ajoute src au PYTHONPATH
-export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
+# 2. Définition des chemins d'Entrée et de Sortie
+# C'est ici qu'on redirige le script vers les dossiers gérés par DVC
+INPUT_DIR="${BASE_RUN_DIR}/perspective/triplets_sampled"
+OUTPUT_DIR="${BASE_RUN_DIR}/perspective/triplets_predicted"
 
-# 3. Se déplace dans le dossier de travail
-WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/predict_triplet"
-echo "Déplacement vers : $WORK_DIR"
-cd "$WORK_DIR"
+# Création du dossier de sortie (sécurité)
+mkdir -p "$OUTPUT_DIR"
 
-# 4. Variables
-DATASET="banking77"
-# Fichier d'entrée (généré à l'étape précédente)
-DATA_PATH="${WORK_DIR}/sampled_triplet_results/banking77_embed=instructor_s=small_m=500_d=67_choice_seed=42.json"
+echo "========================================================"
+echo " CLUSTERLLM - PREDICTION DES TRIPLETS"
+echo "========================================================"
+echo "Dataset     : $DATASET"
+echo "Modèle LLM  : $MODEL"
+echo "Input Dir   : $INPUT_DIR"
+echo "Output Dir  : $OUTPUT_DIR"
+echo "========================================================"
 
-# NOUVEAUTÉ : Prendre le modèle en argument 1, sinon utiliser "llama3:8b-instruct-q4_K_M" par défaut
-OLLAMA_MODEL="${1:-llama3:8b-instruct-q4_K_M}"
-
-# Création du dossier de sortie AVANT de lancer Python
-OUT_DIR="predicted_triplet_results"
-mkdir -p "$OUT_DIR"
-
-echo "----------------------------------------------------------------"
-echo "Prédiction des triplets"
-echo "Entrée     : $DATA_PATH"
-echo "Sortie dir : $WORK_DIR/$OUT_DIR"
-echo "Modèle     : $OLLAMA_MODEL"
-echo "----------------------------------------------------------------"
-
-# 5. Exécution
+# 3. Exécution du script Python avec les bons arguments
+# On force le script python à lire et écrire aux bons endroits
 python predict.py \
     --dataset "$DATASET" \
-    --data_path "$DATA_PATH" \
-    --ollama-base-url "http://localhost:11434" \
-    --ollama-model "$OLLAMA_MODEL" \
-    --ollama-num-predict 64 \
-    --delay 0
+    --model_name "$MODEL" \
+    --input_dir "$INPUT_DIR" \
+    --output_dir "$OUTPUT_DIR" \
+    --seed "${SEED:-42}"
+
+echo "--> Prédiction terminée."

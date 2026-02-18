@@ -1,5 +1,5 @@
 {
-    "banking77": "Select the banking customer utterance that better corresponds with the Query in terms of intent.\n\n",
+    "bank77": "Select the banking customer utterance that better corresponds with the Query in terms of intent.\n\n",
     "stackexchange": "Select the StackExchange question that better corresponds with the Query in terms of topic.\n\n",
     "reddit": "Select the Reddit question that better corresponds with the Query in terms of topic.\n\n",
     "arxiv_fine": "Select the Arxiv paper title that better corresponds with the Query in terms of domain.\n\n",

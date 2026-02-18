@@ -1,9 +1,227 @@
+vars:
+  - params.yaml
+
 stages:
   prepare_data:
-    cmd: poetry run python src/data/prepare_data.py
+    cmd: ALLOW_REMOTE_CODE=1 poetry run python src/data/prepare_data.py
     deps:
-    - poetry.lock
-    - pyproject.toml
-    - src/data/prepare_data.py
+      - src/data/prepare_data.py
+      - pyproject.toml
+      - poetry.lock
+    params:
+      - seed
     outs:
-    - data/raw
+      - data/raw
+
+  # 1) Initial embeddings (Perspective)
+  embed_init:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export OLLAMA_HOST="${ollama.host}"
+        export OLLAMA_MODEL="${run.ollama_model}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/perspective/emb_init"
+        cd src/clusterllm/perspective/finetuning
+        bash scripts/get_embedding.sh
+      '
+    deps:
+      - src/clusterllm/perspective/finetuning/scripts/get_embedding.sh
+      - data/raw/${run.dataset}_${run.split_train}.csv
+      - pyproject.toml
+      - poetry.lock
+      - params.yaml
+    outs:
+      - ${run.run_dir}/perspective/emb_init
+
+  # 2) Triplet sampling
+  triplet_sampling:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export OLLAMA_HOST="${ollama.host}"
+        export OLLAMA_MODEL="${run.ollama_model}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/perspective/triplets_sampled"
+        cd src/clusterllm/perspective/predict_triplet
+        bash scripts/triplet_sampling.sh
+      '
+    deps:
+      - src/clusterllm/perspective/predict_triplet/scripts/triplet_sampling.sh
+      - ${run.run_dir}/perspective/emb_init
+      - data/raw/${run.dataset}_${run.split_train}.csv
+      - params.yaml
+    outs:
+      - ${run.run_dir}/perspective/triplets_sampled
+
+  # 3) Triplet prediction (Ollama)
+  triplet_predict:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export OLLAMA_HOST="${ollama.host}"
+        export OLLAMA_MODEL="${run.ollama_model}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/perspective/triplets_predicted"
+        cd src/clusterllm/perspective/predict_triplet
+        bash scripts/predict_triplet.sh
+      '
+    deps:
+      - src/clusterllm/perspective/predict_triplet/scripts/predict_triplet.sh
+      - ${run.run_dir}/perspective/triplets_sampled
+      - params.yaml
+    outs:
+      - ${run.run_dir}/perspective/triplets_predicted
+
+  # 4) Convert triplets for finetuning
+  triplet_convert:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/perspective/finetune_data"
+        cd src/clusterllm/perspective/finetuning
+        bash scripts/convert_triplet.sh
+      '
+    deps:
+      - src/clusterllm/perspective/finetuning/scripts/convert_triplet.sh
+      - ${run.run_dir}/perspective/triplets_predicted
+      - params.yaml
+    outs:
+      - ${run.run_dir}/perspective/finetune_data
+
+  # 5) Finetune (create checkpoint)
+  finetune:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/perspective/checkpoints"
+        cd src/clusterllm/perspective/finetuning
+        bash scripts/finetune.sh
+      '
+    deps:
+      - src/clusterllm/perspective/finetuning/scripts/finetune.sh
+      - ${run.run_dir}/perspective/finetune_data
+      - params.yaml
+    outs:
+      - ${run.run_dir}/perspective/checkpoints
+
+  # 6) Finetuned embeddings (for Granularity)
+  embed_finetuned:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/granularity/emb_finetuned"
+        cd src/clusterllm/perspective/finetuning
+        bash scripts/get_embedding.sh
+      '
+    deps:
+      - src/clusterllm/perspective/finetuning/scripts/get_embedding.sh
+      - ${run.run_dir}/perspective/checkpoints
+      - data/raw/${run.dataset}_${run.split_train}.csv
+      - params.yaml
+    outs:
+      - ${run.run_dir}/granularity/emb_finetuned
+
+  # 9) Pair sampling (Granularity)
+  pair_sampling:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/granularity/pairs_sampled"
+        cd src/clusterllm/granularity
+        bash scripts/sample_pairs.sh
+      '
+    deps:
+      - src/clusterllm/granularity/scripts/sample_pairs.sh
+      - ${run.run_dir}/granularity/emb_finetuned
+      - params.yaml
+    outs:
+      - ${run.run_dir}/granularity/pairs_sampled
+
+  # 10) Predict pairs (Ollama)
+  predict_pairs:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export OLLAMA_HOST="${ollama.host}"
+        export OLLAMA_MODEL="${run.ollama_model}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/granularity/pairs_predicted"
+        cd src/clusterllm/granularity
+        bash scripts/predict_pairs.sh
+      '
+    deps:
+      - src/clusterllm/granularity/scripts/predict_pairs.sh
+      - ${run.run_dir}/granularity/pairs_sampled
+      - params.yaml
+    outs:
+      - ${run.run_dir}/granularity/pairs_predicted
+
+  # 10bis) Predict final cluster count
+  predict_num_clusters:
+    cmd: >-
+      bash -lc '
+        set -euo pipefail
+        export CUDA_VISIBLE_DEVICES="${system.cuda_visible_devices}"
+        export SEED="${seed}"
+        export DATASET="${run.dataset}"
+        export SPLIT_TRAIN="${run.split_train}"
+        export SPLIT_EVAL="${run.split_eval}"
+        export RUN_DIR="${run.run_dir}"
+        mkdir -p "${RUN_DIR}/results"
+        cd src/clusterllm/granularity
+        bash scripts/predict_num_clusters.sh
+      '
+    deps:
+      - src/clusterllm/granularity/scripts/predict_num_clusters.sh
+      - ${run.run_dir}/granularity/pairs_predicted
+      - params.yaml
+    outs:
+      - ${run.run_dir}/results
+    metrics:
+      - ${run.run_dir}/results/metrics.json:
+          cache: false

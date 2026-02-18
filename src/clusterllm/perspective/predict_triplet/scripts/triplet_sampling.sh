@@ -1,40 +1,43 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1. Trouve la racine du projet
 REPO_ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
-
-# 2. Ajoute src au PYTHONPATH
 export PYTHONPATH="${REPO_ROOT}/src:${PYTHONPATH:-}"
 
-# 3. Se déplace dans le dossier de travail
-WORK_DIR="${REPO_ROOT}/src/clusterllm/perspective/predict_triplet"
-echo "Déplacement vers : $WORK_DIR"
-cd "$WORK_DIR"
+# Configuration
+DATASET="${DATASET:-bank77}"
+SPLIT="${SPLIT:-small}"
+SEED="${SEED:-42}"
+NUM_QUERIES="${NUM_QUERIES:-1024}"
 
-# 4. Variables
-DATASET="banking77"
-DATA_PATH="${REPO_ROOT}/datasets/banking77/test.jsonl"
-# CORRECTION 1: On utilise FEAT_PATH pour pointer vers les embeddings
-FEAT_PATH="${REPO_ROOT}/datasets/banking77/embeddings.pkl"
-# CORRECTION 2: On définit le dossier de sortie
-OUT_DIR="${WORK_DIR}/sampled_triplet_results"
+# DOSSIERS : On sépare bien l'entrée de la sortie
+DATA_PATH="${REPO_ROOT}/src/clusterllm/datasets/${DATASET}/${SPLIT}.jsonl"
 
-# Création du dossier de résultats
+# Utilise l'embedding déjà généré (vérifie les deux emplacements possibles)
+EMBED_PATH="${INIT_EMB_PATH:-${REPO_ROOT}/runs/test_manual/${DATASET}_${SPLIT}_embeds.hdf5}"
+
+# Dossier où stocker les triplets pour DeepSeek
+OUT_DIR="${REPO_ROOT}/runs/${DATASET}_${SPLIT}/deepseek_finetuning/triplets"
+
+if [[ ! -f "$EMBED_PATH" ]]; then
+    echo "❌ Erreur: Embedding introuvable à $EMBED_PATH"
+    echo "   Lancez 'export INIT_EMB_PATH=/votre/chemin/file.hdf5' si le fichier est ailleurs."
+    exit 1
+fi
+
 mkdir -p "$OUT_DIR"
 
 echo "----------------------------------------------------------------"
-echo "Échantillonnage (Sampling)"
-echo "Embeddings : $FEAT_PATH"
-echo "Sortie     : $OUT_DIR"
+echo "CLUSTERLLM - Sampling Triplets for Perspective Improvement"
+echo "Input Embedding : $EMBED_PATH"
+echo "Output Directory: $OUT_DIR"
 echo "----------------------------------------------------------------"
 
-# 5. Exécution avec les arguments CORRIGÉS (--feat_path, --out_dir, --max_query)
-python sampling.py \
+poetry run python "${REPO_ROOT}/src/clusterllm/perspective/predict_triplet/triplet_sampling.py" \
     --dataset "$DATASET" \
     --data_path "$DATA_PATH" \
-    --feat_path "$FEAT_PATH" \
-    --out_dir "$OUT_DIR" \
-    --max_query 500 \
-    --seed 42
-
+    --embed_path "$EMBED_PATH" \
+    --output_dir "$OUT_DIR" \
+    --num_queries "$NUM_QUERIES" \
+    --scale "$SPLIT" \
+    --seed "$SEED"
