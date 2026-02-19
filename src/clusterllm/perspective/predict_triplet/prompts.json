@@ -14,7 +14,8 @@
     "mtop_domain": "Select the user utterance that better corresponds with the Query in terms of domain\n\n",
     "mtop_intent": "Select the user utterance that better corresponds with the Query in terms of intent\n\n",
     "few_event": "Select the example that better corresponds with the Query in terms of event type.\n\n",
-    "clinc_intent": "Select the customer utterance that better corresponds with the Query in terms of intent.\n\n",
+    "clinc_intent": "Select the customer utterance that better corresponds with the Query in terms of intent.",
+    "clinc150": "Select the customer utterance that better corresponds with the Query in terms of intent.",
     "clinc_domain": "Select the customer utterance that better corresponds with the Query in terms of domain\n\n",
     "goal_topic": "Select the example that better corresponds with the Query in terms of topic\n\n",
     "goal_language": "Select the choice that uses the same language (such as English or Chinese) as Query.\n\n"

@@ -34,6 +34,7 @@ DEFINITIONS = {
         # ... (Kept legacy keys if needed, but added yours below) ...
         'bank77': 'Represent the bank purpose for retrieval: ',
         'clinc_intent': 'Represent the sentence for retrieving the purpose: ',
+        "clinc150": "Represent the sentence for retrieving the intent: ",
         'mtop_intent': 'Represent the sentence for retrieving the purpose: ',
         'mtop_domain': 'Represent a sentence: ',
         'massive_intent': 'Represent the sentence for retrieving the purpose: ',
@@ -42,6 +43,10 @@ DEFINITIONS = {
         'arxiv': 'Represent the science statement for retrieval: ',
         'reddit': 'represent a reddit community title: ',
         'go_emotions': 'Represent an emotion sentence for retrieval: ',
+        'few_rel_nat': 'Represent the relation between two entities for retrieval: ',
+        'few_nerd_nat': 'Represent the entity type for retrieval: ',
+        'few_event': 'Represent the event type for retrieval: ',
+        'clinc_domain': 'Represent a sentence: ',
     },
     'hkunlp/instructor-large': {
         # --- YOUR 10 DATASETS (Strict Naming & Paper Prompts) ---
@@ -49,8 +54,10 @@ DEFINITIONS = {
         # 1. Intent Discovery [cite: 637]
         'bank77': 'Represent the bank purpose for retrieval: ',
         'clinc_intent': 'Represent the sentence for retrieving the purpose: ',
+        "clinc150": "Represent the sentence for retrieving the intent: ",
         'mtop_intent': 'Represent the sentence for retrieving the purpose: ',
         'massive_intent': 'Represent the sentence for retrieving the purpose: ',
+
         
         # 2. Domain Discovery [cite: 614]
         'mtop_domain': 'Represent a sentence: ',
@@ -95,6 +102,7 @@ DEFINITIONS = {
         # Mapped similarly for consistency if you ever switch to base
         'bank77': 'Represent the bank purpose for retrieval: ',
         'clinc_intent': 'Represent the sentence for retrieving the purpose: ',
+        "clinc150": "Represent the sentence for retrieving the intent: ",
         'mtop_intent': 'Represent the sentence for retrieving the purpose: ',
         'mtop_domain': 'Represent a sentence: ',
         'massive_intent': 'Represent the sentence for retrieving the purpose: ',
@@ -184,7 +192,11 @@ class ClusteringEvaluator(object):
         else:
             new_sentences = self.sentences
 
+
         # Encoding
+        if not new_sentences:
+            raise ValueError("No sentences to encode (dataset is empty). Check your <ds>/<split>.jsonl generation.")
+
         corpus_embeddings = np.asarray(model.encode(new_sentences))
 
         # Metric Calculation

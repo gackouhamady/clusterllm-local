@@ -121,6 +121,95 @@ def _atomic_write_jsonl(df: pd.DataFrame, path: str) -> None:
 
     os.replace(tmp, path)
 
+def _infer_text_label(df: pd.DataFrame, *, task: str) -> pd.DataFrame:
+    """
+    task in {"relation","entity","event","domain","intent","generic"}
+    Try hard to build strict (text,label) dataframe.
+    """
+
+    if df is None:
+        return pd.DataFrame(columns=["text", "label"])
+    
+    if hasattr(df, 'empty') and df.empty:
+        return pd.DataFrame(columns=["text", "label"])
+        
+    out = df.copy()
+
+    # Common MTEB style: sentences + labels
+    if "sentences" in out.columns and "labels" in out.columns:
+        out = explode_sentences_labels(out)
+
+    # If we still have list-like text fields, explode safely
+    if "text" not in out.columns:
+        # pick best text column
+        text_col = _find_first_col(out, [
+            "text", "sentence", "utterance", "query", "input",
+            "sent", "sentence1", "sentence_1", "premise"
+        ])
+        if text_col is None and "sentences" in out.columns:
+            text_col = "sentences"
+        if text_col is None:
+            # last resort: stringify whole row
+            out["text"] = out.apply(lambda r: json.dumps(r.to_dict(), ensure_ascii=False), axis=1)
+        else:
+            out = out.rename(columns={text_col: "text"})
+
+    # label candidates by task
+    label_candidates = {
+        "relation": ["relation", "relation_type", "rel", "label", "labels", "y"],
+        "entity":   ["entity_type", "type", "fine_type", "ner_tag", "label", "labels", "y"],
+        "event":    ["event_type", "type", "event", "label", "labels", "y"],
+        "domain":   ["domain", "scenario", "service", "label", "labels", "y"],
+        "intent":   ["intent", "label", "labels", "y"],
+        "generic":  ["label", "labels", "y", "class", "category"],
+    }
+    cand = label_candidates.get(task, label_candidates["generic"])
+    lab_col = _find_first_col(out, cand)
+
+    if lab_col is None:
+        # last resort: create dummy labels (but your pipeline wants labels for --measure)
+        out["label"] = 0
+    else:
+        out = out.rename(columns={lab_col: "label"})
+
+    # If labels is list, try to make it single-label when possible
+    if "label" in out.columns:
+        def _to_single(x):
+            if isinstance(x, list) and len(x) > 0:
+                return x[0]
+            return x
+        out["label"] = out["label"].apply(_to_single)
+
+    return _ensure_text_label(out)
+
+
+def _load_any_splits(hf_id: str, config: Optional[str], allow_remote_code: bool, allow_remote_code_env: bool) -> Dict[str, pd.DataFrame]:
+    """
+    Load dataset and return dict split_name -> DataFrame.
+    Works whether dataset has train/test/validation or only a single split.
+    """
+    if load_dataset is None:
+        raise RuntimeError("datasets is not installed.")
+
+    kwargs: Dict[str, Any] = {}
+    if allow_remote_code:
+        if not allow_remote_code_env:
+            raise RuntimeError(f"{hf_id}: requires remote code but ALLOW_REMOTE_CODE=1 is not set.")
+        kwargs["trust_remote_code"] = True
+    if VerificationMode is not None:
+        kwargs["verification_mode"] = VerificationMode.NO_CHECKS
+
+    ds = load_dataset(hf_id, config, **kwargs) if config else load_dataset(hf_id, **kwargs)
+
+    # ds can be DatasetDict or Dataset
+    if hasattr(ds, "keys"):
+        return {k: pd.DataFrame(ds[k]) for k in ds.keys()}
+    return {"train": pd.DataFrame(ds)}
+
+
+
+
+
 
 def _shuffle_df(df: pd.DataFrame, seed: int) -> pd.DataFrame:
     if len(df) <= 1:
@@ -396,6 +485,36 @@ def build_tasks(
 
     tasks.append(Task("clinc_intent", 15000, 4500, load_clinc_intent))
 
+    def load_clinc150() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        hf_id = "clinc/clinc_oos"
+        cfg = "plus"
+        try:
+            df_train = load_from_hf_files(hf_id, "train", config=cfg, hf_token=hf_token)
+            df_test  = load_from_hf_files(hf_id, "test",  config=cfg, hf_token=hf_token)
+        except Exception:
+            df_train = load_from_datasets(hf_id, split="train", config=cfg, allow_remote_code=False,
+                                        allow_remote_code_env=allow_remote_code_env)
+            df_test  = load_from_datasets(hf_id, split="test",  config=cfg, allow_remote_code=False,
+                                        allow_remote_code_env=allow_remote_code_env)
+
+        # IMPORTANT: enlever OOS
+        df_train = clinc_filter_oos(df_train)
+        df_test  = clinc_filter_oos(df_test)
+
+        text_col  = _find_first_col(df_train, ["text", "sentence", "utterance"]) or "text"
+        label_col = _find_first_col(df_train, ["intent", "label"]) or "intent"
+
+        train = _normalize(df_train, text_col, label_col)
+        test  = _normalize(df_test,  text_col, label_col)
+
+        # tailles “large/small” -> adapte si tu veux
+        return _sample_df(train, 15000, seed), _sample_df(test, 4500, seed)
+
+    tasks.append(Task("clinc150", 15000, 4500, load_clinc150))
+
+
+
+
     def load_mtop_intent() -> Tuple[pd.DataFrame, pd.DataFrame]:
         df_train = load_from_datasets("mteb/mtop_intent", split="train", config="en", allow_remote_code=True,
                                       allow_remote_code_env=allow_remote_code_env)
@@ -500,6 +619,124 @@ def build_tasks(
         return _sample_df(train, 23485, seed), _sample_df(test, 3010, seed)
 
     tasks.append(Task("go_emotions", 23485, 3010, load_go_emotions))
+
+
+
+        # -------------------------
+    # FewRel / FewNerd / FewEvent / CLINC(D)
+    # -------------------------
+
+    def load_few_rel_nat() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        hf_id = "BrandonZYW/FewRelClustering"
+
+        splits = _load_any_splits(
+            hf_id,
+            config=None,
+            allow_remote_code=False,
+            allow_remote_code_env=allow_remote_code_env,
+        )
+
+        # This dataset has ONLY "test"
+        df = splits.get("test")
+        if df is None:
+            raise ValueError(f"{hf_id} has no usable split. Available: {list(splits.keys())}")
+
+        # rename cluster → label
+        df = df.rename(columns={"cluster": "label"})
+
+        df = _ensure_text_label(df)
+        df = _shuffle_df(df, seed)
+
+        large = _sample_df(df, 50000, seed)
+        small = _sample_df(df, 5000, seed)
+
+        return large, small
+
+    tasks.append(Task("few_rel_nat", 50000, 5000, load_few_rel_nat))
+
+
+    def load_few_nerd_nat() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        hf_id = "BrandonZYW/FewNerdClustering"
+        splits = _load_any_splits(
+            hf_id,
+            config=None,
+            allow_remote_code=False,
+            allow_remote_code_env=allow_remote_code_env,
+        )
+
+        # This dataset has ONLY "test"
+        df = splits.get("test")
+        if df is None:
+            raise ValueError(f"{hf_id} has no usable split. Available: {list(splits.keys())}")
+
+        # rename cluster → label
+        df = df.rename(columns={"cluster": "label"})
+
+        df = _ensure_text_label(df)
+        df = _shuffle_df(df, seed)
+
+        large = _sample_df(df, 50000, seed)
+        small = _sample_df(df, 5000, seed)
+
+        return large, small
+
+    tasks.append(Task("few_nerd_nat", 50000, 5000, load_few_nerd_nat))
+
+
+    def load_few_event() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        hf_id = "BrandonZYW/FewEventClustering"
+
+        splits = _load_any_splits(
+            hf_id,
+            config=None,
+            allow_remote_code=False,
+            allow_remote_code_env=allow_remote_code_env,
+        )
+
+        # This dataset has ONLY "test"
+        df = splits.get("test")
+        if df is None:
+            raise ValueError(f"{hf_id} has no usable split. Available: {list(splits.keys())}")
+
+        # rename cluster → label
+        df = df.rename(columns={"cluster": "label"})
+
+        df = _ensure_text_label(df)
+        df = _shuffle_df(df, seed)
+
+        large = _sample_df(df, 50000, seed)
+        small = _sample_df(df, 5000, seed)
+
+        return large, small
+
+    tasks.append(Task("few_event", 50000, 5000, load_few_event))
+
+
+    def load_clinc_domain() -> Tuple[pd.DataFrame, pd.DataFrame]:
+        hf_id = "willcb/clinc-domain"
+
+        splits = _load_any_splits(
+            hf_id,
+            config=None,
+            allow_remote_code=False,
+            allow_remote_code_env=allow_remote_code_env,
+        )
+
+        df = splits.get("train")
+        if df is None:
+            raise ValueError(f"{hf_id} missing train split")
+
+        df = df.rename(columns={"input": "text"})
+        df = _ensure_text_label(df)
+        df = _shuffle_df(df, seed)
+
+        large = _sample_df(df, 50000, seed)
+        small = _sample_df(df, 5000, seed)
+
+        return large, small
+
+    tasks.append(Task("clinc_domain", 50000, 5000, load_clinc_domain))
+
 
     return tasks
 
