@@ -54,3 +54,8 @@ runs/
 *.bin
 __pycache__/
 .DS_Store
+.dvc/scripts/
+_backup_dvc/
+poetry
+prompts.json
+sitecustomize.py.bak
