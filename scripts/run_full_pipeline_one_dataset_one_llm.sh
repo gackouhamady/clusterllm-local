@@ -27,7 +27,7 @@ OLLAMA_BASE_URL="http://127.0.0.1:11434"
 SEED=42
 
 # ====== CHOOSE HERE ======
-ds="bank77"                      # any folder name inside: $ROOT/src/clusterllm/datasets/<ds>/
+ds="go_emotions"                      # any folder name inside: $ROOT/src/clusterllm/datasets/<ds>/
 sc="small"                       # small | large
 llm="llama3.2:3b-instruct-q8_0"  # one model from `ollama list`
 # =========================
@@ -92,7 +92,7 @@ python "$FT_DIR/get_embedding.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --result_file "$DATA_DIR/$ds/${sc}_embeds.hdf5" \
   --prompt "Represent the text for clustering." \
-  --batch_size 32 \
+  --batch_size 128 \
   --scale "$sc" \
   --measure \
   --overwrite
@@ -131,8 +131,8 @@ python "$PRED_TRIPLET_DIR/predict.py" \
   --ollama-base-url "$OLLAMA_BASE_URL" \
   --ollama-model "$llm" \
   --ollama-timeout 600 \
-  --ollama-temperature 0 \
-  --ollama-num-predict 256
+  --ollama-temperature 0.5 \
+  --ollama-num-predict 10
 
 PRED_DIR="$ROOT/runs/perspective/triplet_preds/$ds/$sc/$llm_dir"
 pred_json="$(newest_file "$PRED_DIR"/*.json)"
@@ -195,8 +195,8 @@ python "$FT_DIR/finetune.py" \
   --train_file "$train_json" \
   --output_dir "$OUT_CKPT" \
   --per_device_train_batch_size 1 \
-  --gradient_accumulation_steps 8 \
-  --learning_rate 5e-6 \
+  --gradient_accumulation_steps 16 \
+  --learning_rate 2e-6 \
   --num_train_epochs 1 \
   --bf16 \
   --logging_steps 5
@@ -249,7 +249,7 @@ python "$FT_DIR/get_embedding.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --result_file "$FT_EMB" \
   --prompt "Represent the text for clustering." \
-  --batch_size 32 \
+  --batch_size 128 \
   --checkpoint "$OUT_CKPT" \
   --scale "$sc" \
   --measure \
@@ -328,8 +328,8 @@ touch "$MARKER"
     --ollama-base-url "$OLLAMA_BASE_URL" \
     --ollama-model "$llm" \
     --ollama-timeout 600 \
-    --ollama-temperature 0 \
-    --ollama-num-predict 256
+    --ollama-temperature 0.5 \
+    --ollama-num-predict 10
 )
 
 CANDIDATES="$(

@@ -1,6 +1,8 @@
 import argparse
 import json
 import os
+import re
+import concurrent.futures
 from tqdm import tqdm
 
 from tools import (
@@ -81,7 +83,7 @@ def prepare_data(task_prompt, datum):
 
 def robust_post_process(completion):
     """
-    Parser intelligent pour extraire la décision du LLM.
+    Parser intelligent et TRES STRICT pour extraire la décision du LLM.
     Gère les retours type dict (API) ou string brute (Ollama).
     """
     # 1) Extract raw text
@@ -90,22 +92,31 @@ def robust_post_process(completion):
     else:
         content = str(completion)
 
-    content = content.strip()
-    normalized = content.lower()
+    content_clean = content.strip()
+    
+    # 2) Logique de décision stricte
+    # On remplace la ponctuation par des espaces et on met tout en minuscules
+    words = re.sub(r'[^a-zA-Z0-9]', ' ', content_clean.lower()).split()
+    
+    # Si la réponse est vide
+    if not words:
+        return content_clean, ["No"]
 
-    # 2) Decision logic
-    if "yes" in normalized:
-        return content, ["Yes"]
-    if "no" in normalized:
-        return content, ["No"]
+    # Le premier mot de la phrase générée doit être strictement "yes"
+    if words[0] == "yes":
+        return content_clean, ["Yes"]
+    elif words[0] == "no":
+        return content_clean, ["No"]
 
-    # fallback
-    return content, ["No"]
+    # S'il commence par autre chose ("The answer is...", "I think..."), on refuse par sécurité absolue
+    return content_clean, ["No"]
 
 
 def predict(args):
     client = build_ollama_client_from_args(args)
-    model_nick = getattr(args, "ollama_model", "ollama").replace(":", "_")
+    # Récupération sécurisée du nom du modèle passé dans le bash
+    model_name = getattr(args, "ollama_model", "ollama")
+    model_nick = model_name.replace(":", "_")
 
     prompt_file_name = os.path.basename(args.prompt_file).split(".")[0]
     pred_name = os.path.basename(args.data_path).replace(".json", f"-{model_nick}-{prompt_file_name}.json")
@@ -118,11 +129,7 @@ def predict(args):
     with open(args.prompt_file, "r", encoding="utf-8") as f:
         prompts = json.load(f)
 
-    # Robust prompt selection:
-    # - try exact dataset key
-    # - try lowercase
-    # - common alias banking77
-    # - otherwise first value
+    # Robust prompt selection for ANY dataset:
     task_prompt = (
         prompts.get(args.dataset)
         or prompts.get(str(args.dataset).lower())
@@ -138,46 +145,78 @@ def predict(args):
     if not isinstance(data, list):
         raise ValueError(f"Unexpected data format in {args.data_path}: expected list or dict with 'test_inputs'.")
 
-    yes_count = 0
-    for idx, datum in tqdm(enumerate(data), total=len(data)):
+    # ---- DEBUT DU MULTI-THREADING ----
+    
+    # Aperçu du premier prompt
+    if len(data) > 0:
+        print("\n--- PROMPT PREVIEW ---")
+        print(prepare_data(task_prompt, data[0]))
+        print("----------------------\n")
+
+    # Fonction isolée pour traiter UNE paire
+    def process_pair(idx):
+        datum = data[idx]
+
+        # Ne pas écraser si déjà fait
         if isinstance(datum, dict) and "prediction" in datum and not args.overwrite:
-            if "Yes" in datum.get("prediction", []):
-                yes_count += 1
-            continue
+            return idx, True
 
         prompt = prepare_data(task_prompt, datum)
 
-        if idx == 0:
-            print("\n--- PROMPT PREVIEW ---")
-            print(prompt)
-            print("----------------------\n")
-
+        # C'EST ICI QUE LE BUG A ETE CORRIGE : Ajout de model=model_name
         completion, error = delayed_completion(
             client=client,
             prompt=prompt,
             delay_in_seconds=float(args.delay),
             max_trials=int(args.max_trials),
+            model=model_name
         )
 
         if completion is None:
             print(f"Error index {idx}: {error}")
-            continue
+            return idx, False
 
         content, results = robust_post_process(completion)
 
-        # store results (compatible with predict_num_clusters.py)
+        # Rendre compatible
         if not isinstance(datum, dict):
-            # if datum isn't a dict, convert to dict so downstream code doesn't crash
             datum = {"input": _get_input_text(datum)}
             data[idx] = datum
 
         datum["res"] = content          # raw text (debug)
-        datum["output"] = results[0]    # "Yes"/"No"
+        datum["output"] = results[0]    # Strict "Yes"/"No"
         datum["prediction"] = results   # ["Yes"] or ["No"]
 
-        if results[0] == "Yes":
-            yes_count += 1
+        return idx, True
 
+    # Récupère la variable d'environnement ou utilise 4 par défaut
+    max_workers = int(os.environ.get("OLLAMA_NUM_PARALLEL", 4))
+    save_counter = 0
+
+    print(f"🚀 Lancement des PAIRES ({model_name}) avec {max_workers} requêtes en parallèle...")
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Soumission de toutes les tâches
+        futures = {executor.submit(process_pair, i): i for i in range(len(data))}
+        
+        # Récupération progressive
+        for future in tqdm(concurrent.futures.as_completed(futures), total=len(data)):
+            idx = futures[future]
+            success = future.result()
+
+            if not success:
+                continue
+
+            save_counter += 1
+            if save_counter >= args.save_every:
+                final_output = {"test_inputs": data, "pairs": data}
+                with open(pred_path, "w", encoding="utf-8") as f:
+                    json.dump(final_output, f, indent=4, ensure_ascii=False)
+                save_counter = 0
+
+    # Sauvegarde finale et décompte
+    yes_count = sum(1 for d in data if isinstance(d, dict) and d.get("output") == "Yes")
+    
     final_output = {"test_inputs": data, "pairs": data}
     with open(pred_path, "w", encoding="utf-8") as f:
         json.dump(final_output, f, indent=4, ensure_ascii=False)

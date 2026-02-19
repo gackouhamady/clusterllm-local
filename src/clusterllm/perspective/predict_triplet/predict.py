@@ -3,6 +3,7 @@ import json
 import os
 import glob
 from tqdm import tqdm
+import concurrent.futures
 
 from tools import (
     add_ollama_cli_args,
@@ -88,14 +89,14 @@ def predict(args):
         if "prepared" not in d:
             d["prepared"] = prepare_data(task_prompt, d)
 
-    # ---- 7. Inference Loop ----
-    save_counter = 0
-    for idx, datum in tqdm(enumerate(data), total=len(data)):
-        if idx == 0:
-            print(f"Sample Prompt:\n{datum['prepared']}\n")
+# ---- 7. Inference Loop (MULTI-THREADING) ----
+    if len(data) > 0 and "prepared" in data[0]:
+        print(f"Sample Prompt:\n{data[0]['prepared']}\n")
 
+    def process_item(idx, datum):
+        # Si déjà prédit lors d'une exécution précédente, on passe
         if "prediction" in datum:
-            continue
+            return idx, True
 
         prompt = datum["prepared"]
 
@@ -104,30 +105,44 @@ def predict(args):
             prompt=prompt,
             delay_in_seconds=float(args.delay),
             max_trials=int(args.max_trials),
-            # Pass model explicitly if delayed_completion supports it, 
-            # otherwise client is already configured.
             model=args.ollama_model 
         )
 
         if completion is None:
-            print(f"Saving data after failure at index {idx}.")
-            with open(pred_path, "w") as f:
-                json.dump(data, f, indent=2)
-            print(f"Error: {error}")
-            raise RuntimeError(f"Ollama completion failed at idx={idx}") from error
+            print(f"Error at index {idx}: {error}")
+            return idx, False
 
         content, results = post_process(completion, datum["options"])
-        data[idx]["content"] = content
-        data[idx]["prediction"] = results
+        datum["content"] = content
+        datum["prediction"] = results
+        return idx, True
 
-        save_counter += 1
-        if save_counter >= args.save_every:
-            print(f"Saving progress at index {idx}...")
-            with open(pred_path, "w") as f:
-                json.dump(data, f, indent=2)
-            save_counter = 0
+    max_workers = 4 # Parallélisme (doit correspondre à OLLAMA_NUM_PARALLEL)
+    save_counter = 0
 
-    # Final save
+    print(f"🚀 Lancement de l'inférence avec {max_workers} requêtes en parallèle...")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Prépare toutes les tâches
+        futures = {executor.submit(process_item, i, d): i for i, d in enumerate(data)}
+        
+        # Traite les tâches au fur et à mesure qu'elles se terminent
+        for future in tqdm(concurrent.futures.as_completed(futures), total=len(data)):
+            idx = futures[future]
+            success = future.result()
+
+            if not success:
+                print(f"Sauvegarde des données après échec à l'index {idx}.")
+                with open(pred_path, "w") as f:
+                    json.dump(data, f, indent=2)
+                raise RuntimeError(f"Ollama completion failed at idx={idx}")
+
+            save_counter += 1
+            if save_counter >= args.save_every:
+                with open(pred_path, "w") as f:
+                    json.dump(data, f, indent=2)
+                save_counter = 0
+
+    # Sauvegarde finale
     with open(pred_path, "w") as f:
         json.dump(data, f, indent=2)
 

@@ -4,20 +4,25 @@ import os
 import random
 
 dataset2lp = {
-    "banking77": "intent",
-    "few_rel_nat": "relation type",
-    "massive_scenario": "scenario",
+    "arxiv": "domain",
+    "bank77": "intent",
+    "clinc_intent": "intent",
+    "clinc150": "intent",
+    "go_emotions": "emotion",
+    "massive_domain": "domain",
     "massive_intent": "intent",
     "mtop_domain": "domain",
     "mtop_intent": "intent",
-    "clinc": "intent",
-    "clinc_domain": "domain"
+    "reddit": "topic",
+    "stackex": "topic"
 }
 
 def prepare_prompt(pos_pairs, neg_pairs, label_property):
     prompt_pos = f"[Example<IDX>]\nSentence 1: <SENT1>\nSentence 2: <SENT2>\nYes. Because both {label_property}s are <LABEL>.\n\n"
     prompt_neg = f"[Example<IDX>]\nSentence 1: <SENT1>\nSentence 2: <SENT2>\nNo. Because Sentence 1 has {label_property} <LABEL1> and Sentence 2 has {label_property} <LABEL2>.\n\n"
-    inst = f"Determine whether the {label_property}s of two banking customer utterances below belong to the same {label_property} category using above examples.\n\n"
+    
+    # "banking" retiré pour être générique et s'adapter à clinc_intent, arxiv, etc.
+    inst = f"Determine whether the {label_property}s of two customer utterances below belong to the same {label_property} category using above examples.\n\n"
 
     final_prepared = ""
     for idx, pair in enumerate(pos_pairs):
@@ -43,6 +48,7 @@ def prepare_prompt(pos_pairs, neg_pairs, label_property):
 def main(args):
     random.seed(args.seed)
 
+    # Initialisation propre pour ne pas écraser les autres datasets du fichier JSON
     if os.path.exists(args.prompt_path):
         with open(args.prompt_path, 'r') as f:
             all_prompts = json.load(f)
@@ -86,7 +92,7 @@ if __name__ == "__main__":
     parser.add_argument("--prompt_path", type=str, required=True)
     parser.add_argument("--sampled_pair_path", type=str, required=True)
     parser.add_argument("--data_path", type=str, required=True)
-    parser.add_argument("--dataset", type=str, default="banking77")
+    parser.add_argument("--dataset", type=str, default="bank77") # Changé ici aussi
     parser.add_argument("--num_sampled", type=int, default=16)
     parser.add_argument("--num_for_prompt", type=int, default=2)
     parser.add_argument("--seed", type=int, default=0)
