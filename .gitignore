@@ -47,3 +47,10 @@ src/clusterllm/perspective/predict_triplet/predicted_triplet_results/
 
 # datasets managed by DVC inside this tree
 src/data/data/
+.cache/
+runs/
+*.hdf5
+*.safetensors
+*.bin
+__pycache__/
+.DS_Store
