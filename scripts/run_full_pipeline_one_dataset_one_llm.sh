@@ -27,7 +27,7 @@ OLLAMA_BASE_URL="http://127.0.0.1:11434"
 SEED=42
 
 # ====== CHOOSE HERE ======
-ds="few_rel_nat"                      # any folder name inside: $ROOT/src/clusterllm/datasets/<ds>/
+ds="few_nerd_nat"                      # any folder name inside: $ROOT/src/clusterllm/datasets/<ds>/
 sc="small"                       # small | large
 llm="llama3.2:3b-instruct-q8_0"  # one model from `ollama list`
 # =========================
