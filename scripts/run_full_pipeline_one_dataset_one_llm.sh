@@ -27,7 +27,7 @@ OLLAMA_BASE_URL="http://127.0.0.1:11434"
 SEED=42
 
 # ====== CHOOSE HERE ======
-ds="go_emotions"                      # any folder name inside: $ROOT/src/clusterllm/datasets/<ds>/
+ds="massive_intent"                      # any folder name inside: $ROOT/src/clusterllm/datasets/<ds>/
 sc="small"                       # small | large
 llm="llama3.2:3b-instruct-q8_0"  # one model from `ollama list`
 # =========================
@@ -320,7 +320,7 @@ touch "$MARKER"
   python "$GRAN_DIR/predict_pairs.py" \
     --dataset "$ds" \
     --data_path "$cluster_json" \
-    --prompt_file "$PROMPT_RUN" \
+    --prompt_file "$PROMPT_TEMPLATE" \
     --delay 0 \
     --max_trials 5 \
     --save_every 50 \
