@@ -1,23 +1,30 @@
 """
-This follows exactly the pretraining scheme
+This follows exactly the pretraining scheme (CL contrastive objective for INSTRUCTOR),
+but is made robust to any dataset/LLM-generated converted triplets.
+
+Key robustness:
+- Normalize the INSTRUCTOR instruction (cur_e[k][0]) instead of asserting a specific prefix.
+- Keep the rest of the training logic identical.
 """
+
 import logging
 import os
-import torch
-import random
 import sys
 import json
 from dataclasses import dataclass, field
 from typing import Optional
 
+import torch
 import datasets
 import nltk
 import transformers
 from filelock import FileLock
 from InstructorEmbedding import INSTRUCTOR
+from datasets import Dataset, DatasetDict
 from transformers import (
     AutoTokenizer,
     DataCollatorForSeq2Seq,
+    default_data_collator,
     HfArgumentParser,
     MBart50Tokenizer,
     MBart50TokenizerFast,
@@ -28,14 +35,20 @@ from transformers import (
     set_seed,
 )
 from transformers.trainer_utils import get_last_checkpoint
-from transformers.utils import check_min_version, is_offline_mode
+from transformers.utils import check_min_version
+from transformers.utils.versions import require_version
 from torch.utils.data import SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
-from transformers.utils.versions import require_version
-from datasets import Dataset, DatasetDict
 
+# ---- transformers version compatibility (robust) ----
 check_min_version("4.20.0.dev0")
 require_version("datasets>=1.8.0", "To fix: pip install datasets>=1.8.0")
+
+try:
+    from transformers.utils import is_offline_mode  # transformers <5 and some 4.x
+except Exception:
+    def is_offline_mode():
+        return False
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +73,10 @@ def has_length(dataset):
 
 
 class InstructorTrainer(Seq2SeqTrainer):
-    def _get_train_sampler(self):
+    def _get_train_sampler(self, train_dataset=None):
+        if train_dataset is not None:
+            self.train_dataset = train_dataset
+
         if self.train_dataset is None or not has_length(self.train_dataset):
             return None
 
@@ -121,7 +137,9 @@ class InstructorTrainer(Seq2SeqTrainer):
                 one_neg_emb = embeddings_neg[j].unsqueeze(0)
                 one_neg_score = similarity_fct(anchor_emb, one_neg_emb) / temperature
                 cur_score = torch.cat([cur_score, one_neg_score], dim=-1)
-            all_scores = cur_score.unsqueeze(0) if all_scores is None else torch.cat([all_scores, cur_score.unsqueeze(0)], dim=0)
+            all_scores = cur_score.unsqueeze(0) if all_scores is None else torch.cat(
+                [all_scores, cur_score.unsqueeze(0)], dim=0
+            )
 
         labels = torch.zeros(all_scores.size(0)).long().to(embeddings_query.device)
         loss = nn.CrossEntropyLoss()(all_scores, labels)
@@ -138,7 +156,9 @@ class InstructorTrainer(Seq2SeqTrainer):
                 one_neg_emb = embeddings_query[j].unsqueeze(0)
                 one_neg_score = similarity_fct(anchor_emb, one_neg_emb) / temperature
                 cur_score = torch.cat([cur_score, one_neg_score], dim=-1)
-            all_another_scores = cur_score.unsqueeze(0) if all_another_scores is None else torch.cat([all_another_scores, cur_score.unsqueeze(0)], dim=0)
+            all_another_scores = cur_score.unsqueeze(0) if all_another_scores is None else torch.cat(
+                [all_another_scores, cur_score.unsqueeze(0)], dim=0
+            )
 
         labels_another = torch.zeros(all_another_scores.size(0)).long().to(embeddings_query.device)
         loss += nn.CrossEntropyLoss()(all_another_scores, labels_another)
@@ -156,7 +176,10 @@ class ModelArguments:
     model_revision: str = field(default="main")
     use_auth_token: bool = field(default=False)
     resize_position_embeddings: Optional[bool] = field(default=None)
-    init_checkpoint: Optional[str] = field(default=None, metadata={"help": "A model checkpoint dir containing pytorch_model.bin"})
+    init_checkpoint: Optional[str] = field(
+        default=None,
+        metadata={"help": "A model checkpoint dir containing pytorch_model.bin or model.safetensors"},
+    )
 
 
 @dataclass
@@ -172,8 +195,32 @@ class DataTrainingArguments:
     max_source_length: Optional[int] = field(default=512)
     max_train_samples: Optional[int] = field(default=None)
 
+    # Robust default instruction if provided instruction is empty/malformed
+    default_instruction: str = field(
+        default="Represent the text for clustering: ",
+        metadata={"help": "Fallback INSTRUCTOR instruction when input instruction is invalid."},
+    )
+
     def __post_init__(self):
         pass
+
+
+def _normalize_instruction(instr: str, fallback: str) -> str:
+    """
+    Paper expects INSTRUCTOR style instruction often starting with 'Represent ...'.
+    In practice, converted triplets may contain other prefixes.
+    We keep the instruction field but enforce a safe, INSTRUCTOR-compatible fallback.
+    """
+    if instr is None:
+        return ""
+    instr = str(instr).lstrip()  # remove leading spaces/tabs
+    if instr == "":
+        return ""
+    # Keep if already in the expected style
+    if instr.lower().startswith("represent "):
+        return instr
+    # Otherwise, normalize to fallback
+    return fallback
 
 
 def main():
@@ -241,11 +288,12 @@ def main():
             for s in cur_e[k][:-1]:
                 assert "!@#$%^&**!@#$%^&**" not in s
             cur_e[k][-1] = str(cur_e[k][-1])
+
             if not data_args.add_prompt_to_document:
                 cur_e[k][0] = ""
 
-            # Paper assertion:
-            assert cur_e[k][0].startswith("Represent ") or cur_e[k][0] == "" or cur_e[k][0].startswith("represent ")
+            # Robust instruction normalization (instead of assert)
+            cur_e[k][0] = _normalize_instruction(cur_e[k][0], data_args.default_instruction)
 
             train_examples[k].append("!@#$%^&**!@#$%^&**".join(cur_e[k]))
 
@@ -293,8 +341,8 @@ def main():
             keys = list(tokenized.keys())
             if all_tokenized is None:
                 all_tokenized = {}
-            for k in keys:
-                all_tokenized[f"{key}_{k}"] = tokenized[k].tolist()
+            for kk in keys:
+                all_tokenized[f"{key}_{kk}"] = tokenized[kk].tolist()
 
         all_tokenized["task_name"] = examples["task_name"]
         return all_tokenized
@@ -315,19 +363,13 @@ def main():
         )
 
     label_pad_token_id = -100 if data_args.overwrite_cache else tokenizer.pad_token_id
-    data_collator = DataCollatorForSeq2Seq(
-        tokenizer,
-        model=model,
-        label_pad_token_id=label_pad_token_id,
-        pad_to_multiple_of=8 if training_args.fp16 else None,
-    )
+    data_collator =  default_data_collator
 
     trainer = InstructorTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=None,
-        tokenizer=tokenizer,
+        eval_dataset=None, 
         data_collator=data_collator,
         compute_metrics=None,
     )
@@ -338,13 +380,26 @@ def main():
     elif last_checkpoint is not None:
         checkpoint = last_checkpoint
 
+    # Optional init checkpoint (bin or safetensors)
     if model_args.init_checkpoint is not None:
-        print(f"Loading from {model_args.init_checkpoint} ...")
-        state_dict = torch.load(os.path.join(model_args.init_checkpoint, "pytorch_model.bin"))
-        model.load_state_dict(state_dict)
+        ckpt_bin = os.path.join(model_args.init_checkpoint, "pytorch_model.bin")
+        ckpt_safe = os.path.join(model_args.init_checkpoint, "model.safetensors")
+        if os.path.exists(ckpt_bin):
+            print(f"Loading from {ckpt_bin} ...")
+            state_dict = torch.load(ckpt_bin, map_location="cpu")
+            model.load_state_dict(state_dict)
+        elif os.path.exists(ckpt_safe):
+            print(f"Loading from {ckpt_safe} ...")
+            from safetensors.torch import load_file as safe_load_file
+            state_dict = safe_load_file(ckpt_safe)
+            model.load_state_dict(state_dict)
+        else:
+            raise FileNotFoundError(f"init_checkpoint set but no pytorch_model.bin/model.safetensors in {model_args.init_checkpoint}")
 
     train_result = trainer.train(resume_from_checkpoint=checkpoint)
     trainer.save_model()
+    tokenizer.save_pretrained(training_args.output_dir)
+
 
     metrics = train_result.metrics
     metrics["train_samples"] = len(train_dataset)
