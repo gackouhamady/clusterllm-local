@@ -1,6 +1,24 @@
 run:
   dataset: clinc150
   scale: small
-  llm_triplet: llama3.2:3b-instruct-q8_0
-  llm_pairs: qwen2.5:32b
   seed: 42
+  llm_triplet: deepseek-r1:32b
+  llm_pairs: qwen2.5:32b
+
+datasets:
+  all:
+    - bank77
+    - clinc_intent
+    - clinc150
+    - mtop_intent
+    - mtop_domain
+    - massive_intent
+    - massive_domain
+    - stackex
+    - arxiv
+    - reddit
+    - go_emotions
+    - few_rel_nat
+    - few_nerd_nat
+    - few_event
+    - clinc_domain

@@ -1,11 +1,45 @@
 stages:
+  prepare_small:
+    foreach: ${datasets.all}
+    do:
+      cmd: >-
+        ALLOW_REMOTE_CODE=1
+        bash scripts/run_prepare_data_only.sh
+        ${item} small ${run.seed}
+      deps:
+        - scripts/run_prepare_data_only.sh
+        - src/data/prepare_data.py
+      params:
+        - run.seed
+      outs:
+        - src/clusterllm/datasets/${item}/small.jsonl
+        - data/raw/${item}_small_train.csv
+        - data/raw/${item}_small_eval.csv
+
+  prepare_large:
+    foreach: ${datasets.all}
+    do:
+      cmd: >-
+        ALLOW_REMOTE_CODE=1
+        bash scripts/run_prepare_data_only.sh
+        ${item} large ${run.seed}
+      deps:
+        - scripts/run_prepare_data_only.sh
+        - src/data/prepare_data.py
+      params:
+        - run.seed
+      outs:
+        - src/clusterllm/datasets/${item}/large.jsonl
+        - data/raw/${item}_large_train.csv
+        - data/raw/${item}_large_eval.csv
+
   full_pipeline_2llms:
     cmd: >-
       bash scripts/run_full_pipeline_one_dataset_two_llms.sh
       ${run.dataset} ${run.scale} ${run.llm_triplet} ${run.llm_pairs} ${run.seed}
     deps:
       - scripts/run_full_pipeline_one_dataset_two_llms.sh
-      - src/data/prepare_data.py
+      - src/clusterllm/datasets/${run.dataset}/${run.scale}.jsonl
       - src/clusterllm/perspective/predict_triplet/triplet_sampling.py
       - src/clusterllm/perspective/predict_triplet/predict.py
       - src/clusterllm/perspective/finetuning/convert_triplet.py
@@ -24,8 +58,6 @@ stages:
       - run.llm_pairs
       - run.seed
     outs:
-      - src/clusterllm/datasets/${run.dataset}:
-          cache: false
       - runs/perspective:
           cache: false
       - runs/granularity:

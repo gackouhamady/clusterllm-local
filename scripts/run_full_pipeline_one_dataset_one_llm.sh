@@ -52,35 +52,13 @@ newest_file() {
   ls -t $pattern 2>/dev/null | head -n 1 || true
 }
 
+
+DATA_DIR="$ROOT/src/clusterllm/datasets"
+PREP="$ROOT/src/data/prepare_data.py"
 # ------------------------------------------------------------------
-# STAGE 0) Ensure data exists: $DATA_DIR/$ds/$sc.jsonl
+# STAGE 0 REMOVED: data must already exist
 # ------------------------------------------------------------------
-mkdir -p "$DATA_DIR/$ds"
-
-if [ ! -f "$DATA_DIR/$ds/$sc.jsonl" ]; then
-  echo "MISSING: $DATA_DIR/$ds/$sc.jsonl -> running prepare_data.py to generate it"
-
-  mkdir -p "$ROOT/data/raw"
-
-  out_train_jsonl="$DATA_DIR/$ds/${sc}_train.jsonl"
-  out_eval_jsonl="$DATA_DIR/$ds/${sc}_eval.jsonl"
-
-  python "$PREP" \
-    --dataset "$ds" \
-    --seed "$SEED" \
-    --output-dir "$ROOT/data/raw" \
-    --datasets-dir "$DATA_DIR" \
-    --split-train "$sc" \
-    --split-eval "$sc" \
-    --out-train "$ROOT/data/raw/${ds}_${sc}_train.csv" \
-    --out-eval "$ROOT/data/raw/${ds}_${sc}_eval.csv" \
-    --jsonl-train "$out_train_jsonl" \
-    --jsonl-eval "$out_eval_jsonl"
-
-  cat "$out_train_jsonl" "$out_eval_jsonl" > "$DATA_DIR/$ds/$sc.jsonl"
-fi
-
-test -f "$DATA_DIR/$ds/$sc.jsonl" || die "still missing $DATA_DIR/$ds/$sc.jsonl"
+test -f "$DATA_DIR/$ds/$sc.jsonl" || die "Missing $DATA_DIR/$ds/$sc.jsonl. Run: scripts/run_prepare_data_only.sh $ds $sc"
 
 # ------------------------------------------------------------------
 # STAGE 1) Embeddings (baseline Instructor) -> ${sc}_embeds.hdf5

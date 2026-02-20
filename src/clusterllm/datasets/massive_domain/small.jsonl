@@ -1,0 +1,2030 @@
+{"text": "suffering consequences", "label": "qa_definition"}
+{"text": "did ben's email have an attachment", "label": "email_query"}
+{"text": "find a train ticket to philadelphia", "label": "transport_ticket"}
+{"text": "i hate this song", "label": "music_dislikeness"}
+{"text": "open parcheese game for you and i", "label": "play_game"}
+{"text": "add a reminder of a conference for tomorrow in new york", "label": "calendar_set"}
+{"text": "please power down", "label": "iot_wemo_off"}
+{"text": "olly there's a good band playing tonight at nine at jazz bar i want to go", "label": "calendar_set"}
+{"text": "please load new email for bruce and send message now", "label": "email_sendemail"}
+{"text": "any cultural events in california", "label": "recommendation_events"}
+{"text": "show me reviews of my nearest location food court", "label": "recommendation_locations"}
+{"text": "what time will the soccer match be tonight", "label": "calendar_query"}
+{"text": "cancel everything on my calendar", "label": "calendar_remove"}
+{"text": "for every odd numbered sunday set a reminder for", "label": "calendar_set"}
+{"text": "run coffee maker", "label": "iot_coffee"}
+{"text": "describe the new football game rules", "label": "general_quirky"}
+{"text": "what gun shows are in tulsa", "label": "recommendation_events"}
+{"text": "tell me the largest ocean in the world", "label": "qa_factoid"}
+{"text": "play for me the game harry potter and the chamber of secrets", "label": "play_game"}
+{"text": "mild or heavy weather", "label": "weather_query"}
+{"text": "send tech news", "label": "news_query"}
+{"text": "send email to joseph at gmail dot com", "label": "email_sendemail"}
+{"text": "how old are you", "label": "general_quirky"}
+{"text": "i'd like to set a date for this week", "label": "calendar_set"}
+{"text": "hey has john sent me any email lately", "label": "email_query"}
+{"text": "my desire is to listen to some country music", "label": "play_music"}
+{"text": "meetings from twenty to twenty five june", "label": "calendar_query"}
+{"text": "seven years", "label": "play_music"}
+{"text": "what is the definition of logic", "label": "qa_definition"}
+{"text": "do i have new emails", "label": "email_query"}
+{"text": "sticking to diet", "label": "general_quirky"}
+{"text": "olly book me a ticket to paris on eurostar this weekend", "label": "transport_ticket"}
+{"text": "alexa please turn down the lights in the house", "label": "iot_hue_lightdim"}
+{"text": "remove my next scheduled appointment please", "label": "calendar_remove"}
+{"text": "topic", "label": "email_query"}
+{"text": "delete event from calendar", "label": "calendar_remove"}
+{"text": "alexa change the radio station", "label": "play_radio"}
+{"text": "get me a person a. s. a. p.", "label": "social_post"}
+{"text": "event reminder mona tuesday", "label": "calendar_set"}
+{"text": "post the message now", "label": "social_post"}
+{"text": "how is the weather where i am", "label": "weather_query"}
+{"text": "can you tell me about animal kingdom in amazon forest", "label": "general_quirky"}
+{"text": "remind", "label": "calendar_set"}
+{"text": "i would like to hear some rap music", "label": "play_music"}
+{"text": "give me an update on the election in one hour", "label": "calendar_set"}
+{"text": "do we have morgan's office's number", "label": "email_querycontact"}
+{"text": "pandora", "label": "play_music"}
+{"text": "google what are the basic things humans need", "label": "general_quirky"}
+{"text": "can you tell me the time it is", "label": "datetime_query"}
+{"text": "when does my alarm go off", "label": "alarm_query"}
+{"text": "my day was extremely hard", "label": "general_quirky"}
+{"text": "get rid of all my scheduled events", "label": "calendar_remove"}
+{"text": "playback tom clancy splinter cell", "label": "play_audiobook"}
+{"text": "send an email to my brother and say wedding anniversary", "label": "email_sendemail"}
+{"text": "from now on mute", "label": "audio_volume_mute"}
+{"text": "play creed from my rock playlist", "label": "play_music"}
+{"text": "start a vacuum cleaner", "label": "iot_cleaning"}
+{"text": "let me know when the meeting is gonna happen", "label": "calendar_set"}
+{"text": "please tweet a complaint to comcast for bad customer service", "label": "social_post"}
+{"text": "make the radio turn on now", "label": "play_radio"}
+{"text": "tell me what i wore yesterday", "label": "general_quirky"}
+{"text": "what is the make up of the chair", "label": "qa_factoid"}
+{"text": "olly play a good track from my favorite jazz player", "label": "play_music"}
+{"text": "play prairie home companion on the car radio", "label": "play_radio"}
+{"text": "how much is lebron james worth", "label": "qa_factoid"}
+{"text": "take out the milk from the shopping list", "label": "lists_remove"}
+{"text": "call the nearest thai restaurant with delivery", "label": "takeaway_order"}
+{"text": "what's a good joke", "label": "general_joke"}
+{"text": "set repeating reminder for every sunday", "label": "calendar_set"}
+{"text": "can you make dinner for me", "label": "general_quirky"}
+{"text": "play only my list", "label": "play_music"}
+{"text": "jump to next podcast", "label": "play_podcasts"}
+{"text": "wake me up at five am this week", "label": "alarm_set"}
+{"text": "read me new post on my feed", "label": "social_query"}
+{"text": "my vacuum cleaner should start between ten to eleven am everyday", "label": "iot_cleaning"}
+{"text": "turn the kitchen lights off", "label": "iot_hue_lightoff"}
+{"text": "siri please turn the lights off in the bathroom", "label": "iot_hue_lightoff"}
+{"text": "please activate my coffee pot for me", "label": "iot_coffee"}
+{"text": "check if default alarm is set", "label": "alarm_query"}
+{"text": "great song for the commute", "label": "music_likeness"}
+{"text": "play music playlist", "label": "play_music"}
+{"text": "tell me some best tourist places to visit in america", "label": "recommendation_locations"}
+{"text": "include mike and jack to festival calendar", "label": "calendar_set"}
+{"text": "play random music", "label": "play_music"}
+{"text": "get rid of tax list from nineteen ninety", "label": "lists_remove"}
+{"text": "what time does the train to place leave", "label": "transport_query"}
+{"text": "lets hear the united states of anxiety podcast", "label": "play_podcasts"}
+{"text": "check my to do list", "label": "lists_query"}
+{"text": "set first week of june as holiday in my calendar", "label": "calendar_set"}
+{"text": "who takes less of duration of time for delivery", "label": "takeaway_query"}
+{"text": "remove succeeding event", "label": "calendar_remove"}
+{"text": "put on the vacuum on now and clean the living room", "label": "iot_cleaning"}
+{"text": "i really enjoy this song", "label": "music_likeness"}
+{"text": "keep playing war and peace", "label": "play_audiobook"}
+{"text": "is there a food festival in the area", "label": "recommendation_events"}
+{"text": "delete all events", "label": "calendar_remove"}
+{"text": "prepare coffee now", "label": "iot_coffee"}
+{"text": "crack a joke", "label": "general_joke"}
+{"text": "tweet complaint to at", "label": "social_post"}
+{"text": "birthday", "label": "calendar_set"}
+{"text": "any new email from john", "label": "email_query"}
+{"text": "is there any special in politic", "label": "news_query"}
+{"text": "is my reminder alarm set for dance class", "label": "alarm_query"}
+{"text": "wedding wishes", "label": "social_post"}
+{"text": "what does obama do in his day to day life", "label": "general_quirky"}
+{"text": "open temperature", "label": "weather_query"}
+{"text": "can you please add an item to my grocery list", "label": "lists_createoradd"}
+{"text": "light up the lights in the kitchen", "label": "iot_hue_lighton"}
+{"text": "keep playing secret garden", "label": "play_audiobook"}
+{"text": "what's the answer to the universe", "label": "qa_factoid"}
+{"text": "hello how is your day", "label": "general_quirky"}
+{"text": "play", "label": "play_radio"}
+{"text": "what is the weather this week for miami", "label": "weather_query"}
+{"text": "where is the nearest gas station", "label": "recommendation_locations"}
+{"text": "is today saint patricks day", "label": "calendar_query"}
+{"text": "set alarm at six thirty am", "label": "alarm_set"}
+{"text": "hey what time is it in dallas texas", "label": "datetime_query"}
+{"text": "put on some led zeppelin", "label": "play_music"}
+{"text": "how tall is mount everest", "label": "qa_factoid"}
+{"text": "what are lady gagas most popular songs", "label": "music_query"}
+{"text": "play duncan trussel's latest podcast", "label": "play_podcasts"}
+{"text": "play the next show on podcast", "label": "play_podcasts"}
+{"text": "i want to order a pizza from michael's pizza", "label": "takeaway_order"}
+{"text": "on monday the twentieth i need to have a conversation with greg about our weekend trip", "label": "calendar_set"}
+{"text": "read me the latest new york times headlines", "label": "news_query"}
+{"text": "check if alarm is set for six am", "label": "alarm_query"}
+{"text": "start audio playback of twilight again", "label": "play_audiobook"}
+{"text": "music", "label": "play_music"}
+{"text": "i would like to hear jazz music", "label": "play_music"}
+{"text": "can you tell me the recipe to cook pav bhaji", "label": "cooking_recipe"}
+{"text": "how would you describe a happy birthday", "label": "qa_definition"}
+{"text": "tell me if global warming is true", "label": "general_quirky"}
+{"text": "how is the new movie swat", "label": "recommendation_movies"}
+{"text": "what is the definition of forensic", "label": "qa_definition"}
+{"text": "will it rain tomorrow", "label": "weather_query"}
+{"text": "what do i have planned for this week", "label": "calendar_query"}
+{"text": "put on", "label": "play_radio"}
+{"text": "next play justin bieber's sorry", "label": "play_music"}
+{"text": "text an email to donna hey what are you doing today", "label": "email_sendemail"}
+{"text": "take out available louies", "label": "takeaway_query"}
+{"text": "tell me everything you know about sloths", "label": "qa_factoid"}
+{"text": "i had food as soon as i got up", "label": "general_quirky"}
+{"text": "send a reply to mike with the answer four hundred and thirty from his email he sent this morning", "label": "email_sendemail"}
+{"text": "what time does the train arrive in sacremento", "label": "transport_query"}
+{"text": "instructions to make a meal", "label": "cooking_recipe"}
+{"text": "list exchange rate information for the day for u. s. d. to jpy", "label": "qa_currency"}
+{"text": "give the stock price details of motorolla", "label": "qa_stock"}
+{"text": "i'm so happy today i got tickets for the concert", "label": "general_quirky"}
+{"text": "have any emails come in since four hundred today", "label": "email_query"}
+{"text": "current time in japan", "label": "datetime_query"}
+{"text": "what's for today", "label": "calendar_query"}
+{"text": "radio channels", "label": "play_radio"}
+{"text": "i want it to be able to tell me statistics about things it's done for me like how often i've eaten out this month", "label": "general_quirky"}
+{"text": "wake me up at five am", "label": "alarm_set"}
+{"text": "look for shopping mall in sacramento for women's clothes", "label": "recommendation_locations"}
+{"text": "what's the latest news", "label": "news_query"}
+{"text": "add a reminder for april twenty as my bro's birthday", "label": "calendar_set"}
+{"text": "show me direction to my home", "label": "transport_query"}
+{"text": "did the price of walmart stock go up or down", "label": "qa_stock"}
+{"text": "what does situation mean", "label": "qa_definition"}
+{"text": "delete my meeting for two o'clock p. m. today", "label": "calendar_remove"}
+{"text": "read list of new emails", "label": "email_query"}
+{"text": "let's cook meatballs together", "label": "cooking_recipe"}
+{"text": "silence volume on speakers", "label": "audio_volume_mute"}
+{"text": "shut the lights off", "label": "iot_hue_lightoff"}
+{"text": "show me my alarms i have set", "label": "alarm_query"}
+{"text": "how many hours distance is between my location and new york", "label": "datetime_convert"}
+{"text": "what is on the agenda for the four p. m. meeting with joe", "label": "calendar_query"}
+{"text": "could you repeat this event", "label": "calendar_set"}
+{"text": "make my usual", "label": "iot_coffee"}
+{"text": "how are you feeling today", "label": "general_quirky"}
+{"text": "more stock price", "label": "qa_stock"}
+{"text": "if you had to kill someone to save three people would you do it and if so why", "label": "general_quirky"}
+{"text": "when will my chinese food be delivered", "label": "takeaway_query"}
+{"text": "do you know recipe for risotto", "label": "cooking_recipe"}
+{"text": "start playing", "label": "play_music"}
+{"text": "olly do they deliver home", "label": "takeaway_query"}
+{"text": "play slayer", "label": "play_music"}
+{"text": "look for apple pie recipe", "label": "cooking_recipe"}
+{"text": "add this to the list", "label": "lists_createoradd"}
+{"text": "i do not know how to answer this question you left a word or two out", "label": "general_quirky"}
+{"text": "please say to the email that sent me george i need the money now it's urgent", "label": "email_sendemail"}
+{"text": "become a helicopter", "label": "general_quirky"}
+{"text": "what is the traffic like on my commute home at five", "label": "transport_query"}
+{"text": "brightness ninety percent", "label": "iot_hue_lightchange"}
+{"text": "listen to my favorites", "label": "play_music"}
+{"text": "what is my schedule for the day", "label": "calendar_query"}
+{"text": "what is the weather like right now", "label": "weather_query"}
+{"text": "have i received any emails in the last ten minutes", "label": "email_query"}
+{"text": "what is the population of new york", "label": "qa_factoid"}
+{"text": "add tomorrows dinner date to the calendar", "label": "calendar_set"}
+{"text": "check emails from john", "label": "email_query"}
+{"text": "what brand hair spray does donald trump use", "label": "qa_factoid"}
+{"text": "show meetings", "label": "calendar_set"}
+{"text": "show future events", "label": "calendar_query"}
+{"text": "cancel business meeting on wednesday", "label": "calendar_remove"}
+{"text": "olly play music from the jazz genre", "label": "play_music"}
+{"text": "put meeting with pawel for tomorrow ten am", "label": "calendar_set"}
+{"text": "my day was full of work olly", "label": "general_quirky"}
+{"text": "did i leave myself any reminders", "label": "calendar_query"}
+{"text": "play bilando", "label": "play_music"}
+{"text": "how long should i cook a steak to achieve medium rare", "label": "cooking_recipe"}
+{"text": "is there takeaway at papa john's", "label": "takeaway_query"}
+{"text": "make a repeating reminder for this calendar event", "label": "calendar_set"}
+{"text": "how long will my lunch meeting be on tuesday", "label": "calendar_query"}
+{"text": "tell me about the latest environmental news", "label": "news_query"}
+{"text": "is this program is scheduled", "label": "calendar_query"}
+{"text": "what time is it in london right now", "label": "datetime_query"}
+{"text": "make sure there is no events on my calendar", "label": "calendar_remove"}
+{"text": "what are todays top podcasts", "label": "play_podcasts"}
+{"text": "it's my mother's birthday today send me a notification every year on this date", "label": "calendar_set"}
+{"text": "give me the latest political headlines across the world", "label": "news_query"}
+{"text": "remind me about the meeting tomorrow one hour before", "label": "calendar_set"}
+{"text": "should i take my raincoat with me now", "label": "weather_query"}
+{"text": "play a podcast from my library", "label": "play_podcasts"}
+{"text": "how much is the us dollar versus the pound", "label": "qa_currency"}
+{"text": "fastest route to turiellos", "label": "transport_query"}
+{"text": "brighten the lights", "label": "iot_hue_lightup"}
+{"text": "open the folder app please", "label": "takeaway_order"}
+{"text": "please play only are rehman's songs", "label": "play_music"}
+{"text": "knock knock", "label": "general_joke"}
+{"text": "where is volume setting", "label": "audio_volume_other"}
+{"text": "please remove my list of favorite albums", "label": "lists_remove"}
+{"text": "add song to running list", "label": "music_likeness"}
+{"text": "what news has happened on c. n. n. today", "label": "news_query"}
+{"text": "delete alarm", "label": "alarm_remove"}
+{"text": "please purchase a train ticket for this weekend", "label": "transport_ticket"}
+{"text": "i feel like jazz right now how about you", "label": "play_music"}
+{"text": "olly what day of the week is halloween", "label": "datetime_query"}
+{"text": "please give me todays forecast for new york city", "label": "weather_query"}
+{"text": "daily news", "label": "news_query"}
+{"text": "can you create a sugar free diet for me and create a shopping list for the ingredients", "label": "general_quirky"}
+{"text": "do i have anything planned", "label": "calendar_query"}
+{"text": "what does oscillate mean", "label": "qa_definition"}
+{"text": "play me a random song from my playlist", "label": "play_music"}
+{"text": "delete calendar item", "label": "calendar_remove"}
+{"text": "tell me about alarms", "label": "alarm_query"}
+{"text": "i am unavailable from four to six in the evening tomorrow mark my calendar", "label": "calendar_set"}
+{"text": "where is the venue in which the marriage of tom is going to take place", "label": "calendar_query"}
+{"text": "find food and order", "label": "takeaway_order"}
+{"text": "can you turn up the lights", "label": "iot_hue_lightup"}
+{"text": "please send an email to cassy who is there on my family and friend list", "label": "email_sendemail"}
+{"text": "add a wrist watch to the shopping list", "label": "lists_createoradd"}
+{"text": "open up and play music from my jogging playlist", "label": "play_music"}
+{"text": "email donna plans for today", "label": "email_sendemail"}
+{"text": "show me my latest social media activity", "label": "social_query"}
+{"text": "wipe everything on my calendar", "label": "calendar_remove"}
+{"text": "quiet mode on until i am home from work", "label": "audio_volume_mute"}
+{"text": "please begin clash of clans", "label": "play_game"}
+{"text": "add my car payment on the twelfth in my calendar", "label": "calendar_set"}
+{"text": "remove events from calendar", "label": "calendar_remove"}
+{"text": "when does the super bowl officially start", "label": "qa_factoid"}
+{"text": "what is on my playlist", "label": "lists_query"}
+{"text": "tell me when it is five p. m.", "label": "alarm_set"}
+{"text": "start the vacuum", "label": "iot_cleaning"}
+{"text": "reset my locations list", "label": "lists_remove"}
+{"text": "tell me the funniest joke that was ever told", "label": "general_joke"}
+{"text": "can they do delivery", "label": "takeaway_query"}
+{"text": "is it any ones birthday", "label": "calendar_query"}
+{"text": "what is the exchange rate for mexico money", "label": "qa_currency"}
+{"text": "change the lights in the living room to green and red", "label": "iot_hue_lightchange"}
+{"text": "play game with me", "label": "play_game"}
+{"text": "olly i'm looking for some dress shows can you find clothing stores within one mile", "label": "recommendation_locations"}
+{"text": "alexa turn the lights down to seven", "label": "iot_hue_lightdim"}
+{"text": "set an alert for two p. m.", "label": "alarm_set"}
+{"text": "tell me about city traffic", "label": "transport_traffic"}
+{"text": "you like the song", "label": "music_likeness"}
+{"text": "reserve the closest uber", "label": "transport_taxi"}
+{"text": "please list all my alarms", "label": "alarm_query"}
+{"text": "what is leonardo dicaprio's networth", "label": "qa_factoid"}
+{"text": "biography of person", "label": "general_quirky"}
+{"text": "i want the music to be saved can you do it for me", "label": "music_likeness"}
+{"text": "which bar has the most affordable drinks near sixth street", "label": "recommendation_locations"}
+{"text": "give the list of theaters in the vicinity", "label": "recommendation_locations"}
+{"text": "i would like to reply to the most recent email", "label": "email_sendemail"}
+{"text": "delete the shopping trip i have scheduled march twenty third", "label": "calendar_remove"}
+{"text": "rock", "label": "play_music"}
+{"text": "please start the vacuum cleaner", "label": "iot_cleaning"}
+{"text": "have i need to take a sun glass", "label": "weather_query"}
+{"text": "remove that item", "label": "lists_remove"}
+{"text": "what does my facebook feed look like", "label": "social_query"}
+{"text": "consequences to actions", "label": "qa_definition"}
+{"text": "how is the weather in san francisco", "label": "weather_query"}
+{"text": "tell comcast i hate them", "label": "social_post"}
+{"text": "play best friends by yelawolf", "label": "play_music"}
+{"text": "do i have anything scheduled for today", "label": "calendar_query"}
+{"text": "display list of recent emails", "label": "email_query"}
+{"text": "at what time is the italian cafe closed between lunch and dinner", "label": "calendar_query"}
+{"text": "check unread emails from amy", "label": "email_query"}
+{"text": "remove my dinner event for monday", "label": "calendar_remove"}
+{"text": "check for all the movie theater prices and availability for a newly released movie in my location", "label": "recommendation_movies"}
+{"text": "hey siri start an email to coworker", "label": "email_sendemail"}
+{"text": "what's the easiest way to cook pasta", "label": "cooking_recipe"}
+{"text": "how much is one american dollars worth in england", "label": "qa_currency"}
+{"text": "change the lights to blue olly", "label": "iot_hue_lightchange"}
+{"text": "do i have any alarms set for six am tomorrow", "label": "alarm_query"}
+{"text": "convert current time from g. m. t. to e. s. t.", "label": "datetime_convert"}
+{"text": "open stock price for name", "label": "qa_stock"}
+{"text": "start b. b. c. radio", "label": "play_radio"}
+{"text": "meeting reminder", "label": "calendar_set"}
+{"text": "how long do i cook maccoroni", "label": "cooking_recipe"}
+{"text": "what do you know about fringe in edinburgh next year", "label": "general_quirky"}
+{"text": "hi you there", "label": "general_quirky"}
+{"text": "i need to talk to mom", "label": "general_quirky"}
+{"text": "can you erase the haircut i have scheduled for friday", "label": "calendar_remove"}
+{"text": "where is my meeting at nine am", "label": "calendar_query"}
+{"text": "the song in background is cool", "label": "music_likeness"}
+{"text": "what is the nearest pizza shop", "label": "recommendation_locations"}
+{"text": "how many tornadoes have there been this month", "label": "general_quirky"}
+{"text": "open company name and find complaints", "label": "social_post"}
+{"text": "what's happening around the world", "label": "news_query"}
+{"text": "play a live version of elton john", "label": "play_music"}
+{"text": "tweet a complaint for the online bookstore", "label": "social_post"}
+{"text": "set reminder for noon to get lunch with boss", "label": "calendar_set"}
+{"text": "have i gotten any new email", "label": "email_query"}
+{"text": "set an alarm for nine am", "label": "alarm_set"}
+{"text": "yes i like to save opinion on song playing and which player support that song", "label": "music_likeness"}
+{"text": "post my business on twitter", "label": "social_post"}
+{"text": "tell me something to remind this week", "label": "calendar_set"}
+{"text": "show me tomorrows weather in this area", "label": "weather_query"}
+{"text": "when is the next train to glasgow from aberdeen", "label": "transport_query"}
+{"text": "delete it", "label": "calendar_remove"}
+{"text": "which contact haven't i called in twelve months", "label": "email_querycontact"}
+{"text": "remind me of my meeting on", "label": "calendar_set"}
+{"text": "what is on my to do list", "label": "lists_query"}
+{"text": "divide seventy six in two parts", "label": "qa_maths"}
+{"text": "get me up at eight am", "label": "alarm_set"}
+{"text": "should i bring a jacket with me tonight", "label": "weather_query"}
+{"text": "i need to know the time right now what is it", "label": "datetime_query"}
+{"text": "please play shape of you by said sheeran", "label": "play_music"}
+{"text": "i want you to play bohemian raphsody for me", "label": "play_music"}
+{"text": "please read my new mails", "label": "email_query"}
+{"text": "brighten the light of hall", "label": "iot_hue_lightup"}
+{"text": "speak loudly", "label": "audio_volume_up"}
+{"text": "what can i substitute butter with", "label": "cooking_recipe"}
+{"text": "play the second song from anirudh's song", "label": "play_music"}
+{"text": "please set lunch meeting at twelve p. m. for every wednesday in march", "label": "calendar_set"}
+{"text": "what is your name", "label": "general_quirky"}
+{"text": "olly what time is it in this city", "label": "datetime_query"}
+{"text": "what is the weather", "label": "weather_query"}
+{"text": "is the thanks giving event on fourteenth of this month true", "label": "calendar_query"}
+{"text": "add a meeting to my calendar for nine am with tom", "label": "calendar_set"}
+{"text": "schedule a meeting event in my calendar", "label": "calendar_set"}
+{"text": "what is going on on december fourth", "label": "calendar_query"}
+{"text": "more lights please", "label": "iot_hue_lightup"}
+{"text": "remind me about my meeting an hour before it begins", "label": "calendar_set"}
+{"text": "music third day", "label": "play_music"}
+{"text": "who won the presidential election this year", "label": "qa_factoid"}
+{"text": "remove pencil from stationary", "label": "lists_remove"}
+{"text": "book a cab to office for me", "label": "transport_taxi"}
+{"text": "tell me billy crytals address", "label": "qa_factoid"}
+{"text": "read me my list for shopping", "label": "lists_query"}
+{"text": "add an alarm for tomorrow morning at six am", "label": "alarm_set"}
+{"text": "check most current emails", "label": "email_query"}
+{"text": "give me my facebook update every three hours", "label": "social_query"}
+{"text": "stream poker face by lady gaga", "label": "play_music"}
+{"text": "have i received any emails since noon", "label": "email_query"}
+{"text": "did i leave the light on in the garage", "label": "iot_hue_lightoff"}
+{"text": "start the dogwalking playlist", "label": "play_music"}
+{"text": "what does my schedule look like today", "label": "calendar_query"}
+{"text": "give me the train time", "label": "transport_query"}
+{"text": "olly how long should i boil the egg", "label": "cooking_recipe"}
+{"text": "post in twitter my visit to japan", "label": "social_post"}
+{"text": "please play the radio gaga song", "label": "play_music"}
+{"text": "i bought pre season baseball tickets", "label": "general_quirky"}
+{"text": "please compose a new email to coworker", "label": "email_sendemail"}
+{"text": "slow down the speaker volume", "label": "audio_volume_down"}
+{"text": "say the list", "label": "lists_query"}
+{"text": "please make me coffee without sweetener", "label": "iot_coffee"}
+{"text": "what region is miami located", "label": "qa_factoid"}
+{"text": "i mostly pay attention", "label": "weather_query"}
+{"text": "what is the latest news on donald trump", "label": "news_query"}
+{"text": "what time is it in central time zone", "label": "datetime_query"}
+{"text": "turn off eight am alarm", "label": "alarm_remove"}
+{"text": "what's shakin bacon", "label": "general_quirky"}
+{"text": "i want a coffee", "label": "iot_coffee"}
+{"text": "start a competitive crossword for us", "label": "play_game"}
+{"text": "turn off the porch light", "label": "iot_hue_lightoff"}
+{"text": "play station gx in the radio", "label": "play_radio"}
+{"text": "what will the weather be tomorrow", "label": "weather_query"}
+{"text": "what does celebrity do", "label": "qa_factoid"}
+{"text": "tell me when i should leave for a scheduled event so that i am on time", "label": "calendar_set"}
+{"text": "will i need to wear a jacket next wednesday", "label": "weather_query"}
+{"text": "house change all lights to blue", "label": "iot_hue_lightchange"}
+{"text": "are there any new emails in outlook", "label": "email_query"}
+{"text": "show me my calendar event this friday afternoon", "label": "calendar_query"}
+{"text": "what is googs current price", "label": "qa_stock"}
+{"text": "send a complaint tweet", "label": "social_post"}
+{"text": "have i received new emails in the last ten minutes", "label": "email_query"}
+{"text": "what's the weather next wednesday", "label": "weather_query"}
+{"text": "today i had a meeting with george", "label": "general_quirky"}
+{"text": "how long will it take to get to the airport", "label": "transport_query"}
+{"text": "front page news articles please", "label": "news_query"}
+{"text": "remind me my mom's birthday a week before", "label": "calendar_set"}
+{"text": "two thumbs down at companyname", "label": "social_post"}
+{"text": "turn off the bathroom light please", "label": "iot_hue_lightoff"}
+{"text": "what does turbulence mean", "label": "qa_definition"}
+{"text": "b. b. c. world headlines", "label": "news_query"}
+{"text": "search to find current local time and time zone", "label": "datetime_query"}
+{"text": "play the next one", "label": "play_podcasts"}
+{"text": "can they provide takeaway", "label": "takeaway_query"}
+{"text": "i want to listen to podcast", "label": "play_podcasts"}
+{"text": "can you please stop speaking", "label": "audio_volume_mute"}
+{"text": "what time does the first train depart from chicago", "label": "transport_query"}
+{"text": "what do i have scheduled for the nineteenth at two p. m.", "label": "calendar_query"}
+{"text": "bring up papa pear saga", "label": "play_game"}
+{"text": "get hourly notification on sports news", "label": "news_query"}
+{"text": "i am having a meeting on tomorrow set it", "label": "calendar_set"}
+{"text": "user friendly", "label": "news_query"}
+{"text": "news articles on a particular subject", "label": "news_query"}
+{"text": "give me news from c. n. n.", "label": "news_query"}
+{"text": "play music from my rock list", "label": "play_music"}
+{"text": "turn off the bathroom lights", "label": "iot_hue_lightoff"}
+{"text": "can you show me a list of all my recent commands", "label": "general_quirky"}
+{"text": "where is the prime meridian", "label": "qa_factoid"}
+{"text": "add practice to calendar on feb four at king's park at two p. m.", "label": "calendar_set"}
+{"text": "so clean news in past six hours is what", "label": "news_query"}
+{"text": "this is the best band ever", "label": "music_likeness"}
+{"text": "set a meeting between myself and john at two p. m. tomorrow", "label": "calendar_set"}
+{"text": "i have a function at washington tomorrow remind it", "label": "calendar_set"}
+{"text": "has the dollar rate increased", "label": "qa_currency"}
+{"text": "please remind me about this tomorrow", "label": "calendar_set"}
+{"text": "remind me to call mom every tuesday at ten am", "label": "calendar_set"}
+{"text": "i need good ideas for cooking", "label": "cooking_recipe"}
+{"text": "are my contacts mostly female or male", "label": "email_querycontact"}
+{"text": "show bio of rihana", "label": "qa_factoid"}
+{"text": "hey what will be the predicted weather for tomorrow", "label": "weather_query"}
+{"text": "remove meeting reminder for tuesday", "label": "calendar_remove"}
+{"text": "are sunglasses a good choice for today", "label": "weather_query"}
+{"text": "two by two is", "label": "qa_maths"}
+{"text": "search in the web for buying bakeware for muffins", "label": "cooking_recipe"}
+{"text": "where is the nearest walmart", "label": "recommendation_locations"}
+{"text": "did i email tom on the subject of gun control", "label": "email_query"}
+{"text": "don't talk until i ask you to", "label": "audio_volume_mute"}
+{"text": "can you send the email to the new email id", "label": "email_sendemail"}
+{"text": "is the city cheaper or costlier to live", "label": "weather_query"}
+{"text": "the news from c. b. s. alexa", "label": "news_query"}
+{"text": "play song aces high", "label": "play_music"}
+{"text": "please play the podcast for me", "label": "play_podcasts"}
+{"text": "olly turn the news on", "label": "news_query"}
+{"text": "where is the car", "label": "audio_volume_up"}
+{"text": "replay the musics", "label": "music_settings"}
+{"text": "what is the exchange rate with in one british pound", "label": "qa_currency"}
+{"text": "anything interesting from bob's news", "label": "news_query"}
+{"text": "travel book a train ticket", "label": "transport_ticket"}
+{"text": "play a game with me", "label": "play_game"}
+{"text": "do you know of any good free knitting patterns", "label": "general_quirky"}
+{"text": "what is the quickest way to my work downtown without hitting any traffic", "label": "transport_query"}
+{"text": "tell me about the new foreign policy of trump", "label": "news_query"}
+{"text": "find an interesting podcast about last pritzker price winners", "label": "play_podcasts"}
+{"text": "tell me when obama was born", "label": "qa_factoid"}
+{"text": "please find the radio station currently playing howard stern", "label": "play_radio"}
+{"text": "what's euro u. s. d. right now", "label": "qa_currency"}
+{"text": "call city cab to airport", "label": "transport_taxi"}
+{"text": "could you turn the light off", "label": "iot_hue_lightoff"}
+{"text": "what is todays weather", "label": "weather_query"}
+{"text": "play country radio", "label": "play_radio"}
+{"text": "what is the exchange rate between us and mexico", "label": "qa_currency"}
+{"text": "new message to newmail at gmail dot com", "label": "email_sendemail"}
+{"text": "i need to find a gift what stores are within a one mile radius", "label": "recommendation_locations"}
+{"text": "add a lunch with mike", "label": "calendar_set"}
+{"text": "what is the definition of timeliness", "label": "qa_definition"}
+{"text": "mute please", "label": "audio_volume_mute"}
+{"text": "play audiobook of planets", "label": "play_audiobook"}
+{"text": "i want to eat some spicy thing", "label": "takeaway_order"}
+{"text": "my set alarms", "label": "alarm_query"}
+{"text": "today i saw a bulldog", "label": "general_quirky"}
+{"text": "wake me at six am thursday so i have time for the meeting", "label": "calendar_set"}
+{"text": "what information do i have on reminders", "label": "calendar_query"}
+{"text": "how do i set my coffee machine to make coffee", "label": "iot_coffee"}
+{"text": "explanation of the song", "label": "music_query"}
+{"text": "tell me current time in los angels", "label": "datetime_query"}
+{"text": "power off the wemo plug", "label": "iot_wemo_off"}
+{"text": "please add sugar to my grocery list", "label": "lists_createoradd"}
+{"text": "enter song suggestion", "label": "music_likeness"}
+{"text": "what are the trending articles on the new york times", "label": "news_query"}
+{"text": "facebook current stock rate", "label": "qa_stock"}
+{"text": "has robert emails me yet", "label": "email_query"}
+{"text": "add broccoli to my grocery list", "label": "lists_createoradd"}
+{"text": "olly turn the light off in the living room", "label": "iot_hue_lightoff"}
+{"text": "give me the weather forecast for this week", "label": "weather_query"}
+{"text": "tweet my current location", "label": "social_post"}
+{"text": "i need some details about bruce lee please assist", "label": "qa_factoid"}
+{"text": "what's in my inbox since we last looked", "label": "email_query"}
+{"text": "show me the current time in germany", "label": "datetime_query"}
+{"text": "let me hear my list", "label": "lists_query"}
+{"text": "tell me about the latest political news", "label": "news_query"}
+{"text": "lower the overhead lights", "label": "iot_hue_lightdim"}
+{"text": "tweet samsung and tell them to stop killing people with their products", "label": "social_post"}
+{"text": "how is it outside", "label": "weather_query"}
+{"text": "tell me the info about india's geography", "label": "qa_factoid"}
+{"text": "order a pizza with sausage from domino's", "label": "takeaway_order"}
+{"text": "please book a ticket of rajdhani express train from jaipur", "label": "transport_ticket"}
+{"text": "find funny jokes", "label": "general_joke"}
+{"text": "what times are my alarms set for", "label": "alarm_query"}
+{"text": "turn off bedroom light at nine thirty p. m.", "label": "iot_hue_lightoff"}
+{"text": "i want dimmer lights", "label": "iot_hue_lightdim"}
+{"text": "report weather for largo", "label": "weather_query"}
+{"text": "what was elvis presley's birthday", "label": "qa_factoid"}
+{"text": "show weather", "label": "weather_query"}
+{"text": "give details of rock sand", "label": "qa_definition"}
+{"text": "lower volume by fifty percent", "label": "audio_volume_down"}
+{"text": "has john sent me an email", "label": "email_query"}
+{"text": "will the temperature stay about the same or is it going to get colder", "label": "weather_query"}
+{"text": "please set the alarm for next friday at six thirty am", "label": "alarm_set"}
+{"text": "i need a recipe that is from ingredients on my shopping list", "label": "cooking_recipe"}
+{"text": "tweet to google costumer service my new nexus phone stop working help please", "label": "social_post"}
+{"text": "tweet mcdonald's down reseda has terrible service", "label": "social_post"}
+{"text": "search for more songs from the band", "label": "play_music"}
+{"text": "remind me i take mom to the hairdresser's thursday at one thousand one hundred am", "label": "calendar_set"}
+{"text": "did i receive any new emails from dan", "label": "email_query"}
+{"text": "i want to know about this song", "label": "music_query"}
+{"text": "just play nine hundred and thirty seven f. m.", "label": "play_radio"}
+{"text": "list all train times to ny", "label": "transport_query"}
+{"text": "what are some restaurants near me", "label": "recommendation_locations"}
+{"text": "silence for two hours", "label": "audio_volume_mute"}
+{"text": "what about new mail", "label": "email_query"}
+{"text": "reply to email", "label": "email_sendemail"}
+{"text": "color of light should be dimmed bright", "label": "iot_hue_lightdim"}
+{"text": "could you please play the song of michael jackson", "label": "play_music"}
+{"text": "email form for regional v. p.", "label": "email_sendemail"}
+{"text": "delete the next event today", "label": "calendar_remove"}
+{"text": "play me in tic tac toe", "label": "play_game"}
+{"text": "please change the light colors to red", "label": "iot_hue_lightchange"}
+{"text": "on friday please put dentist appointment at three", "label": "calendar_set"}
+{"text": "olly change the lighting to blue", "label": "iot_hue_lightchange"}
+{"text": "can you make the lights go out", "label": "iot_hue_lightoff"}
+{"text": "what is the location of moldova", "label": "qa_factoid"}
+{"text": "play all order of the green hand from previous week", "label": "play_podcasts"}
+{"text": "c. n. n. headlines", "label": "news_query"}
+{"text": "delete events from calendar", "label": "calendar_remove"}
+{"text": "when is the next friday the thirteenth", "label": "datetime_query"}
+{"text": "where is laos located", "label": "qa_factoid"}
+{"text": "please negative response tweet on daikin service", "label": "social_post"}
+{"text": "just set me reminders about pending bill payments", "label": "calendar_set"}
+{"text": "give me more light", "label": "iot_hue_lightup"}
+{"text": "inform me on the items on the list", "label": "lists_query"}
+{"text": "facebook", "label": "social_query"}
+{"text": "i want to know about the brexit", "label": "news_query"}
+{"text": "remind me to do something then", "label": "calendar_set"}
+{"text": "alexa please send an email to mom", "label": "email_sendemail"}
+{"text": "describe what a sphere is", "label": "qa_definition"}
+{"text": "i want the status on my screen brightness", "label": "general_quirky"}
+{"text": "what's happening around me", "label": "recommendation_events"}
+{"text": "tell me the recipe of", "label": "cooking_recipe"}
+{"text": "could you please play the f. m. station which plays pop songs", "label": "play_radio"}
+{"text": "turn off the shed light", "label": "iot_hue_lightoff"}
+{"text": "what are the top stories on c. n. n.", "label": "news_query"}
+{"text": "best rap music", "label": "play_music"}
+{"text": "delete the first item on the list", "label": "lists_remove"}
+{"text": "i need some rap", "label": "play_music"}
+{"text": "play only all music released between the year one thousand nine hundred and ninety and two thousand", "label": "play_music"}
+{"text": "please turn off the light of my son's room", "label": "iot_hue_lightoff"}
+{"text": "please find out the share price of microsoft in nasdaq", "label": "qa_stock"}
+{"text": "how do i get to the mall", "label": "transport_query"}
+{"text": "change the lights to dim", "label": "iot_hue_lightdim"}
+{"text": "how is rice prepared", "label": "cooking_recipe"}
+{"text": "what did vogue post today", "label": "news_query"}
+{"text": "hey olly turn off the light please", "label": "iot_hue_lightoff"}
+{"text": "order a twelve piece honey mustard wing combo with seasonimg altnon the fries and a sprite as the drink", "label": "takeaway_order"}
+{"text": "send a replay email", "label": "email_sendemail"}
+{"text": "where was president madison born", "label": "qa_factoid"}
+{"text": "can you cook something special for me and my wife", "label": "general_quirky"}
+{"text": "spell and define oscillate", "label": "qa_definition"}
+{"text": "what alarms are set", "label": "alarm_query"}
+{"text": "current time in cpt", "label": "datetime_query"}
+{"text": "no lights in the kitchen", "label": "iot_hue_lightoff"}
+{"text": "s.", "label": "play_music"}
+{"text": "is there any new information regarding the mexican american border wall", "label": "news_query"}
+{"text": "i'd like you to turn turn on the t. v.", "label": "iot_wemo_on"}
+{"text": "how much is the us dollar worth in canada", "label": "qa_currency"}
+{"text": "please slow down volume of speaker", "label": "audio_volume_down"}
+{"text": "find the list", "label": "lists_query"}
+{"text": "when is the next train leaving for austin", "label": "transport_query"}
+{"text": "please play shake it off by taylor swiftm", "label": "play_music"}
+{"text": "do not wake me up tomorrow", "label": "alarm_remove"}
+{"text": "how much is a train ticket to chicago", "label": "transport_query"}
+{"text": "add a reminder to my calendar every year on this date", "label": "calendar_set"}
+{"text": "please check email contain job listing", "label": "email_query"}
+{"text": "how long until my order is ready", "label": "takeaway_query"}
+{"text": "hey olly cancel all my other meetings and calls for second march as it is jim's birthday tag it as an event in your calendar", "label": "calendar_set"}
+{"text": "give me petey's telephone number", "label": "email_querycontact"}
+{"text": "give me to do list", "label": "calendar_query"}
+{"text": "olly tweet a message to a. t. & t. and tell them my service is bad", "label": "social_post"}
+{"text": "please remove remainder", "label": "calendar_remove"}
+{"text": "play songs by barenaked ladies", "label": "play_music"}
+{"text": "i need to know if mr. pizza delivers", "label": "takeaway_query"}
+{"text": "what alarms i have set", "label": "alarm_query"}
+{"text": "show me the best podcast of rock songs having good rating", "label": "play_podcasts"}
+{"text": "siri today is what date", "label": "datetime_query"}
+{"text": "what's the current weather", "label": "weather_query"}
+{"text": "show me my events", "label": "calendar_query"}
+{"text": "did anyone like my photo i just posted", "label": "social_query"}
+{"text": "set an alarm at six am", "label": "alarm_set"}
+{"text": "what is the current time in chennai", "label": "datetime_query"}
+{"text": "what is the birthday of hemingway", "label": "qa_factoid"}
+{"text": "begin a new list", "label": "lists_createoradd"}
+{"text": "i want to play the song again", "label": "play_music"}
+{"text": "what is the largest desk", "label": "qa_definition"}
+{"text": "remove my car payment on my calendar", "label": "lists_remove"}
+{"text": "please let me know the dog shows events going on in my home town", "label": "recommendation_events"}
+{"text": "open contacts", "label": "email_addcontact"}
+{"text": "post a new status on facebook saying that i am enjoying the nice weather", "label": "social_post"}
+{"text": "how's the weather like in new jersey", "label": "weather_query"}
+{"text": "what time is it in cleveland", "label": "datetime_query"}
+{"text": "play the most popular elton john song", "label": "play_music"}
+{"text": "explain quantum physics to me in language i understand", "label": "general_quirky"}
+{"text": "show me the answer for this problem two hundred and forty six plus six hundred and fifty four", "label": "qa_maths"}
+{"text": "only nine hundred and ninety nine f. m. is to be played on the radio", "label": "play_radio"}
+{"text": "i want to send a tweet to united airlines i'm angry you lost my bags", "label": "social_post"}
+{"text": "ok google play one hundred and six point seven", "label": "play_radio"}
+{"text": "information of recent events", "label": "calendar_query"}
+{"text": "what's my schedule like today", "label": "calendar_query"}
+{"text": "respond to my email from bob letting them know i'll see them tomorrow", "label": "email_sendemail"}
+{"text": "is dinner ready yet", "label": "takeaway_query"}
+{"text": "can you do nine plus two", "label": "qa_maths"}
+{"text": "please search the internet and display the suitable youtube videos for cooking italian foods", "label": "cooking_recipe"}
+{"text": "set a meeting event reminder with mona on tuesday", "label": "calendar_set"}
+{"text": "play my summer jams playlist", "label": "play_music"}
+{"text": "write an email for john at gmail dot com", "label": "email_sendemail"}
+{"text": "play rap music", "label": "play_music"}
+{"text": "how far is california from georgia", "label": "qa_factoid"}
+{"text": "open media play jingle bells", "label": "play_music"}
+{"text": "list out my schedule today", "label": "calendar_query"}
+{"text": "what is the exchange rates in this region", "label": "qa_currency"}
+{"text": "delete to do list", "label": "lists_remove"}
+{"text": "please open chess game i would like to play with you", "label": "play_game"}
+{"text": "boiling", "label": "cooking_recipe"}
+{"text": "tweet that there was an insect in the chocolate packet", "label": "social_post"}
+{"text": "send a funny message to all of my friends", "label": "social_post"}
+{"text": "olly i need to hear some sad songs today", "label": "play_music"}
+{"text": "i need a cup of coffee", "label": "iot_coffee"}
+{"text": "driving time to los angeles", "label": "transport_query"}
+{"text": "i want to hear any songs that got grammys this year", "label": "play_music"}
+{"text": "please play songs i've purchased and favorited", "label": "play_music"}
+{"text": "book me a taxi to leith in half an hour", "label": "transport_taxi"}
+{"text": "olly read my lists to me", "label": "lists_query"}
+{"text": "i want to thank everyone for the birthday wishes", "label": "social_post"}
+{"text": "email jerry regarding the meeting", "label": "email_sendemail"}
+{"text": "add this new email with contact", "label": "email_addcontact"}
+{"text": "notify me when g. b. p. to u. s. d. rate as i expected", "label": "qa_currency"}
+{"text": "read me the latest headlines from nytimescom", "label": "news_query"}
+{"text": "lets play battleship", "label": "play_game"}
+{"text": "is it going to rain later", "label": "weather_query"}
+{"text": "where do most celebrities hang out", "label": "qa_factoid"}
+{"text": "what is the population of russia", "label": "qa_factoid"}
+{"text": "olly tweet apple that the iphone doesn't work", "label": "social_post"}
+{"text": "play poker face by lady gaga", "label": "play_music"}
+{"text": "what is happening after one and before three p. m.", "label": "calendar_query"}
+{"text": "are you smart", "label": "general_quirky"}
+{"text": "how long should i boil an egg", "label": "cooking_recipe"}
+{"text": "make a coffee", "label": "iot_coffee"}
+{"text": "how is the stock going in general", "label": "qa_stock"}
+{"text": "is there anything happening on jazz scene around edinburgh", "label": "recommendation_events"}
+{"text": "find a taxi to book", "label": "transport_taxi"}
+{"text": "check recent to do list", "label": "lists_query"}
+{"text": "did i get an email from paul", "label": "email_query"}
+{"text": "clear my calendar for saturday", "label": "calendar_remove"}
+{"text": "one dolla equals how much inr", "label": "qa_currency"}
+{"text": "tell me a place that has snow now", "label": "general_quirky"}
+{"text": "when was the us got freedom", "label": "qa_factoid"}
+{"text": "how long should i cook a steak to be medium", "label": "cooking_recipe"}
+{"text": "play my spotify dance play list", "label": "play_music"}
+{"text": "olly do i have any new emails", "label": "email_query"}
+{"text": "tell me about trump", "label": "news_query"}
+{"text": "update to current time", "label": "datetime_query"}
+{"text": "play the song sung by katy perry", "label": "play_music"}
+{"text": "go back to the last episode in this podcast", "label": "play_podcasts"}
+{"text": "set my alarm for seven am", "label": "alarm_set"}
+{"text": "show me nearby musical events", "label": "recommendation_events"}
+{"text": "show me the available colors of lights", "label": "iot_hue_lightchange"}
+{"text": "tweet esurance and tell them they suck", "label": "social_post"}
+{"text": "delete all dates", "label": "calendar_remove"}
+{"text": "please archive my read messages", "label": "email_query"}
+{"text": "what is the difference between bake and broil", "label": "cooking_recipe"}
+{"text": "what is the definition of the word perpetual", "label": "qa_definition"}
+{"text": "what reminders do i have scheduled before noon tomorrow", "label": "calendar_query"}
+{"text": "remind me every monday to take out the trash", "label": "calendar_set"}
+{"text": "how old is clint eastwood", "label": "qa_factoid"}
+{"text": "has jane doe emailed me", "label": "email_query"}
+{"text": "read my grocery list", "label": "lists_query"}
+{"text": "hey what has been happening interesting in sports lately", "label": "general_quirky"}
+{"text": "send an email to juanpedro at gmail dot com", "label": "email_sendemail"}
+{"text": "send email to boss saying i will be late", "label": "email_sendemail"}
+{"text": "how far away is the sun", "label": "qa_factoid"}
+{"text": "start a pot of coffee please", "label": "iot_coffee"}
+{"text": "i want to listen to a sports podcast", "label": "play_podcasts"}
+{"text": "alexa start email", "label": "email_sendemail"}
+{"text": "play some christian music", "label": "play_music"}
+{"text": "recite the schedules of the list", "label": "lists_query"}
+{"text": "reply to last received email", "label": "email_sendemail"}
+{"text": "please select the first song in my itunes library", "label": "play_music"}
+{"text": "how we can get credit", "label": "email_sendemail"}
+{"text": "what items are on my shopping list", "label": "lists_query"}
+{"text": "let me know when you hear about france", "label": "news_query"}
+{"text": "what date is it", "label": "calendar_query"}
+{"text": "open twitter type my complaint and post to at consumer service", "label": "social_post"}
+{"text": "delete the last phrase", "label": "lists_remove"}
+{"text": "what time is it in new york city", "label": "datetime_query"}
+{"text": "order one pizza from pizza hut", "label": "takeaway_order"}
+{"text": "can you play my favorite audio book of tarzan", "label": "play_audiobook"}
+{"text": "can you book an uber after i left for office", "label": "transport_taxi"}
+{"text": "send an email to my boss", "label": "email_sendemail"}
+{"text": "clear data", "label": "audio_volume_mute"}
+{"text": "will it rain this week", "label": "weather_query"}
+{"text": "today the following happened to me i had a meeting with george", "label": "general_quirky"}
+{"text": "go to channel one hundred and six point nine", "label": "play_radio"}
+{"text": "what movies are showing in cinema today", "label": "recommendation_movies"}
+{"text": "show me a video on cooking fried chicken", "label": "cooking_recipe"}
+{"text": "check the dish price and all", "label": "takeaway_query"}
+{"text": "olly let's listen to hunt for read october", "label": "play_audiobook"}
+{"text": "i need a good cry can you play me sad rock songs", "label": "play_music"}
+{"text": "i need to ask you how many angels can dance on a pinhead", "label": "general_quirky"}
+{"text": "i never want to hear that song again", "label": "music_dislikeness"}
+{"text": "look up the map to stores near me", "label": "transport_query"}
+{"text": "what all goes into a red velvet cake", "label": "cooking_recipe"}
+{"text": "decrease brightness of lights", "label": "iot_hue_lightdim"}
+{"text": "please put on my favorite rap music playlist", "label": "play_music"}
+{"text": "please get the coffee machine to make me some coffee", "label": "iot_coffee"}
+{"text": "book my train ticket from las vegas to los angeles", "label": "transport_ticket"}
+{"text": "tell me current events between yesterday and this morning", "label": "calendar_query"}
+{"text": "if a pencil cost four dollars and a book ten dollars cost how much i should pay if i buy two pencil and three book", "label": "qa_maths"}
+{"text": "what's a movie in theaters that doesn't suck", "label": "recommendation_movies"}
+{"text": "olly i just cleaned my car", "label": "general_quirky"}
+{"text": "help complaint to consumer service", "label": "social_post"}
+{"text": "the definition of life", "label": "qa_definition"}
+{"text": "f. m. ninety three point five radio songs", "label": "play_radio"}
+{"text": "remind me to wash the windows", "label": "calendar_set"}
+{"text": "olly change the color of the lights", "label": "iot_hue_lightchange"}
+{"text": "is there a sporting event tomorrow in chicago", "label": "recommendation_events"}
+{"text": "find a description about a samsung t. v.", "label": "qa_definition"}
+{"text": "why isn't adam sandler funny", "label": "qa_factoid"}
+{"text": "have any emails arrived in the last fifteen minutes", "label": "email_query"}
+{"text": "what are today's sports news", "label": "news_query"}
+{"text": "post this to my facebook l. o. l.", "label": "social_post"}
+{"text": "ok google what is a president", "label": "qa_definition"}
+{"text": "lets send a tweet", "label": "social_post"}
+{"text": "move on to the next podcast episode", "label": "play_podcasts"}
+{"text": "what is the music playing right now", "label": "music_query"}
+{"text": "play last libertarian podcast", "label": "play_podcasts"}
+{"text": "respond to the email from john doe", "label": "email_sendemail"}
+{"text": "when is the birth date of taylor lautner", "label": "qa_factoid"}
+{"text": "please remove the alarm that is set for weekdays at nine", "label": "alarm_remove"}
+{"text": "vacation spots", "label": "general_quirky"}
+{"text": "time difference between u. k. and us", "label": "datetime_convert"}
+{"text": "birthday wishes", "label": "social_post"}
+{"text": "when's mark lanegan's next album out", "label": "qa_factoid"}
+{"text": "find a recipe for dinner tonight", "label": "cooking_recipe"}
+{"text": "who is the contact that last called me", "label": "email_querycontact"}
+{"text": "book a train ticket from baltimore maryland to new york new york", "label": "transport_ticket"}
+{"text": "convert eight am manila time to new york time", "label": "datetime_convert"}
+{"text": "show me news about the environment", "label": "news_query"}
+{"text": "what's the latest news on c. n. n.", "label": "news_query"}
+{"text": "who am i meeting today", "label": "calendar_query"}
+{"text": "start the radio now", "label": "play_radio"}
+{"text": "what artist is this", "label": "music_query"}
+{"text": "hey what is the weather like today", "label": "weather_query"}
+{"text": "play kiss f. m. for me", "label": "play_radio"}
+{"text": "what is the birth year of barack obama", "label": "qa_factoid"}
+{"text": "i want a lower light", "label": "iot_hue_lightdim"}
+{"text": "give me a cooking tutorial", "label": "cooking_recipe"}
+{"text": "show me recent emails", "label": "email_query"}
+{"text": "turn off the lamps", "label": "iot_hue_lightoff"}
+{"text": "give me a reminder notification on tomorrow's meeting at ten am", "label": "calendar_set"}
+{"text": "how long do you cook a fifteen pound turkey", "label": "cooking_recipe"}
+{"text": "what's the date of the winter solstice two years from now", "label": "datetime_query"}
+{"text": "present time in new york", "label": "datetime_query"}
+{"text": "decrease twenty percent", "label": "audio_volume_down"}
+{"text": "make a new alarm", "label": "alarm_set"}
+{"text": "set a reminder every day at noon to take medication", "label": "calendar_set"}
+{"text": "do you think i should go to the theater today", "label": "general_quirky"}
+{"text": "play the twilight book", "label": "play_audiobook"}
+{"text": "tell me today's direction", "label": "transport_query"}
+{"text": "what day is new year's eve this year", "label": "datetime_query"}
+{"text": "which is the highest peak in the world", "label": "qa_factoid"}
+{"text": "what is the fastest way to get to starbucks", "label": "transport_query"}
+{"text": "i want to see the news", "label": "news_query"}
+{"text": "can you please download my podcast file available in internet and play it once", "label": "play_podcasts"}
+{"text": "what's a good joke", "label": "general_joke"}
+{"text": "tweet mobile complaint to samsung", "label": "social_post"}
+{"text": "resume harry potter from the place i have stopped listening to last time", "label": "play_audiobook"}
+{"text": "make the lights pink", "label": "iot_hue_lightchange"}
+{"text": "what are my pending tasks", "label": "calendar_query"}
+{"text": "where jackie chan currently live", "label": "qa_factoid"}
+{"text": "turn on favorite songs", "label": "play_music"}
+{"text": "help is to be sent only to jane", "label": "email_sendemail"}
+{"text": "save my opinion on adele's song", "label": "music_likeness"}
+{"text": "play some good song from my play list", "label": "play_music"}
+{"text": "can you please play imogen heap", "label": "play_music"}
+{"text": "how do i start the robot vacuum cleaner", "label": "iot_cleaning"}
+{"text": "what is the current time", "label": "datetime_query"}
+{"text": "set a reminder in one hour for my bread to bake", "label": "calendar_set"}
+{"text": "i like music", "label": "music_likeness"}
+{"text": "olly let's hear wgrr one hundred and three point five", "label": "play_radio"}
+{"text": "temperature outside", "label": "weather_query"}
+{"text": "are you happy", "label": "general_quirky"}
+{"text": "twitter to destination x. l. that they run out of sizes too fast", "label": "social_post"}
+{"text": "store opinion on song", "label": "music_likeness"}
+{"text": "traffic report", "label": "transport_traffic"}
+{"text": "what is going on in the world today", "label": "news_query"}
+{"text": "should i wear sandals or shoes with socks", "label": "weather_query"}
+{"text": "add lowes hardware to my contact emails located in cleveland ohio", "label": "email_addcontact"}
+{"text": "don't make any sounds", "label": "audio_volume_mute"}
+{"text": "can you describe a credit card", "label": "qa_definition"}
+{"text": "locate me the amazon restaurants", "label": "recommendation_locations"}
+{"text": "what day of the week is the twenty third of this month", "label": "datetime_query"}
+{"text": "what's the recipe for fried chicken", "label": "cooking_recipe"}
+{"text": "shadi special podcast play it", "label": "play_podcasts"}
+{"text": "respond to email", "label": "email_sendemail"}
+{"text": "when is the next time it will rain", "label": "weather_query"}
+{"text": "remove from calendar my medical appointment for today", "label": "calendar_remove"}
+{"text": "please alert me", "label": "calendar_set"}
+{"text": "definition of velocity", "label": "qa_definition"}
+{"text": "is there a groomer in town for cats only", "label": "general_quirky"}
+{"text": "tune in to eight hundred and ninety seven f. m.", "label": "play_radio"}
+{"text": "does the nearby dominoes have delivery", "label": "takeaway_query"}
+{"text": "make new schedule for tomorrow meeting", "label": "calendar_set"}
+{"text": "please turn on my balcony lights", "label": "iot_hue_lighton"}
+{"text": "pull up kate's email and write that i will let her know", "label": "email_sendemail"}
+{"text": "turn on new smart socket", "label": "iot_wemo_on"}
+{"text": "can you book a train ticket", "label": "transport_ticket"}
+{"text": "check any mail from amazon", "label": "email_query"}
+{"text": "write a reply to my mother's email", "label": "email_sendemail"}
+{"text": "play my favorite music now", "label": "play_music"}
+{"text": "i love this song", "label": "music_likeness"}
+{"text": "play a random song from my playlist", "label": "play_music"}
+{"text": "search for local shops", "label": "recommendation_locations"}
+{"text": "give me a weather report for las vegas", "label": "weather_query"}
+{"text": "don't play this song again", "label": "music_dislikeness"}
+{"text": "i need to know more about the parade this weekend", "label": "general_quirky"}
+{"text": "both young drivers and provisional drivers crash more often than other drivers because they have not yet had the wide range of experiences they need to drive safely by themselves research has shown that driving experience is a major factor in reducing road crashes and that the safest time for young drivers is when they are driving under supervision while learning", "label": "recommendation_events"}
+{"text": "make march eighteen a repeating appointment for pearl's birthday", "label": "calendar_set"}
+{"text": "olly anything else left on the list", "label": "lists_query"}
+{"text": "i need a recipe of veg pulav", "label": "cooking_recipe"}
+{"text": "i want to make a note on my calendar for the event tomorrow at the library", "label": "calendar_set"}
+{"text": "plants", "label": "general_quirky"}
+{"text": "play f. m.", "label": "play_radio"}
+{"text": "i want an alarm for three today", "label": "alarm_set"}
+{"text": "can you list out my meetings today", "label": "calendar_query"}
+{"text": "who is the current prime minister of russia", "label": "qa_factoid"}
+{"text": "how much is the dollar worth compared to the euro", "label": "qa_currency"}
+{"text": "please show me any articles related to weather in the morning news", "label": "news_query"}
+{"text": "what did i put down already on the walmart list", "label": "lists_query"}
+{"text": "can you tell me what flabbergasted means", "label": "qa_definition"}
+{"text": "what's the capital of kazakhstan", "label": "qa_factoid"}
+{"text": "create an alarm for today at ten am", "label": "alarm_set"}
+{"text": "turn up the brightness", "label": "iot_hue_lightup"}
+{"text": "where was steve jobs born", "label": "qa_factoid"}
+{"text": "delete my to do's for this week", "label": "lists_remove"}
+{"text": "send this email to reply to the latest emails", "label": "email_sendemail"}
+{"text": "what's the weather like right now in new york", "label": "weather_query"}
+{"text": "do not speak today", "label": "audio_volume_mute"}
+{"text": "what is the weather in beijing", "label": "weather_query"}
+{"text": "make me a cup of coffee with salted carmel flavored cream", "label": "iot_coffee"}
+{"text": "send an email to peter and ask him how is he now can i do something to help him", "label": "email_sendemail"}
+{"text": "what is today's forecast for berlin", "label": "weather_query"}
+{"text": "can we go to sun", "label": "general_quirky"}
+{"text": "where are pyramids located", "label": "qa_factoid"}
+{"text": "hello i want to turn off my wemo plug", "label": "iot_wemo_off"}
+{"text": "convert eight thirty from gtm four to g. m. t. five thirty", "label": "datetime_convert"}
+{"text": "let's have the lights blue", "label": "iot_hue_lightchange"}
+{"text": "is there any news about the presidency", "label": "news_query"}
+{"text": "do i have a date on friday", "label": "calendar_query"}
+{"text": "when is the event going to start", "label": "calendar_query"}
+{"text": "why are whales big", "label": "qa_factoid"}
+{"text": "send email to new contact", "label": "email_sendemail"}
+{"text": "olly do i have an alarm set for tomorrow", "label": "alarm_query"}
+{"text": "what is the best way to cook pasta al dente", "label": "cooking_recipe"}
+{"text": "refer local current events", "label": "recommendation_events"}
+{"text": "where's the closest zoo to where i'm at", "label": "recommendation_locations"}
+{"text": "thirteenth june is a day of election result please set it", "label": "calendar_set"}
+{"text": "order a takeaway", "label": "takeaway_order"}
+{"text": "fast me the news of academy awards", "label": "news_query"}
+{"text": "hey cancel all my other meetings and calls for second march as it is jim's birthday tag it as an event in your calendar", "label": "calendar_set"}
+{"text": "please turn the volume down", "label": "audio_volume_down"}
+{"text": "is there a traffic jam on my route", "label": "transport_traffic"}
+{"text": "set a repeating reminder alarm for the facebook event i have to attend on seventh april", "label": "alarm_set"}
+{"text": "how do i get to the train station for a ticket", "label": "transport_query"}
+{"text": "turn off my alarm", "label": "alarm_remove"}
+{"text": "within the past three months how many meetings did i have with mr. richards", "label": "calendar_query"}
+{"text": "remind me of how many lists i have", "label": "lists_query"}
+{"text": "play racing", "label": "play_game"}
+{"text": "tell me what the product of eighteen and thirty one is", "label": "qa_maths"}
+{"text": "play my favorite podcast please", "label": "play_podcasts"}
+{"text": "currency exchange", "label": "qa_currency"}
+{"text": "please check my emails for me", "label": "email_query"}
+{"text": "tell me what's going on with facebook", "label": "social_query"}
+{"text": "get me latest updates from facebook", "label": "social_query"}
+{"text": "turn off all lights", "label": "iot_hue_lightoff"}
+{"text": "is soft cheese better than hard", "label": "cooking_recipe"}
+{"text": "i'd like some red lighting", "label": "iot_hue_lightchange"}
+{"text": "please skip to the next podcast episode", "label": "play_podcasts"}
+{"text": "remove the latest alarm", "label": "alarm_remove"}
+{"text": "most viewed list", "label": "lists_query"}
+{"text": "upcoming events in calendar", "label": "calendar_set"}
+{"text": "what events are upcoming today", "label": "calendar_query"}
+{"text": "let's play music hits", "label": "play_radio"}
+{"text": "tell me all the current events in my hometown", "label": "recommendation_events"}
+{"text": "how its come to us", "label": "email_sendemail"}
+{"text": "where is the public library", "label": "transport_query"}
+{"text": "next play summer lovin", "label": "play_music"}
+{"text": "adjust the lights to a lower setting please", "label": "iot_hue_lightdim"}
+{"text": "explain the geographical location of india", "label": "qa_factoid"}
+{"text": "tell me about this week's weather", "label": "weather_query"}
+{"text": "olly i'm looking for a bar do you know a good one", "label": "recommendation_locations"}
+{"text": "what is a good iranian film from two thousand and sixteen", "label": "recommendation_movies"}
+{"text": "i want to order chinese take-out", "label": "takeaway_order"}
+{"text": "add spent five dollars in my expenses list", "label": "lists_createoradd"}
+{"text": "trump", "label": "general_quirky"}
+{"text": "tweet that product sucks", "label": "social_post"}
+{"text": "how much is starbuck's stock these days", "label": "qa_stock"}
+{"text": "play youtube playlist blank", "label": "play_music"}
+{"text": "reduce volume", "label": "audio_volume_down"}
+{"text": "how's the weather today", "label": "weather_query"}
+{"text": "how much is a round trip train ticket to go to new york", "label": "transport_query"}
+{"text": "what are my current list", "label": "lists_query"}
+{"text": "stop start the juice", "label": "iot_wemo_on"}
+{"text": "to compare in people", "label": "qa_factoid"}
+{"text": "i have a nine am meeting on wednesday send me a reminder", "label": "calendar_set"}
+{"text": "what color are chairs", "label": "qa_factoid"}
+{"text": "tweet a disgusted face about mcdonalds", "label": "social_post"}
+{"text": "will i need an umbrella today", "label": "weather_query"}
+{"text": "enable smart socket", "label": "iot_wemo_on"}
+{"text": "hey what time is it in london now", "label": "datetime_query"}
+{"text": "please look in to the matter", "label": "general_quirky"}
+{"text": "please give me information about john abraham lincon", "label": "qa_factoid"}
+{"text": "olly what is the weather forecast for today", "label": "weather_query"}
+{"text": "do i have any remainder about birthday party", "label": "calendar_query"}
+{"text": "what events are happening soon", "label": "recommendation_events"}
+{"text": "important house information", "label": "lists_query"}
+{"text": "please check the weather in kansas", "label": "weather_query"}
+{"text": "change volume settings in the negative alexa", "label": "audio_volume_other"}
+{"text": "remind me the meeting with allen on fifteenth march", "label": "calendar_set"}
+{"text": "who is celebrity", "label": "qa_factoid"}
+{"text": "turn off room lights", "label": "iot_hue_lightoff"}
+{"text": "remove new year from calendar", "label": "calendar_remove"}
+{"text": "movies with good reviews", "label": "recommendation_movies"}
+{"text": "tell me when i have an event", "label": "calendar_set"}
+{"text": "what is the time in beijing", "label": "datetime_query"}
+{"text": "isn't it a lovely song please save this for me", "label": "music_likeness"}
+{"text": "my day is going well add a memo", "label": "general_quirky"}
+{"text": "please add this email to my contacts", "label": "email_addcontact"}
+{"text": "open saga", "label": "play_game"}
+{"text": "remind me two days before my wife birthday", "label": "calendar_set"}
+{"text": "turn office lights off", "label": "iot_hue_lightoff"}
+{"text": "get rid of all events with jeff", "label": "calendar_remove"}
+{"text": "turn on vacuum cleaner", "label": "iot_cleaning"}
+{"text": "i want some jazz music to play", "label": "play_music"}
+{"text": "let's play global thermonuclear war", "label": "play_game"}
+{"text": "i want tickets to the sold out concert on saturday night", "label": "general_quirky"}
+{"text": "will it be raining on thursday", "label": "weather_query"}
+{"text": "what are pounds worth right now", "label": "qa_currency"}
+{"text": "give me news on president trump", "label": "news_query"}
+{"text": "add to calendar and repeat", "label": "calendar_set"}
+{"text": "please dim the lights", "label": "iot_hue_lightdim"}
+{"text": "play the song let it go", "label": "play_music"}
+{"text": "tune to classic hits", "label": "play_radio"}
+{"text": "what is the wake up time for my alarm i have set for the flight this weekend", "label": "alarm_query"}
+{"text": "play the last doctor who radio broadcast", "label": "play_radio"}
+{"text": "fast", "label": "audio_volume_up"}
+{"text": "what time is the black tie gala dinner supposed to begin", "label": "calendar_query"}
+{"text": "answer to pawel's email", "label": "email_sendemail"}
+{"text": "show me my meeting for the next month", "label": "calendar_query"}
+{"text": "is it raining tonight", "label": "weather_query"}
+{"text": "list all the lists on this device", "label": "lists_query"}
+{"text": "can you delete the dentist appointment", "label": "calendar_remove"}
+{"text": "remove anniversary event from my calendar", "label": "calendar_remove"}
+{"text": "what are the breaking news", "label": "news_query"}
+{"text": "olly i need a drink", "label": "iot_coffee"}
+{"text": "play songs", "label": "play_music"}
+{"text": "please turn socket off", "label": "iot_wemo_off"}
+{"text": "what time should i go for a hike", "label": "weather_query"}
+{"text": "what time is it in a city", "label": "datetime_query"}
+{"text": "news from c. n. n.", "label": "news_query"}
+{"text": "what is an electronic emissions system", "label": "qa_definition"}
+{"text": "is there any events planned for the next three months", "label": "calendar_query"}
+{"text": "what is the current day month and year", "label": "datetime_query"}
+{"text": "remove cereal from my shopping list", "label": "lists_remove"}
+{"text": "what features do you have planned to release in the future", "label": "general_quirky"}
+{"text": "change the music mode to rock", "label": "music_settings"}
+{"text": "what is the stock price of hdfc", "label": "qa_stock"}
+{"text": "please tell me how to i bake twelve oatmeal cookies", "label": "cooking_recipe"}
+{"text": "take me to layfayette saint and canal", "label": "transport_query"}
+{"text": "i feel like having soup for lunch order from wangs kitchen restaurant a chicken manchow soup", "label": "takeaway_order"}
+{"text": "alexa play song over the rainbow", "label": "play_music"}
+{"text": "play one more time", "label": "play_music"}
+{"text": "what time does the first metrolink arrive in the morning", "label": "transport_query"}
+{"text": "recipes that can be cooked in an hour", "label": "cooking_recipe"}
+{"text": "is the song by shakira", "label": "music_query"}
+{"text": "start next podcast", "label": "play_podcasts"}
+{"text": "please set this date to repeat", "label": "calendar_set"}
+{"text": "email notifications", "label": "email_query"}
+{"text": "do i have any new email", "label": "email_query"}
+{"text": "find me info on cars", "label": "news_query"}
+{"text": "recommend a movie playing in my area", "label": "recommendation_movies"}
+{"text": "olly tweet walmart and tell them their customer service is horrible", "label": "social_post"}
+{"text": "give me a reminder twenty four hours before my friday meeting with edg", "label": "calendar_set"}
+{"text": "please tell me what alarms are on", "label": "alarm_query"}
+{"text": "i want more light", "label": "iot_hue_lightup"}
+{"text": "check my new emails and tell me what are they about", "label": "email_query"}
+{"text": "hey send email to john", "label": "email_sendemail"}
+{"text": "what reminders do i have", "label": "calendar_query"}
+{"text": "answer for three times four", "label": "qa_maths"}
+{"text": "are there any alarms going off today", "label": "alarm_query"}
+{"text": "display the seven day forecast for this week", "label": "weather_query"}
+{"text": "it would be great if can give you law consultations", "label": "general_quirky"}
+{"text": "what time does the zach brown concert on june third begin", "label": "calendar_query"}
+{"text": "play podcast for the philadelphia eagles content", "label": "play_podcasts"}
+{"text": "what i am going to do today", "label": "lists_query"}
+{"text": "could you order sushi for tonight dinner", "label": "takeaway_order"}
+{"text": "brighter", "label": "iot_hue_lightup"}
+{"text": "raise the lights", "label": "iot_hue_lightup"}
+{"text": "what is the best oven temperature to roast potatoes", "label": "cooking_recipe"}
+{"text": "can i know what i have to do the next saturday at six p. m.", "label": "calendar_set"}
+{"text": "what is the commute time to the theater", "label": "transport_query"}
+{"text": "please play this playback on audiobook", "label": "play_audiobook"}
+{"text": "exhibition two thousand and seventeen mass on mar twenty five make a note of it on the corresponding date", "label": "calendar_set"}
+{"text": "best paid jobs in digital marketing in my area", "label": "general_quirky"}
+{"text": "have i received any emails with tracking numbers", "label": "email_query"}
+{"text": "how has your day been today", "label": "general_quirky"}
+{"text": "dollar to euro exchange rate", "label": "qa_currency"}
+{"text": "what is the time in china", "label": "datetime_query"}
+{"text": "remind me to water my plants every tuesday thursday and saturday", "label": "calendar_set"}
+{"text": "tell me the current price of exxon mobil stock", "label": "qa_stock"}
+{"text": "what days do i have booked", "label": "calendar_query"}
+{"text": "what's on your list right now", "label": "lists_query"}
+{"text": "for how many years was abraham lincoln president of united states", "label": "qa_factoid"}
+{"text": "what does priyanka chopra do to look beautiful", "label": "general_quirky"}
+{"text": "get me up in half an hour", "label": "alarm_set"}
+{"text": "lead the way to the place", "label": "transport_query"}
+{"text": "set up a notification about tomorrow's meeting at ten", "label": "calendar_set"}
+{"text": "baking times for chicken in the oven", "label": "cooking_recipe"}
+{"text": "raise the light", "label": "iot_hue_lightup"}
+{"text": "display date", "label": "datetime_query"}
+{"text": "remind me to take my medicine at nine am", "label": "calendar_set"}
+{"text": "what is the capitol of west virginia", "label": "qa_factoid"}
+{"text": "what is the us dollar and euro exchange rate", "label": "qa_currency"}
+{"text": "start reply", "label": "email_sendemail"}
+{"text": "how many minutes do i need to wait to pick up my food from china on the go", "label": "takeaway_query"}
+{"text": "do i have any new emails from kellogg", "label": "email_query"}
+{"text": "power up the plug socket one", "label": "iot_wemo_on"}
+{"text": "give me the list of circus shows going on in the city right now", "label": "recommendation_events"}
+{"text": "read that back", "label": "play_audiobook"}
+{"text": "hows mysore climate today", "label": "weather_query"}
+{"text": "what is the time now in new york", "label": "datetime_query"}
+{"text": "what is the size of the united states", "label": "qa_factoid"}
+{"text": "plant based news", "label": "news_query"}
+{"text": "confirm a travel ticket to german", "label": "transport_ticket"}
+{"text": "i need to know how to make stuffed peppers", "label": "cooking_recipe"}
+{"text": "date today", "label": "datetime_query"}
+{"text": "start coffee at six am", "label": "iot_coffee"}
+{"text": "let me know the recipe for preparing pasta", "label": "cooking_recipe"}
+{"text": "check my email for any new email from joe", "label": "email_query"}
+{"text": "alexa play a mi song of rap and rock one after the other", "label": "play_music"}
+{"text": "initialize the robot vacuum", "label": "iot_cleaning"}
+{"text": "what are the coordinates of the equator", "label": "qa_factoid"}
+{"text": "i need a ride home", "label": "transport_taxi"}
+{"text": "can you give me the movie schedule", "label": "calendar_query"}
+{"text": "get rid of the events on the nineteenth from my calendar", "label": "calendar_remove"}
+{"text": "show me the latest news from the guardian", "label": "news_query"}
+{"text": "weekly weather report", "label": "weather_query"}
+{"text": "send an alert before meeting", "label": "calendar_set"}
+{"text": "please find out of charley's steakhouse delivers", "label": "takeaway_query"}
+{"text": "where is mary's birthday party being held", "label": "calendar_query"}
+{"text": "what is the exchange rate of euro and dollar", "label": "qa_currency"}
+{"text": "schedule taxi pickup for monday at noon", "label": "transport_taxi"}
+{"text": "any events this weekend in pondichery", "label": "recommendation_events"}
+{"text": "should i open the sun roof", "label": "weather_query"}
+{"text": "please ring the wake up alarm at eight am next saturday", "label": "alarm_set"}
+{"text": "list items on my work list", "label": "lists_query"}
+{"text": "can you put on the giver", "label": "play_audiobook"}
+{"text": "i want to see all set alarms", "label": "alarm_query"}
+{"text": "i would like to reply to sarah's email", "label": "email_sendemail"}
+{"text": "why are we here", "label": "general_quirky"}
+{"text": "where did mahatma gandhi born", "label": "qa_factoid"}
+{"text": "check my social networks", "label": "social_query"}
+{"text": "what is the most current exchange rate in china", "label": "qa_currency"}
+{"text": "turn on the radio and play channel one hundred and six point nine", "label": "play_radio"}
+{"text": "add bananas to my shopping list", "label": "lists_createoradd"}
+{"text": "turn off the dining room", "label": "iot_hue_lightoff"}
+{"text": "what is the email address for tessa", "label": "email_querycontact"}
+{"text": "i want a meeting till three o'clock", "label": "calendar_set"}
+{"text": "buddy adding event in your calendar", "label": "calendar_set"}
+{"text": "are there any forecasts of rain or snow this week", "label": "weather_query"}
+{"text": "what movies has emma watson acted in", "label": "qa_factoid"}
+{"text": "where is a walking trail near me", "label": "recommendation_locations"}
+{"text": "do i have any new friend requests", "label": "social_query"}
+{"text": "do i need to do anything today", "label": "calendar_query"}
+{"text": "set a reminder for the thirteenth that i have a lunch with dale", "label": "calendar_set"}
+{"text": "resume series podcast", "label": "play_podcasts"}
+{"text": "set reminder to print the documents on tuesday morning", "label": "calendar_set"}
+{"text": "can you tell me the latest news", "label": "news_query"}
+{"text": "i need an alarm set for five hundred and thirty am tomorrow", "label": "alarm_set"}
+{"text": "will i need my snow boots this afternoon", "label": "weather_query"}
+{"text": "tomorrow's temperature is to be hot yes or no", "label": "weather_query"}
+{"text": "is traffic light", "label": "transport_traffic"}
+{"text": "latest news on terrorism", "label": "news_query"}
+{"text": "what is the news today", "label": "news_query"}
+{"text": "olly check my email", "label": "email_query"}
+{"text": "i wish to know the weather in san fransico", "label": "weather_query"}
+{"text": "please send to new email address listed", "label": "email_sendemail"}
+{"text": "here's the truth about meals on wheels in someone's budget", "label": "news_query"}
+{"text": "i want to see the next podcast available", "label": "play_podcasts"}
+{"text": "stop audiobook", "label": "play_audiobook"}
+{"text": "can you turn up your volume", "label": "audio_volume_up"}
+{"text": "can you raise the lights for me please", "label": "iot_hue_lightup"}
+{"text": "are you working for the n. s. a.", "label": "general_quirky"}
+{"text": "play my station", "label": "play_radio"}
+{"text": "start podcasts on n. f. l.", "label": "play_podcasts"}
+{"text": "cancel the breakfast at tiffany's house", "label": "calendar_remove"}
+{"text": "how's the weather in the capital city", "label": "weather_query"}
+{"text": "is my alarm set", "label": "alarm_query"}
+{"text": "add conference call at four p. m. to my reminders for today", "label": "calendar_set"}
+{"text": "i can't see turn up the lights", "label": "iot_hue_lightup"}
+{"text": "do you have the train times for beaumont tx", "label": "transport_query"}
+{"text": "can you find me a furniture store near me", "label": "recommendation_locations"}
+{"text": "what is the menu today add some boiled vegetables also to it", "label": "cooking_recipe"}
+{"text": "directions please", "label": "transport_query"}
+{"text": "show me painting exhibition in bay area", "label": "recommendation_events"}
+{"text": "in how many hours will it be midnight in london england", "label": "datetime_query"}
+{"text": "who is the singer of song", "label": "music_query"}
+{"text": "open audio book history of rome", "label": "play_audiobook"}
+{"text": "add this song for the next playing song", "label": "play_music"}
+{"text": "what is the date next wednesday", "label": "datetime_query"}
+{"text": "please check my mail", "label": "email_query"}
+{"text": "olly how many tornadoes have there been this month", "label": "general_quirky"}
+{"text": "today is which date", "label": "datetime_query"}
+{"text": "brighten the lights in the hallway", "label": "iot_hue_lightup"}
+{"text": "schedule a one hour appointment for saturday", "label": "calendar_set"}
+{"text": "check for emails from steve", "label": "email_query"}
+{"text": "time between us and canada", "label": "datetime_convert"}
+{"text": "play the oldies station", "label": "play_radio"}
+{"text": "do you know math", "label": "qa_maths"}
+{"text": "trash my list", "label": "lists_remove"}
+{"text": "look up movies near me", "label": "recommendation_movies"}
+{"text": "please turn off the lights in patio", "label": "iot_hue_lightoff"}
+{"text": "tell me how to make a poor boy sandwich", "label": "cooking_recipe"}
+{"text": "start the robot roomba", "label": "iot_cleaning"}
+{"text": "what's the next event at the library", "label": "recommendation_events"}
+{"text": "get city cab here to airport", "label": "transport_taxi"}
+{"text": "play sleepyhead by passion pit", "label": "play_music"}
+{"text": "please schedule a meeting with this person", "label": "calendar_set"}
+{"text": "make event", "label": "calendar_set"}
+{"text": "please check for new emails", "label": "email_query"}
+{"text": "olly tell me a joke", "label": "general_joke"}
+{"text": "please play radio station one right now", "label": "play_radio"}
+{"text": "make the house lights amber at six p. m.", "label": "iot_hue_lightchange"}
+{"text": "what is the funniest joke ever", "label": "general_joke"}
+{"text": "what kind of weather should i expect this week", "label": "weather_query"}
+{"text": "what is twelve plus one hundred and ninety six", "label": "qa_maths"}
+{"text": "who was the current prime minister of britain", "label": "qa_factoid"}
+{"text": "show me news about trump", "label": "news_query"}
+{"text": "what new email says", "label": "email_query"}
+{"text": "post this video to facebook", "label": "social_post"}
+{"text": "get me the popular news from b. b. c.", "label": "news_query"}
+{"text": "search nandy", "label": "email_query"}
+{"text": "what was the first movie of morgan freeman", "label": "qa_factoid"}
+{"text": "title", "label": "music_query"}
+{"text": "what day of the week does christmas fall on this year", "label": "datetime_query"}
+{"text": "create a playlist", "label": "lists_createoradd"}
+{"text": "what time are the trains going to chennai leaving", "label": "transport_query"}
+{"text": "will trump visit russia anytime soon", "label": "news_query"}
+{"text": "yes or no tomorrow's temperature is to be hot", "label": "weather_query"}
+{"text": "i want to set an alarm when i'm driving home tomorrow to remember to stop at the store and get food", "label": "alarm_set"}
+{"text": "which teams are playing today in the premier league", "label": "news_query"}
+{"text": "when will the world end", "label": "general_quirky"}
+{"text": "make the light in here redder", "label": "iot_hue_lightchange"}
+{"text": "remove my next event", "label": "calendar_remove"}
+{"text": "please reduce the speaker volume", "label": "audio_volume_down"}
+{"text": "play next podcast", "label": "play_podcasts"}
+{"text": "what is a mango", "label": "qa_definition"}
+{"text": "remind me what i am doing on sunday afternoon", "label": "calendar_set"}
+{"text": "i think i can travel the whole world in a day", "label": "general_quirky"}
+{"text": "please set the brightness of lightness appropriately in kitchen", "label": "iot_hue_lightup"}
+{"text": "tell me about my alarms", "label": "alarm_query"}
+{"text": "please make the lights natural", "label": "iot_hue_lightchange"}
+{"text": "current time in", "label": "datetime_query"}
+{"text": "could you explain the meaning of exorbitant for me please", "label": "qa_definition"}
+{"text": "what is the news from that newsource", "label": "news_query"}
+{"text": "can you tell me about wayne gretszky", "label": "qa_factoid"}
+{"text": "could you tell me the time in london", "label": "datetime_query"}
+{"text": "what's my schedule today", "label": "calendar_query"}
+{"text": "send an email to my assistant clara to cancel all appointments for tomorrow", "label": "email_sendemail"}
+{"text": "when is my next appointment with doctor smith", "label": "calendar_query"}
+{"text": "remind me about my schedule for the afternoon", "label": "calendar_set"}
+{"text": "invite people to the calendar event", "label": "calendar_set"}
+{"text": "alexa remove dinner with mike from my calendar", "label": "calendar_remove"}
+{"text": "i need to change my house lights color to blue", "label": "iot_hue_lightchange"}
+{"text": "what does the email say that was sent thirty minutes ago from mom", "label": "email_query"}
+{"text": "book train best deal", "label": "transport_ticket"}
+{"text": "start a game and play with me", "label": "play_game"}
+{"text": "ok google where does sophia vergara live", "label": "qa_factoid"}
+{"text": "lower the lights please", "label": "iot_hue_lightdim"}
+{"text": "get todays climate forecast here", "label": "weather_query"}
+{"text": "hey olly i met one of my old classmates today", "label": "general_quirky"}
+{"text": "what is the prevailing exchange rate us versus indian rupees", "label": "qa_currency"}
+{"text": "what's up olly", "label": "general_greet"}
+{"text": "send me an alert and hour before my next appointment", "label": "calendar_set"}
+{"text": "play coldplay album", "label": "play_music"}
+{"text": "make the room light blue", "label": "iot_hue_lightchange"}
+{"text": "just let me know next weeks weather in california", "label": "email_query"}
+{"text": "by get marks", "label": "weather_query"}
+{"text": "set a reminder for this", "label": "calendar_set"}
+{"text": "play let me love you by ariana grande", "label": "play_music"}
+{"text": "set notification for news about the dakota pipeline", "label": "news_query"}
+{"text": "what is the dollar price in inr", "label": "qa_currency"}
+{"text": "please send a mail to my friend divya how are you", "label": "email_sendemail"}
+{"text": "is there anything i should be reminded about", "label": "calendar_query"}
+{"text": "android", "label": "lists_query"}
+{"text": "what is denzel washington's next movie", "label": "qa_factoid"}
+{"text": "please remove the following list", "label": "lists_remove"}
+{"text": "what is new news for today", "label": "news_query"}
+{"text": "i have a meeting at noon today", "label": "calendar_set"}
+{"text": "can you remind my next meeting with my boss one hour before it will happen", "label": "calendar_set"}
+{"text": "i wish it could give me advice", "label": "general_quirky"}
+{"text": "this new email should be added to my contact", "label": "email_sendemail"}
+{"text": "reply to johns email", "label": "email_sendemail"}
+{"text": "just let me know the important meetings with my boss over the week", "label": "calendar_set"}
+{"text": "can you give me a recipe for homemade chicken noodle soup", "label": "cooking_recipe"}
+{"text": "this is a good tune please notate file accordingly", "label": "music_likeness"}
+{"text": "how much is one dollar in pounds", "label": "qa_currency"}
+{"text": "has my calendar been updated in the last ten minutes", "label": "calendar_query"}
+{"text": "let's play my most played song list", "label": "play_music"}
+{"text": "let me know in two hours that i have to leave for my violin lesson that's at four p. m. at musicworkz", "label": "calendar_set"}
+{"text": "nobody knows", "label": "play_music"}
+{"text": "read some more of the daisy goodwin book for me", "label": "play_audiobook"}
+{"text": "reply an email to jason that i will not come tonight", "label": "email_sendemail"}
+{"text": "how many legs does a dog have", "label": "qa_factoid"}
+{"text": "how is the weather likely to be this week", "label": "weather_query"}
+{"text": "give me all available lists", "label": "lists_query"}
+{"text": "start radio channel eight hundred and eighty nine", "label": "play_radio"}
+{"text": "will the temperature be higher than forty tomorrow", "label": "weather_query"}
+{"text": "what's the rate between pesos and yen", "label": "qa_currency"}
+{"text": "have i received any emails from jeffrey burnette", "label": "email_query"}
+{"text": "do you know jessica snout's phone number", "label": "qa_factoid"}
+{"text": "can you contact samsung and say my washer is on fire", "label": "social_post"}
+{"text": "post my latest entry to twitter at n.s.a.", "label": "social_post"}
+{"text": "raise the volume of the current music", "label": "audio_volume_up"}
+{"text": "please tell me the latest news", "label": "news_query"}
+{"text": "thanksgiving turkey cooking procedure in five sentences is what", "label": "cooking_recipe"}
+{"text": "i helped a poor needy today olly", "label": "general_quirky"}
+{"text": "noodles one pack make it as takeaway", "label": "takeaway_order"}
+{"text": "is the twenty second on a wednesday", "label": "datetime_query"}
+{"text": "make a new shopping list", "label": "lists_createoradd"}
+{"text": "on my to dos remove mop kitchen", "label": "lists_remove"}
+{"text": "cancel alarm", "label": "alarm_remove"}
+{"text": "stock price", "label": "qa_stock"}
+{"text": "alexa i've got dollars for the month how much can i spend every day this month", "label": "qa_maths"}
+{"text": "check new emails", "label": "email_query"}
+{"text": "reply to dad write i will be late", "label": "email_sendemail"}
+{"text": "what is the increase in stock value over the past week of disney", "label": "qa_stock"}
+{"text": "play the romantic songs", "label": "play_music"}
+{"text": "who sings the song about a long black train", "label": "music_query"}
+{"text": "switch on the roomba", "label": "iot_cleaning"}
+{"text": "what is scheduled on my calendar today", "label": "calendar_query"}
+{"text": "what is eastern standard time right noe", "label": "datetime_query"}
+{"text": "play bhuli bisri yaadien program on ninety one point three f. m.", "label": "play_radio"}
+{"text": "please play the latest song from the album abbas", "label": "play_music"}
+{"text": "do i need a sweater today", "label": "weather_query"}
+{"text": "one plus two equal", "label": "qa_maths"}
+{"text": "siri open twitter tweet at potus sucks", "label": "social_post"}
+{"text": "remind me to something in sometime", "label": "calendar_set"}
+{"text": "it is seven am in pacific standard time", "label": "datetime_convert"}
+{"text": "play all songs on shuffle", "label": "play_music"}
+{"text": "make the coffee", "label": "iot_coffee"}
+{"text": "play music now please", "label": "play_music"}
+{"text": "make the lights off", "label": "iot_hue_lightoff"}
+{"text": "play and shuffle all slow music songs", "label": "play_music"}
+{"text": "how is the weather", "label": "weather_query"}
+{"text": "please see what you wrote for this question", "label": "general_quirky"}
+{"text": "if it's sunrise in stockholm what time is it in okinawa", "label": "datetime_convert"}
+{"text": "what time is it in austin", "label": "datetime_query"}
+{"text": "dictate email", "label": "email_sendemail"}
+{"text": "can you make some coffee", "label": "iot_coffee"}
+{"text": "next", "label": "play_podcasts"}
+{"text": "are you real", "label": "general_quirky"}
+{"text": "friend updates", "label": "general_quirky"}
+{"text": "play me a random audio book that has to do with love", "label": "play_audiobook"}
+{"text": "knowledge about food processing", "label": "cooking_recipe"}
+{"text": "tell me a funny joke", "label": "general_joke"}
+{"text": "how many plays has patrick stewart been in", "label": "qa_factoid"}
+{"text": "can you tell me about the traffic", "label": "transport_traffic"}
+{"text": "what's this week's weather", "label": "weather_query"}
+{"text": "will you mark that i have a meeting with tom at three tomorrow", "label": "calendar_set"}
+{"text": "delete upcoming event", "label": "calendar_remove"}
+{"text": "i need to make a list", "label": "lists_createoradd"}
+{"text": "post to facebook i'm hungry", "label": "social_post"}
+{"text": "check mom's number", "label": "email_querycontact"}
+{"text": "i will need warm socks in winter in morning", "label": "weather_query"}
+{"text": "display recent email from john", "label": "email_query"}
+{"text": "what was the weather for the week", "label": "weather_query"}
+{"text": "i hate how long the traffic jams get", "label": "general_quirky"}
+{"text": "send email to tim at hotmail dot com", "label": "email_sendemail"}
+{"text": "how much is one plus one", "label": "qa_maths"}
+{"text": "olly cancel all soccer practice alarms", "label": "alarm_remove"}
+{"text": "notify me when joshua emails me", "label": "email_query"}
+{"text": "rahul marriage reminder", "label": "calendar_query"}
+{"text": "write and send email to my boss", "label": "email_sendemail"}
+{"text": "i want to do laundry at eight p. m. create reminder", "label": "calendar_set"}
+{"text": "explain how is u. s. a. better than other countries", "label": "general_quirky"}
+{"text": "i would need to be notified of church services on sundays at eleven am", "label": "calendar_set"}
+{"text": "has anyone follow me today on twitter today", "label": "social_query"}
+{"text": "i want to hear purple haze", "label": "play_music"}
+{"text": "remove the list", "label": "lists_remove"}
+{"text": "play any song by joe prsaise", "label": "play_music"}
+{"text": "please find a contact number of jayesh and tell me", "label": "email_querycontact"}
+{"text": "i want to hear the latest world news from today", "label": "news_query"}
+{"text": "turn my lights down to a lower level of brightness", "label": "iot_hue_lightdim"}
+{"text": "do i have any new emails in my inbox today", "label": "email_query"}
+{"text": "what does the traffic look like on my usual route to work", "label": "transport_traffic"}
+{"text": "can you let delta know i'm never using them again", "label": "social_post"}
+{"text": "tell me what the weather is doing in grand rapids mi right now", "label": "weather_query"}
+{"text": "new york", "label": "transport_query"}
+{"text": "please go to the next episode of the podcast", "label": "play_podcasts"}
+{"text": "delete my list", "label": "lists_remove"}
+{"text": "turn off the lights in the kitchen", "label": "iot_hue_lightoff"}
+{"text": "trash the current list", "label": "lists_remove"}
+{"text": "power off", "label": "iot_wemo_off"}
+{"text": "give me the definition for the word pontificate", "label": "qa_definition"}
+{"text": "do i have any appointments", "label": "calendar_query"}
+{"text": "switch off the master's bedroom", "label": "iot_hue_lightoff"}
+{"text": "disable alarm for three p. m.", "label": "alarm_remove"}
+{"text": "remove next monday's meeting", "label": "calendar_remove"}
+{"text": "please email my team", "label": "email_sendemail"}
+{"text": "check for me new emails received from sara", "label": "email_query"}
+{"text": "do i have any new emails in the last hour", "label": "email_query"}
+{"text": "what is the forecast for saturday", "label": "weather_query"}
+{"text": "research the clients that will attend the meeting", "label": "calendar_set"}
+{"text": "what is currently breaking news", "label": "news_query"}
+{"text": "send mom an email now", "label": "email_sendemail"}
+{"text": "could you please confirm if leonardo is married", "label": "qa_factoid"}
+{"text": "what day of the week does the fifteenth of march fall on", "label": "datetime_query"}
+{"text": "share in friends post", "label": "social_post"}
+{"text": "set lunch every day at twelve thirty", "label": "calendar_set"}
+{"text": "current weather", "label": "weather_query"}
+{"text": "save this song to playlist", "label": "music_likeness"}
+{"text": "iphone seven description", "label": "qa_definition"}
+{"text": "turn it up olly", "label": "audio_volume_up"}
+{"text": "switch wemo plug socket off", "label": "iot_wemo_off"}
+{"text": "email my appointments to reschedule", "label": "email_sendemail"}
+{"text": "please repeat my shopping list", "label": "lists_query"}
+{"text": "send an email to jerry ask what time will he be home tonight", "label": "email_sendemail"}
+{"text": "please set my alarm for five p. m.", "label": "alarm_set"}
+{"text": "play my playlist party songs", "label": "play_music"}
+{"text": "what reminders did i set", "label": "calendar_query"}
+{"text": "erase all the events in the calendar", "label": "calendar_remove"}
+{"text": "does the weather call for rain saturday", "label": "weather_query"}
+{"text": "set feeling happy status on facebook", "label": "social_post"}
+{"text": "reply to the mail with the following content hello you", "label": "email_sendemail"}
+{"text": "play the young turks podcast", "label": "play_podcasts"}
+{"text": "say the time", "label": "datetime_query"}
+{"text": "find the recipe for sambar in cookingforu application", "label": "cooking_recipe"}
+{"text": "would you love to see", "label": "iot_hue_lightchange"}
+{"text": "latest news from the area", "label": "news_query"}
+{"text": "remind me to take out the garbage at six p. m.", "label": "calendar_set"}
+{"text": "start some music play the radio", "label": "play_radio"}
+{"text": "i want to know what supermarket near me has the best price on gluten free bread", "label": "recommendation_locations"}
+{"text": "can you track my emotions based on the way i speak", "label": "general_quirky"}
+{"text": "send a twitter complaint", "label": "social_post"}
+{"text": "reply email", "label": "email_sendemail"}
+{"text": "play me an upbeat song through your speakers", "label": "play_music"}
+{"text": "send a tweet about sonys volume issues", "label": "social_post"}
+{"text": "remind me to start getting ready by five p. m. please", "label": "calendar_set"}
+{"text": "hey olly please tell me the name of this song that is currently playing", "label": "music_query"}
+{"text": "play the most popular song by given artist", "label": "play_music"}
+{"text": "remind me to send email to boss after one hour", "label": "calendar_set"}
+{"text": "open tasks delete future events", "label": "calendar_remove"}
+{"text": "how is traffic in city", "label": "transport_traffic"}
+{"text": "put this event in a repeating pattern on my calendar", "label": "calendar_set"}
+{"text": "define elaborate", "label": "qa_definition"}
+{"text": "play classic rock", "label": "play_music"}
+{"text": "turn my bedroom lights off", "label": "iot_hue_lightoff"}
+{"text": "turn off porch light", "label": "iot_hue_lightoff"}
+{"text": "we should play nfs at high speed", "label": "play_game"}
+{"text": "which ocean touches at our continent", "label": "qa_factoid"}
+{"text": "clear my activities list for today", "label": "lists_remove"}
+{"text": "turn the lights off", "label": "iot_hue_lightoff"}
+{"text": "compose a new email to ray", "label": "email_sendemail"}
+{"text": "show me the best recipe for spaghetti", "label": "cooking_recipe"}
+{"text": "today is what date", "label": "datetime_query"}
+{"text": "i'm unhappy with tesco please help me", "label": "social_post"}
+{"text": "up load all my podcast", "label": "play_podcasts"}
+{"text": "olly set alarm for reminder", "label": "alarm_set"}
+{"text": "erase my calendar", "label": "calendar_remove"}
+{"text": "what is the forecast for the week", "label": "weather_query"}
+{"text": "show me podcasts", "label": "play_podcasts"}
+{"text": "what year did george clooney start acting", "label": "qa_factoid"}
+{"text": "tweet kohls about the cleanliness of their store", "label": "social_post"}
+{"text": "make it red in here", "label": "iot_hue_lightchange"}
+{"text": "wake me up", "label": "alarm_set"}
+{"text": "what's happening in the news", "label": "news_query"}
+{"text": "tell me what clothing stores are within five miles of me", "label": "recommendation_locations"}
+{"text": "let me know up and down in stock price of this company stock", "label": "qa_stock"}
+{"text": "latest movies in theaters", "label": "general_quirky"}
+{"text": "when is my brunch with jennifer", "label": "calendar_query"}
+{"text": "remind me about my anniversary in one day advance", "label": "calendar_set"}
+{"text": "change the station to eighty two point four", "label": "play_radio"}
+{"text": "please remind me to go to the post office", "label": "calendar_set"}
+{"text": "erase my appointment for march seven", "label": "calendar_remove"}
+{"text": "thirty minute reminder on meeting for tuesday", "label": "calendar_set"}
+{"text": "turn off overhead light", "label": "iot_hue_lightoff"}
+{"text": "is angeline having a new movie this year", "label": "qa_factoid"}
+{"text": "what's going on in the world these days", "label": "news_query"}
+{"text": "how tall is hulk hogan", "label": "qa_factoid"}
+{"text": "show me any emails received in the last hour", "label": "email_query"}
+{"text": "what is dolly parton's birthday", "label": "qa_factoid"}
+{"text": "check time of ten thousand eight hundred and eighty seven train from luni station on tuesday", "label": "transport_query"}
+{"text": "the weather was bad today", "label": "general_quirky"}
+{"text": "how do i make a turkey", "label": "cooking_recipe"}
+{"text": "what is the event agenda", "label": "calendar_query"}
+{"text": "has tom emailed me about ammunition", "label": "email_query"}
+{"text": "write an email to my family saying i love you all", "label": "email_sendemail"}
+{"text": "in my calendar delete all of my golf events for the current month", "label": "calendar_remove"}
+{"text": "what is a hypothesis", "label": "qa_definition"}
+{"text": "please play folk music", "label": "play_music"}
+{"text": "set environmental news notification", "label": "news_query"}
+{"text": "remove from my calendar meeting at nine am", "label": "calendar_remove"}
+{"text": "set a notification for three two and one hours before next week's english final", "label": "calendar_set"}
+{"text": "please open and play chess with me", "label": "play_game"}
+{"text": "turn on my playlist and play third song in the queue", "label": "play_music"}
+{"text": "can you change the volume at", "label": "audio_volume_other"}
+{"text": "email karen about the budget meeting", "label": "email_sendemail"}
+{"text": "alarm ten am", "label": "alarm_set"}
+{"text": "what is the hobby of ajay devgn", "label": "qa_factoid"}
+{"text": "delete item from my list", "label": "lists_remove"}
+{"text": "create a meeting event in my calendar", "label": "calendar_set"}
+{"text": "next button", "label": "play_podcasts"}
+{"text": "what time is it", "label": "datetime_query"}
+{"text": "cook me some oats", "label": "cooking_recipe"}
+{"text": "can i get take-out from pf changs", "label": "takeaway_query"}
+{"text": "do i have an appointment today", "label": "calendar_query"}
+{"text": "house lights blue", "label": "iot_hue_lightchange"}
+{"text": "please set a reminder in my calendar for my meeting on march twenty five", "label": "calendar_set"}
+{"text": "please check my gmail for new mail", "label": "email_query"}
+{"text": "remove the old music list", "label": "lists_remove"}
+{"text": "please play my nineties rap hits", "label": "play_music"}
+{"text": "olly what's hot social media topics", "label": "social_query"}
+{"text": "replace", "label": "lists_remove"}
+{"text": "remove the appointment with george adams from my calendar", "label": "calendar_remove"}
+{"text": "new meeting add bill and malinda as attendees", "label": "calendar_set"}
+{"text": "what degree is it outside", "label": "weather_query"}
+{"text": "clean my house", "label": "iot_cleaning"}
+{"text": "open pandora", "label": "play_radio"}
+{"text": "please tell me what is the time in sanfranscio", "label": "datetime_query"}
+{"text": "tweet about cold pizza to papa johns", "label": "social_post"}
+{"text": "will i need to shovel my driveway this morning", "label": "weather_query"}
+{"text": "please turn lights off", "label": "iot_hue_lightoff"}
+{"text": "new tweet to consumer service", "label": "social_post"}
+{"text": "play an f. m.", "label": "play_radio"}
+{"text": "what's ten percent off forty dollars", "label": "qa_maths"}
+{"text": "disable my okug", "label": "iot_wemo_off"}
+{"text": "play my soundtrack", "label": "play_music"}
+{"text": "is this the least or most important moment in history ever", "label": "general_quirky"}
+{"text": "do i have any incoming emails", "label": "email_query"}
+{"text": "will it be rainy day tomorrow", "label": "weather_query"}
+{"text": "how much will be the world population after twenty years", "label": "general_quirky"}
+{"text": "do i have a grocery list ready", "label": "lists_query"}
+{"text": "do add this on my calendar", "label": "calendar_set"}
+{"text": "clean the floor", "label": "iot_cleaning"}
+{"text": "turn on the vacuum cleaner", "label": "iot_cleaning"}
+{"text": "the sun is shinning bright will we have this weather for the rest of the day", "label": "weather_query"}
+{"text": "does louie's do take out", "label": "takeaway_query"}
+{"text": "will the weather be less than ten degree in paris", "label": "weather_query"}
+{"text": "please send mom and dad an email asking how they are", "label": "email_sendemail"}
+{"text": "play next episode of podcast", "label": "play_podcasts"}
+{"text": "give me the details on purchase order", "label": "lists_query"}
+{"text": "add jane's birthday party for tomorrow two p. m. at one hundred and twenty three main on my calendar", "label": "calendar_set"}
+{"text": "do i have any new email from joe", "label": "email_query"}
+{"text": "drive the car and bring my friends over", "label": "general_quirky"}
+{"text": "set a reminder for two days prior of the event", "label": "calendar_set"}
+{"text": "remind this event in future", "label": "calendar_set"}
+{"text": "what is the price of starbuck's stock", "label": "qa_stock"}
+{"text": "play radio mirchi for me", "label": "play_radio"}
+{"text": "what jacket should i wear", "label": "weather_query"}
+{"text": "please add an email for john doe to my contacts johndoe at yahoo dot com", "label": "email_addcontact"}
+{"text": "please play the notebook audio", "label": "play_audiobook"}
+{"text": "send complaint via tweet to j. crew", "label": "social_post"}
+{"text": "i am going to work today", "label": "general_quirky"}
+{"text": "what's happening around town", "label": "recommendation_events"}
+{"text": "what information should i know for my meetings today", "label": "calendar_query"}
+{"text": "what is the plan today", "label": "calendar_query"}
+{"text": "olly please list the best clothing shops near me", "label": "recommendation_locations"}
+{"text": "play romantic music in nash f. m. ninety two point seven", "label": "play_radio"}
+{"text": "olly find the nearest uber", "label": "transport_taxi"}
+{"text": "where is a theater in my area", "label": "recommendation_locations"}
+{"text": "how many lists do i have in contacts", "label": "lists_query"}
+{"text": "how can you get basalt", "label": "general_quirky"}
+{"text": "i want to remove apples from list", "label": "lists_remove"}
+{"text": "olly what events are happening in pondichery this weekend", "label": "recommendation_events"}
+{"text": "where i went today", "label": "general_quirky"}
+{"text": "who is the music director of this song", "label": "music_query"}
+{"text": "how many of my contacts live or work in detroit", "label": "email_querycontact"}
+{"text": "add this person's email", "label": "email_addcontact"}
+{"text": "which type of music it is", "label": "music_query"}
+{"text": "is it ten", "label": "datetime_query"}
+{"text": "what is the time in canada now", "label": "datetime_query"}
+{"text": "where can i get a shot of tequila and some to go mexican food", "label": "takeaway_query"}
+{"text": "change the lights in my home to green", "label": "iot_hue_lightchange"}
+{"text": "set alarm of only monday morning six am", "label": "alarm_set"}
+{"text": "confirm my alarm settings", "label": "alarm_query"}
+{"text": "play the previous podcast", "label": "play_podcasts"}
+{"text": "send a reply to the last email", "label": "email_sendemail"}
+{"text": "health", "label": "general_quirky"}
+{"text": "remind me about this", "label": "calendar_set"}
+{"text": "pink is all we need", "label": "iot_hue_lightchange"}
+{"text": "is the weather going to be nice this weekend", "label": "weather_query"}
+{"text": "show all emails sent to me from my boss", "label": "email_query"}
+{"text": "olly where is my food", "label": "takeaway_query"}
+{"text": "what ingredient can be used instead of saffron", "label": "cooking_recipe"}
+{"text": "delete all the events in my calendar", "label": "calendar_remove"}
+{"text": "is it twentieth march today", "label": "datetime_query"}
+{"text": "find me a joke related to baseball", "label": "general_joke"}
+{"text": "can i order take out from licari's", "label": "takeaway_order"}
+{"text": "play a game of contra as a second player", "label": "play_game"}
+{"text": "remind me to go to dinner with dave on friday at five p. m.", "label": "calendar_set"}
+{"text": "once a new topic on politics comes up alert me", "label": "news_query"}
+{"text": "nice lyrics", "label": "music_likeness"}
+{"text": "are there any new emails received after four o'clock today", "label": "email_query"}
+{"text": "set the alarm off", "label": "alarm_remove"}
+{"text": "tell me about mary s.", "label": "email_querycontact"}
+{"text": "what day is december thirteenth", "label": "datetime_query"}
+{"text": "tweet at united airlines i'm angry you lost my bags", "label": "social_post"}
+{"text": "what's jlo up to", "label": "general_quirky"}
+{"text": "play football with me", "label": "play_game"}
+{"text": "play papa pear saga", "label": "play_game"}
+{"text": "check gmail", "label": "email_query"}
+{"text": "respond with", "label": "email_sendemail"}
+{"text": "ticket for delhi", "label": "transport_ticket"}
+{"text": "what else is missing in the diary", "label": "lists_query"}
+{"text": "do not make any noise until morning alarm", "label": "audio_volume_mute"}
+{"text": "start robot vacuum cleaner", "label": "iot_cleaning"}
+{"text": "set a new alarm for that time", "label": "alarm_set"}
+{"text": "add meeting reminder for sunday with my parents in law", "label": "calendar_set"}
+{"text": "house can you make all the lights in the house blue", "label": "iot_hue_lightchange"}
+{"text": "song title", "label": "music_query"}
+{"text": "check for emails from my employer", "label": "email_query"}
+{"text": "find songs from my big band playlist", "label": "play_music"}
+{"text": "today i searched all over for my phone and couldn't find it", "label": "general_quirky"}
+{"text": "is it wednesday", "label": "datetime_query"}
+{"text": "let me know any new emails i've received", "label": "email_query"}
+{"text": "set lights brightness higher", "label": "iot_hue_lightup"}
+{"text": "olly what do i have planned next", "label": "calendar_query"}
+{"text": "hey olly what time is it", "label": "datetime_query"}
+{"text": "what reminders do i still have", "label": "calendar_query"}
+{"text": "what is the trending now", "label": "news_query"}
+{"text": "what's the name of the piece you are playing", "label": "music_query"}
+{"text": "olly play next recording", "label": "play_podcasts"}
+{"text": "set event date in calendar with others", "label": "calendar_set"}
+{"text": "tell me about india location", "label": "qa_factoid"}
+{"text": "what is the yen worth", "label": "qa_currency"}
+{"text": "what is the current weather condition in my place", "label": "weather_query"}
+{"text": "remove the guest list i created last week", "label": "lists_remove"}
+{"text": "give me up to date on sports news", "label": "news_query"}
+{"text": "ensure i have to get up at six in morning", "label": "alarm_set"}
+{"text": "look up the definition of blunder", "label": "qa_definition"}
+{"text": "olly i am taking day off tomorrow", "label": "general_quirky"}
+{"text": "find me a chocolate cake recipe", "label": "cooking_recipe"}
+{"text": "give me the description of a television circuit", "label": "qa_definition"}
+{"text": "what sound does a dog make", "label": "general_quirky"}
+{"text": "do not play rock metal", "label": "music_dislikeness"}
+{"text": "it is a sunny day today right", "label": "weather_query"}
+{"text": "what are some theme parks nearby", "label": "recommendation_events"}
+{"text": "what is the top searches in google today", "label": "general_quirky"}
+{"text": "i need to go to dundee at five am on sunday by train", "label": "transport_ticket"}
+{"text": "what's the exchange rates between u. s. a. and china", "label": "qa_currency"}
+{"text": "when does the f. train run today", "label": "transport_query"}
+{"text": "how about you", "label": "general_quirky"}
+{"text": "tell me my schedule for later this afternoon", "label": "calendar_query"}
+{"text": "cancel all my appointments", "label": "calendar_remove"}
+{"text": "song info", "label": "music_query"}
+{"text": "please tell me the news headlines", "label": "news_query"}
+{"text": "please alert me to the time", "label": "datetime_query"}
+{"text": "weather in paris", "label": "weather_query"}
+{"text": "create a new list", "label": "lists_createoradd"}
+{"text": "call yellow cab", "label": "transport_taxi"}
+{"text": "is there snow in the forecast", "label": "weather_query"}
+{"text": "remove the list called party time", "label": "lists_remove"}
+{"text": "am i going to be able to mow the grass this evening", "label": "weather_query"}
+{"text": "change the lights to a different hue", "label": "iot_hue_lightchange"}
+{"text": "what is the first metro to d. c.", "label": "transport_query"}
+{"text": "play pandora nineties dance party", "label": "play_music"}
+{"text": "wanna netflix and chill", "label": "general_quirky"}
+{"text": "what is the weather forecast for this week", "label": "weather_query"}
+{"text": "please summarize the latest george r. r. martin ice and fire book", "label": "qa_factoid"}
+{"text": "turn on the playlist i have dedicated to rock music", "label": "play_music"}
+{"text": "play the beatles", "label": "play_music"}
+{"text": "what is the weather this friday", "label": "weather_query"}
+{"text": "what's two plus two", "label": "qa_maths"}
+{"text": "i need to buy gas", "label": "general_quirky"}
+{"text": "hold", "label": "play_audiobook"}
+{"text": "tweet complain at comcast", "label": "social_post"}
+{"text": "please play the song every time i see you", "label": "play_music"}
+{"text": "should i take a sweater or a coat to work today", "label": "weather_query"}
+{"text": "may i have a list of five star hotels in paris", "label": "qa_factoid"}
+{"text": "let's play", "label": "play_game"}
+{"text": "start playing ringcast", "label": "play_podcasts"}
+{"text": "clear my calendar all events", "label": "calendar_remove"}
+{"text": "find john smith in contacts", "label": "email_querycontact"}
+{"text": "please check my reminders", "label": "calendar_query"}
+{"text": "when was the bolshoi theater constructed", "label": "qa_factoid"}
+{"text": "veganism", "label": "general_quirky"}
+{"text": "shut off lights", "label": "iot_hue_lightoff"}
+{"text": "please set a notification on twenty third october about meeting with my colleague", "label": "calendar_set"}
+{"text": "is it friday", "label": "calendar_query"}
+{"text": "please check for new email", "label": "email_query"}
+{"text": "email mom and ask how the weather is there", "label": "email_sendemail"}
+{"text": "tell me about economy and g. d. p. about india versus china", "label": "general_quirky"}
+{"text": "the event will include walter and gemma", "label": "calendar_set"}
+{"text": "please tell me the score of the game", "label": "general_quirky"}
+{"text": "please add oranges to my grocery list", "label": "lists_createoradd"}
+{"text": "current song playing what is it", "label": "music_query"}
+{"text": "add podcast favorites to playlist and start", "label": "play_podcasts"}
+{"text": "what lists do i have queried", "label": "lists_query"}
+{"text": "find route", "label": "qa_factoid"}
+{"text": "who mailed me yesterday", "label": "email_query"}
+{"text": "please remove this event from my calendar", "label": "calendar_remove"}
+{"text": "play scrabble with me", "label": "play_game"}
+{"text": "my friend john has sent me a invitation card to his newly bought home say thanks to him in his mail id", "label": "email_sendemail"}
+{"text": "olly how many meetings did mahatma gandhi undertake", "label": "qa_factoid"}
+{"text": "what day is halloween this year", "label": "datetime_query"}
+{"text": "find out what song this is and tell me the name", "label": "music_query"}
+{"text": "what times do my alarms go off", "label": "alarm_query"}
+{"text": "train ticket", "label": "transport_ticket"}
+{"text": "please mute my speaker", "label": "audio_volume_mute"}
+{"text": "is it cold outside", "label": "weather_query"}
+{"text": "erase all events from my calendar", "label": "calendar_remove"}
+{"text": "what is the factorial of ten", "label": "qa_maths"}
+{"text": "what time is it in new york now", "label": "datetime_query"}
+{"text": "do you know any jokes", "label": "general_joke"}
+{"text": "play game", "label": "play_game"}
+{"text": "do i have a meeting this afternoon", "label": "calendar_query"}
+{"text": "any lighting news emails", "label": "email_query"}
+{"text": "tell me if i have new emails", "label": "email_query"}
+{"text": "email chelsea", "label": "email_sendemail"}
+{"text": "how do i make a pizza", "label": "cooking_recipe"}
+{"text": "what should i watch today", "label": "recommendation_movies"}
+{"text": "olly i need directions to madison street", "label": "transport_query"}
+{"text": "please give me the winning lottery numbers for this weekend", "label": "general_quirky"}
+{"text": "start chapter five of physics for future presidents", "label": "play_audiobook"}
+{"text": "what do you think", "label": "music_likeness"}
+{"text": "change volume to thirty five percent", "label": "audio_volume_other"}
+{"text": "switch off the lights", "label": "iot_hue_lightoff"}
+{"text": "i don't have enough money to buy the nintendo switch right now can you please remove it on my amazon wishlist", "label": "lists_remove"}
+{"text": "what are the definitions of orange", "label": "qa_definition"}
+{"text": "post i am happy to facebook", "label": "social_post"}
+{"text": "i need an email to be sent to comcastcom about my service issues", "label": "email_sendemail"}
+{"text": "olly tell me my alarms", "label": "alarm_query"}
+{"text": "what is the traffic like now", "label": "transport_traffic"}
+{"text": "delete all events in calendar", "label": "calendar_remove"}
+{"text": "define speaker", "label": "qa_definition"}
+{"text": "put my dinner at red lobster on the calendar for today at nine", "label": "calendar_set"}
+{"text": "send email to jessica", "label": "email_sendemail"}
+{"text": "will you mark that i am busy for an event tomorrow at two p. m.", "label": "calendar_set"}
+{"text": "who are your developers", "label": "general_quirky"}
+{"text": "show geographic details of pyramids", "label": "qa_factoid"}
+{"text": "list of famous biryani recipes", "label": "cooking_recipe"}
+{"text": "swimming", "label": "recommendation_events"}
+{"text": "call taxi", "label": "transport_taxi"}
+{"text": "how old is j. k. rowling", "label": "qa_factoid"}
+{"text": "start celine dion songs", "label": "play_music"}
+{"text": "turn lights off", "label": "iot_hue_lightoff"}
+{"text": "need to check my list", "label": "lists_query"}
+{"text": "what is the traffic situation at the bazaar highway", "label": "transport_traffic"}
+{"text": "describe a sloth", "label": "qa_definition"}
+{"text": "play the weekend", "label": "play_music"}
+{"text": "mark april twenty as my brother's birthday", "label": "calendar_set"}
+{"text": "how old is marian carey", "label": "qa_factoid"}
+{"text": "move to the next song in the list", "label": "music_settings"}
+{"text": "do not talk", "label": "audio_volume_mute"}
+{"text": "send an email to john asking him what time works for the meeting", "label": "email_sendemail"}
+{"text": "delete all lists", "label": "lists_remove"}
+{"text": "how big is the empire state building", "label": "qa_factoid"}
+{"text": "make an alarm for the meeting with bob at seven today", "label": "alarm_set"}
+{"text": "any mail from amazon today", "label": "email_query"}
+{"text": "my party planning", "label": "calendar_query"}
+{"text": "play bob dylan playlist", "label": "play_music"}
+{"text": "clear out the shopping list", "label": "lists_remove"}
+{"text": "please play the latest bill simmons podcast", "label": "play_podcasts"}
+{"text": "show me the contents of the list", "label": "lists_query"}
+{"text": "i want to listen to the latest mike and mike podcast", "label": "play_podcasts"}
+{"text": "what day is the fifth", "label": "datetime_query"}
+{"text": "is it going to rain on monday", "label": "weather_query"}
+{"text": "can you make this event repetitive", "label": "calendar_set"}
+{"text": "tell me all about hurricane", "label": "qa_definition"}
+{"text": "play the most recent podcast for this american life", "label": "play_podcasts"}
+{"text": "can you turn on the radio", "label": "play_radio"}
+{"text": "tell me something i can do to help my community today", "label": "general_quirky"}
+{"text": "define blanket", "label": "qa_definition"}
+{"text": "play my shuffled playlist please", "label": "play_music"}
+{"text": "let me know the list", "label": "lists_query"}
+{"text": "please check the trending topics on twitter", "label": "social_query"}
+{"text": "fix alarm", "label": "alarm_set"}
+{"text": "one thousand two hundred and thirty p. m. already you will have a meeting in ten mins", "label": "calendar_query"}
+{"text": "add my opinion to this song great", "label": "music_likeness"}
+{"text": "let's hear some indie rock okay", "label": "play_music"}
+{"text": "send an email to grandma saying we are dropping by on saturday see you then", "label": "email_sendemail"}
+{"text": "how much money did bill gates make", "label": "qa_factoid"}
+{"text": "please read new emails", "label": "email_query"}
+{"text": "increase the brightness of the lights", "label": "iot_hue_lightup"}
+{"text": "is there any rain in the forecast for the next week", "label": "weather_query"}
+{"text": "ticket for bombay", "label": "transport_ticket"}
+{"text": "where in d. c. is that meeting at one p. m. on friday", "label": "calendar_query"}
+{"text": "i like this song", "label": "music_likeness"}
+{"text": "remove milk from my grocery list", "label": "lists_remove"}
+{"text": "could you please play this program for me", "label": "play_radio"}
+{"text": "play the radio please", "label": "play_radio"}
+{"text": "please lower music volume", "label": "audio_volume_down"}
+{"text": "read back my grocery list to me", "label": "lists_query"}
+{"text": "time now", "label": "datetime_query"}
+{"text": "alexa how much do you know about me", "label": "general_quirky"}
+{"text": "resume joes book from where i left off last time", "label": "play_audiobook"}
+{"text": "will i need sunscreen this afternoon", "label": "weather_query"}
+{"text": "set wake up thursday seven am", "label": "alarm_set"}
+{"text": "read what is on my list", "label": "lists_query"}
+{"text": "can you tell me how many stomachs a cow has", "label": "qa_factoid"}
+{"text": "calendar event send invite bill malinda", "label": "calendar_set"}
+{"text": "how is the weather like today", "label": "weather_query"}
+{"text": "what do i need to make lamb pathia", "label": "cooking_recipe"}
+{"text": "purchase ticket to new york city on train", "label": "transport_ticket"}
+{"text": "which pole is colder south or north", "label": "qa_factoid"}
+{"text": "can you book an uber for me", "label": "transport_taxi"}
+{"text": "i would like a cheeseburger", "label": "cooking_recipe"}
+{"text": "turn off sound", "label": "audio_volume_mute"}
+{"text": "have you heard any good music lately", "label": "general_quirky"}
+{"text": "lower the lights", "label": "iot_hue_lightdim"}
+{"text": "i've canceled the order placed at mcd did it go through", "label": "takeaway_query"}
+{"text": "find geographic details of this place", "label": "qa_factoid"}
+{"text": "please place my new email address to the contact", "label": "email_addcontact"}
+{"text": "is there an alarm for ten am", "label": "alarm_query"}
+{"text": "will there any events downtown this weekend", "label": "calendar_query"}
+{"text": "remind me about the party tomorrow", "label": "calendar_set"}
+{"text": "show all emails regarding the breach", "label": "email_query"}
+{"text": "what do i have to do this week", "label": "calendar_query"}
+{"text": "give me the time of the events", "label": "calendar_query"}
+{"text": "can you make me some coffee olly", "label": "iot_coffee"}
+{"text": "olly does shibaru sushi deliver", "label": "takeaway_query"}
+{"text": "show me some current events", "label": "news_query"}
+{"text": "call an uberpool to get me at long island bar", "label": "transport_taxi"}
+{"text": "can you check the facts on this issue", "label": "calendar_query"}
+{"text": "baseball scores", "label": "general_quirky"}
+{"text": "current time new york", "label": "datetime_query"}
+{"text": "olly turn on the coffee machine to make me some coffee", "label": "iot_coffee"}
+{"text": "please read my facebook feed", "label": "social_query"}
+{"text": "please be quiet for another hour", "label": "audio_volume_mute"}
+{"text": "lights at percent", "label": "iot_hue_lightchange"}
+{"text": "elections in up", "label": "news_query"}
+{"text": "i need to get a ticket via train to orlando from hwood", "label": "transport_ticket"}
+{"text": "what is the weather in pittsburgh", "label": "weather_query"}
+{"text": "inform my group that the new meeting date is tomorrow", "label": "calendar_set"}
+{"text": "did i tell you to remind me something", "label": "calendar_query"}
+{"text": "how many euros can i get for one dollar", "label": "qa_currency"}
+{"text": "new updates", "label": "social_query"}
+{"text": "launch game", "label": "play_game"}
+{"text": "what's the latest trump controversy", "label": "news_query"}
+{"text": "email my boss that i will be late today because of an emergency and apologize to him for missing the meeting", "label": "email_sendemail"}
+{"text": "schedule a meeting with matt at eleven am on thursday", "label": "calendar_set"}
+{"text": "tag this song with five stars", "label": "music_likeness"}
+{"text": "what new movie is jennifer lawrence working on", "label": "qa_factoid"}
+{"text": "what are the events next week", "label": "calendar_query"}
+{"text": "where on earth has the most volcanoes", "label": "qa_factoid"}
+{"text": "create email to yulia", "label": "email_sendemail"}
+{"text": "when does panama city mall open", "label": "recommendation_events"}
+{"text": "please pull up the wikipedia article on glass blowing", "label": "general_quirky"}
+{"text": "send a reply if it is very important", "label": "email_query"}
+{"text": "new gadgets", "label": "general_quirky"}
+{"text": "can you really see russia from alaska", "label": "qa_factoid"}
+{"text": "tell me the percentage of the chance of rain in seattle washington for today", "label": "weather_query"}
+{"text": "please scan my social media and tell me what's happening", "label": "social_query"}
+{"text": "any breaking news from the huffington post", "label": "news_query"}
+{"text": "my coffee is cold please make more coffee", "label": "iot_coffee"}
+{"text": "add event for meeting with james", "label": "calendar_set"}
+{"text": "where is new zealand located on a map", "label": "qa_factoid"}
+{"text": "play me john's podcast", "label": "play_podcasts"}
+{"text": "change my light color to blue and please turn off the kitchen light", "label": "iot_hue_lightchange"}
+{"text": "can you play rock music for the next hour", "label": "play_music"}
+{"text": "can you let amazon know that this new phone case is junk", "label": "social_post"}
+{"text": "can you delete the next event", "label": "calendar_remove"}
+{"text": "will there be a world war four", "label": "general_quirky"}
+{"text": "title of song", "label": "music_query"}
+{"text": "what time is my next appointment", "label": "calendar_query"}
+{"text": "play the sweet song on radio", "label": "play_radio"}
+{"text": "email alice to let her know we are on the way", "label": "email_sendemail"}
+{"text": "i went to the store", "label": "general_quirky"}
+{"text": "what are the b. b. c. poll predictions for the upcoming us elections", "label": "news_query"}
+{"text": "submit a negative review about a company", "label": "social_post"}
+{"text": "start the coffee machine at three", "label": "iot_coffee"}
+{"text": "change the light to pink color", "label": "iot_hue_lightchange"}
+{"text": "hoover the hallway", "label": "iot_cleaning"}
+{"text": "does pings do takeaway", "label": "takeaway_query"}
+{"text": "what day does my birthday fall on this year june twenty seventh", "label": "datetime_query"}
+{"text": "please stop talking", "label": "audio_volume_mute"}
+{"text": "turn the vibrate off from speaker", "label": "audio_volume_mute"}
+{"text": "are there any upcoming concerts by", "label": "music_likeness"}
+{"text": "turn on the robot vacuum cleaner", "label": "iot_cleaning"}
+{"text": "turn my morning alarm on", "label": "alarm_set"}
+{"text": "show pending reminders", "label": "calendar_query"}
+{"text": "is the last order is ready", "label": "takeaway_query"}
+{"text": "what are the news stories on the c. n. n. website", "label": "news_query"}
+{"text": "away off from list", "label": "lists_remove"}
+{"text": "social media", "label": "social_query"}
+{"text": "remind me everyday at two p. m. for lunch", "label": "calendar_set"}
+{"text": "how many square miles is the average country on earth", "label": "qa_factoid"}
+{"text": "what's my upcoming week look like", "label": "calendar_query"}
+{"text": "please sent this email to my friend", "label": "email_sendemail"}
+{"text": "open a reminder about next weeks managers meeting on tuesday", "label": "calendar_set"}
+{"text": "i want to make this week's shopping list", "label": "lists_createoradd"}
+{"text": "should i wear raincoat before getting out", "label": "weather_query"}
+{"text": "let's play hits on the radio", "label": "play_radio"}
+{"text": "play nine hundred and eighty nine the radio station", "label": "play_radio"}
+{"text": "make it brighter in here", "label": "iot_hue_lightup"}
+{"text": "can you set my coffee machine to make me coffee at seven am", "label": "iot_coffee"}
+{"text": "can you tell me the times the train leaves for chicago", "label": "transport_query"}
+{"text": "why is the earth round", "label": "general_quirky"}
+{"text": "what is two hundred divided by ten", "label": "qa_maths"}
+{"text": "what was george eliot's first november el", "label": "qa_factoid"}
+{"text": "play the song title", "label": "play_music"}
+{"text": "please play clash of clans", "label": "play_game"}
+{"text": "current weather forecast", "label": "weather_query"}
+{"text": "is there a connecting train from london to paris and what time", "label": "transport_query"}
+{"text": "add bob to my list of contacts", "label": "lists_createoradd"}
+{"text": "is there any news olly", "label": "news_query"}
+{"text": "olly where did the first americans settle", "label": "qa_factoid"}
+{"text": "anything good happening this weekend in the area", "label": "recommendation_events"}
+{"text": "set a birthday event for martin", "label": "calendar_set"}
+{"text": "set an event for friday", "label": "calendar_set"}
+{"text": "i want it to remember my preferences and recommend me things based on them when i ask", "label": "general_quirky"}
+{"text": "notify me about the event in my calendar", "label": "calendar_set"}
+{"text": "remove list item", "label": "lists_remove"}
+{"text": "turn off the lights in the bathroom", "label": "iot_hue_lightoff"}
+{"text": "how many people are attending my next meeting", "label": "calendar_query"}
+{"text": "check emails", "label": "email_query"}
+{"text": "add event to calendar app", "label": "calendar_set"}
+{"text": "is fongs dine in only", "label": "takeaway_query"}
+{"text": "find information on today's stocks", "label": "news_query"}
+{"text": "radio please", "label": "play_radio"}
+{"text": "play a nirvana playlist", "label": "play_music"}
+{"text": "are there any free events on in my area today", "label": "recommendation_events"}
+{"text": "block one hour from ten tomorrow morning", "label": "calendar_set"}
+{"text": "start my playlist on i heart radio", "label": "play_radio"}
+{"text": "were the stocks rising or declining", "label": "qa_stock"}
+{"text": "book me a cab going to location", "label": "transport_taxi"}
+{"text": "alexa start from my last session of joes book", "label": "play_audiobook"}
+{"text": "what events are going in my town this week", "label": "recommendation_events"}
+{"text": "play all by playlist", "label": "play_music"}
+{"text": "can you reply to charlotte that i am going to be busy with the projects for next three weeks", "label": "email_sendemail"}
+{"text": "ask for the weather today evening", "label": "weather_query"}
+{"text": "please tell me news related to the stock market", "label": "qa_stock"}
+{"text": "how is the traffic presently near central park road", "label": "transport_traffic"}
+{"text": "comfort my ears with arijit singh", "label": "play_music"}
+{"text": "please clean my calendar", "label": "calendar_remove"}
+{"text": "delete all events from my calendar", "label": "calendar_remove"}
+{"text": "speak softer please", "label": "audio_volume_down"}
+{"text": "will i need to carry around a brolly today", "label": "weather_query"}
+{"text": "what date is it today", "label": "datetime_query"}
+{"text": "coffee", "label": "iot_coffee"}
+{"text": "i want to know more about the fair this weekend", "label": "general_quirky"}
+{"text": "where did amal clooney go to college", "label": "qa_factoid"}
+{"text": "what music is currently playing on", "label": "music_query"}
+{"text": "my trip to goa photo post it on instagram", "label": "social_post"}
+{"text": "make the bedroom lights red and the hall lights normal color please", "label": "iot_hue_lightchange"}
+{"text": "please set a meeting to discuss terrorism with fred on the next available meeting day", "label": "calendar_set"}
+{"text": "delete list for groceries", "label": "lists_remove"}
+{"text": "play me last year's hits", "label": "play_music"}
+{"text": "do they deliver home", "label": "takeaway_query"}
+{"text": "what do i have coming up", "label": "calendar_query"}
+{"text": "hey siri what's the time", "label": "datetime_query"}
+{"text": "can i wear my sandals today", "label": "weather_query"}
+{"text": "what is the root of six hundred and twenty five", "label": "qa_maths"}
+{"text": "tell me the current time", "label": "datetime_query"}
+{"text": "play for me the music by the beatles", "label": "play_music"}
+{"text": "when i came back from this place", "label": "general_quirky"}
+{"text": "check new email", "label": "email_query"}
+{"text": "open google keep", "label": "lists_query"}
+{"text": "will there be a fall in temperature by tonight", "label": "weather_query"}
+{"text": "turn the plug off", "label": "iot_wemo_off"}
+{"text": "what are the upcoming concerts in dallas", "label": "calendar_query"}
+{"text": "how long does it take to make vegetable lasagna", "label": "cooking_recipe"}
+{"text": "i had a bad day", "label": "general_quirky"}
+{"text": "i would like my robot to feed and pet my dog when i'm not home", "label": "general_quirky"}
+{"text": "put that song in my favorite list", "label": "music_likeness"}
+{"text": "play radio with nonstop songs", "label": "play_radio"}
+{"text": "what is the current temperature outside", "label": "weather_query"}
+{"text": "what is mr. taxi's phone number it is in my contacts", "label": "email_querycontact"}
+{"text": "what is the temperature in indianapolis indiana", "label": "qa_factoid"}
+{"text": "olly i have to tell you about my day", "label": "general_quirky"}
+{"text": "turn off my first alarm", "label": "alarm_remove"}
+{"text": "is this song ed sheeran", "label": "music_query"}
+{"text": "please mute for five minutes", "label": "audio_volume_mute"}
+{"text": "does kim kardashian wear converse", "label": "qa_factoid"}
+{"text": "opinion save", "label": "music_likeness"}
+{"text": "brighten up the lighting", "label": "iot_hue_lightup"}
+{"text": "what kind of weather are they having in orange tx right now", "label": "weather_query"}
+{"text": "shall i change my car tires to snow tires soon", "label": "weather_query"}
+{"text": "give the definition of motivation", "label": "qa_definition"}
+{"text": "directions to disney land", "label": "transport_query"}
+{"text": "dim the lights in the living room", "label": "iot_hue_lightdim"}
+{"text": "anything new on insta", "label": "social_query"}
+{"text": "tell me that list i wrote two days ago", "label": "lists_query"}
+{"text": "info of the upcoming events", "label": "recommendation_events"}
+{"text": "send email to joe at a. o. l. dot com", "label": "email_sendemail"}
+{"text": "set meeting with joanna on saturday four p. m.", "label": "calendar_set"}
+{"text": "what's the date", "label": "datetime_query"}
+{"text": "check email about my job", "label": "email_query"}
+{"text": "what happened to the dow jones today", "label": "qa_stock"}
+{"text": "cisco system", "label": "recommendation_movies"}
+{"text": "please tweet on dell service for delay services", "label": "social_post"}
+{"text": "how cold is today", "label": "weather_query"}
+{"text": "clear out the problem", "label": "general_quirky"}
+{"text": "set alarm six am", "label": "alarm_set"}
+{"text": "open gallery post picture name", "label": "social_post"}
+{"text": "what are meeting scheduled for today", "label": "calendar_query"}
+{"text": "bring me the title of current music", "label": "music_query"}
+{"text": "what is a caftan", "label": "qa_definition"}
+{"text": "just add a new email in my contacts from michael", "label": "email_addcontact"}
+{"text": "i want to reply to bob smith's email", "label": "email_sendemail"}
+{"text": "put the lights off now", "label": "iot_hue_lightoff"}
+{"text": "help me start my kitchen list", "label": "lists_createoradd"}
+{"text": "call me a taxi olly", "label": "transport_taxi"}
+{"text": "find exchange rate for u. s. d. to pound", "label": "qa_currency"}
+{"text": "find me the cheapest train ticket to spain", "label": "transport_ticket"}
+{"text": "remove the alarm for tomorrow", "label": "alarm_remove"}
+{"text": "what movies are playing tonight", "label": "recommendation_movies"}
+{"text": "what's on my to-do list", "label": "lists_query"}
+{"text": "olly give me some dim light", "label": "iot_hue_lightdim"}
+{"text": "stop play", "label": "play_audiobook"}
+{"text": "start and email to john smith", "label": "email_sendemail"}
+{"text": "start playlist and play music", "label": "play_music"}
+{"text": "i want to know more about this event", "label": "calendar_query"}
+{"text": "beep when i get an email from john", "label": "email_query"}
+{"text": "what movies are out this week", "label": "recommendation_movies"}
+{"text": "remind me when i am at the library to get a new library card", "label": "calendar_set"}
+{"text": "set alarm at nine am on next sunday", "label": "alarm_set"}
+{"text": "create reminder for laundry at eight p. m.", "label": "calendar_set"}
+{"text": "activate the roomba", "label": "iot_cleaning"}
+{"text": "how many lists do i have", "label": "lists_query"}
+{"text": "play techno music", "label": "play_music"}
+{"text": "wooo", "label": "general_quirky"}
+{"text": "what is the date for next tuesday", "label": "datetime_query"}
+{"text": "add paav bhaji in menu card", "label": "lists_createoradd"}
+{"text": "say a good joke for me right now", "label": "general_joke"}
+{"text": "i want coffee everyday", "label": "iot_coffee"}
+{"text": "play previous song", "label": "play_music"}
+{"text": "top model car", "label": "general_quirky"}
+{"text": "what are the traffic conditions on the one hundred and one", "label": "transport_traffic"}
+{"text": "turn program on xmtune", "label": "play_radio"}
+{"text": "get me new email", "label": "email_query"}
+{"text": "train ticket please", "label": "transport_ticket"}
+{"text": "tell me all events for today in my city", "label": "recommendation_events"}
+{"text": "do you know the weather", "label": "weather_query"}
+{"text": "play me a game of tic tac toe", "label": "play_game"}
+{"text": "clear everything off my calendar for the rest of the year", "label": "calendar_remove"}
+{"text": "how many saturdays are in march", "label": "datetime_query"}
+{"text": "how do i make pizza", "label": "cooking_recipe"}
+{"text": "remind me tonight to pick up my dry cleaning at eight p. m.", "label": "calendar_set"}
+{"text": "let's tweet a complaint", "label": "social_post"}
+{"text": "make a call to", "label": "email_querycontact"}
+{"text": "are storms likely today", "label": "weather_query"}
+{"text": "what's the sum of the two numbers four and six", "label": "qa_maths"}
+{"text": "turn off smart plug socket", "label": "iot_wemo_off"}
+{"text": "remove shopping list", "label": "lists_remove"}
+{"text": "remind me to get the oil changed", "label": "calendar_set"}
+{"text": "any special events on my list", "label": "lists_query"}
+{"text": "please reserve the next taxi a nine am", "label": "transport_taxi"}
+{"text": "can many seashells did sally sell by the seashore", "label": "qa_factoid"}
+{"text": "how much would it cost to buy stock in apple", "label": "qa_stock"}
+{"text": "i want two burgers and one coke order it fast", "label": "takeaway_order"}
+{"text": "anything interesting going on in the bay area", "label": "recommendation_events"}
+{"text": "can you book an uber tomorrow", "label": "transport_taxi"}
+{"text": "i don't want any alarms", "label": "alarm_remove"}
+{"text": "contact detail of paul", "label": "email_querycontact"}
+{"text": "i need to something every monday set a reminder for it", "label": "calendar_set"}
+{"text": "set the default audio setting", "label": "audio_volume_other"}
+{"text": "i'm going to sleep now", "label": "iot_hue_lightoff"}
+{"text": "a quarter to two", "label": "datetime_query"}
+{"text": "will you remind me of the dentist appointment i have in two hours", "label": "calendar_set"}
+{"text": "let's suck out the dust", "label": "iot_cleaning"}
+{"text": "remember how i fell about this song", "label": "music_likeness"}
+{"text": "find the latest disney podcast", "label": "play_podcasts"}
+{"text": "please book a ticket form jaipur to mumbai on tuesday", "label": "transport_ticket"}
+{"text": "has anyone commented on my status", "label": "social_query"}
+{"text": "play for me music by the beatles", "label": "play_music"}
+{"text": "i need to confirm all meetings for today can the invite person", "label": "calendar_query"}
+{"text": "describe item xy", "label": "qa_definition"}
+{"text": "turn on a country music station", "label": "play_radio"}
+{"text": "i want to hear snow by red hot chili peppers", "label": "play_music"}
+{"text": "if it's five am in berlin what time is it here", "label": "datetime_convert"}
+{"text": "how far is canada from my current location", "label": "qa_factoid"}
+{"text": "who is the singer of hotel california", "label": "music_query"}
+{"text": "has ben got in touch", "label": "email_query"}
+{"text": "alexa i'dl like to hear any classical except for bach or schubert", "label": "play_music"}
+{"text": "i want you to play the podcast", "label": "play_podcasts"}
+{"text": "send a giggle my way", "label": "general_joke"}
+{"text": "turn off my wifi", "label": "iot_wemo_off"}
+{"text": "what happens to me if you become sentient", "label": "general_quirky"}
+{"text": "i would like to know the best rating pubs in the local area", "label": "recommendation_locations"}
+{"text": "tell me the news about share market ups and downs", "label": "news_query"}
+{"text": "what movie can i watch tonight on the theater here in boston", "label": "recommendation_events"}
+{"text": "is there anything special going on nearby", "label": "recommendation_events"}
+{"text": "olly tell me the time in g. m. t. plus five", "label": "datetime_convert"}
+{"text": "go to contacts and enter a new email address", "label": "email_sendemail"}
+{"text": "what is robin williams birthday", "label": "qa_factoid"}
+{"text": "initiate polling for new email", "label": "email_query"}
+{"text": "add the post office to my list of errands for saturday", "label": "lists_createoradd"}
+{"text": "which song is this one", "label": "music_query"}
+{"text": "do i have anything going on", "label": "calendar_query"}
+{"text": "what was the last email from work", "label": "email_query"}
+{"text": "i need to get up at ten tomorrow", "label": "alarm_set"}
+{"text": "i would like the like in the kitchen to be a different color", "label": "iot_hue_lightchange"}
+{"text": "get me the latest stock price for costco", "label": "news_query"}
+{"text": "show latest email", "label": "email_query"}
+{"text": "hi can you please turn lower the lights", "label": "iot_hue_lightdim"}
+{"text": "open audiobook", "label": "play_audiobook"}
+{"text": "set notifications on the current weather disasters in america", "label": "calendar_set"}
+{"text": "get me match highlights", "label": "news_query"}
+{"text": "look up", "label": "general_quirky"}
+{"text": "olly can we listen to reply all podcast", "label": "play_podcasts"}
+{"text": "remind me of rita's birthday twenty four hours in advance", "label": "calendar_set"}
+{"text": "i want to listen to be more chill by ned vizzini", "label": "play_audiobook"}
+{"text": "could you please email john saying i'm on leave", "label": "email_sendemail"}
+{"text": "i like senatra songs", "label": "music_likeness"}
+{"text": "please check new email from andy", "label": "email_query"}
+{"text": "will you put on the music", "label": "play_music"}
+{"text": "what's the funniest joke you know", "label": "general_joke"}
+{"text": "what are my available lists", "label": "lists_query"}
+{"text": "please raise the light i am not comfortable at this", "label": "iot_hue_lightup"}
+{"text": "is steph curry married", "label": "qa_factoid"}
+{"text": "economic affairs", "label": "news_query"}
+{"text": "get rid of the list google", "label": "lists_remove"}
+{"text": "set an alarm for six thirty am", "label": "alarm_set"}
+{"text": "look up the number of people living in miami florida", "label": "qa_factoid"}
