@@ -1,0 +1,1 @@
+clinc150 large deepseek-r1:32b qwen2.5:32b 42

@@ -1,6 +1,14 @@
 ollama:
   host: "http://localhost:11434"
   models:
-    judge_strict: "llama3.1:8b-instruct-q8_0"
-    judge_moe: "mixtral:8x7b-instruct-v0.1-q4_0"
-    judge_fast: "qwen2.5:7b"
+    llama3_3_70b_q2: "llama3.3:70b-instruct-q2_K"
+    qwen2_5_32b: "qwen2.5:32b"
+    deepseek_r1_32b: "deepseek-r1:32b"
+    llama3_2_3b_q8: "llama3.2:3b-instruct-q8_0"
+    llama3_latest: "llama3:latest"
+    qwen2_5_7b: "qwen2.5:7b"
+    llama3_1_8b_q8: "llama3.1:8b-instruct-q8_0"
+    mixtral_8x7b_q4: "mixtral:8x7b-instruct-v0.1-q4_0"
+    gemma_7b_q4: "gemma:7b-instruct-q4_K_M"
+    mistral_7b_q4: "mistral:7b-instruct-q4_K_M"
+    llama3_8b_q4: "llama3:8b-instruct-q4_K_M"

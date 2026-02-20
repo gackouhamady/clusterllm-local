@@ -1,0 +1,116 @@
+bank77 small deepseek-r1:32b qwen2.5:32b 42
+bank77 small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+bank77 small llama3.1:8b-instruct-q8_0 qwen2.5:32b 42
+bank77 small llama3.2:3b-instruct-q8_0 qwen2.5:32b 42
+bank77 small qwen2.5:32b qwen2.5:32b 42
+bank77 small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+
+clinc150 small deepseek-r1:32b qwen2.5:32b 42
+clinc150 small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+clinc150 small llama3.1:8b-instruct-q8_0 qwen2.5:32b 42
+clinc150 small llama3.2:3b-instruct-q8_0 qwen2.5:32b 42
+clinc150 small qwen2.5:32b qwen2.5:32b 42
+clinc150 small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+
+clinc_intent small deepseek-r1:32b qwen2.5:32b 42
+clinc_intent small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+clinc_intent small llama3.1:8b-instruct-q8_0 qwen2.5:32b 42
+clinc_intent small llama3.2:3b-instruct-q8_0 qwen2.5:32b 42
+clinc_intent small qwen2.5:32b qwen2.5:32b 42
+clinc_intent small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+
+mtop_intent small deepseek-r1:32b qwen2.5:32b 42
+mtop_intent small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+mtop_intent small llama3.1:8b-instruct-q8_0 qwen2.5:32b 42
+mtop_intent small llama3.2:3b-instruct-q8_0 qwen2.5:32b 42
+mtop_intent small qwen2.5:32b qwen2.5:32b 42
+mtop_intent small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+
+massive_intent small deepseek-r1:32b qwen2.5:32b 42
+massive_intent small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+massive_intent small llama3.1:8b-instruct-q8_0 qwen2.5:32b 42
+massive_intent small llama3.2:3b-instruct-q8_0 qwen2.5:32b 42
+massive_intent small qwen2.5:32b qwen2.5:32b 42
+massive_intent small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+
+few_rel_nat small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+few_rel_nat small qwen2.5:32b mixtral:8x7b-instruct-v0.1-q4_0 42
+few_rel_nat small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+few_rel_nat small llama3:latest llama3.3:70b-instruct-q2_K 42
+few_rel_nat small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+few_rel_nat small qwen2.5:7b llama3.3:70b-instruct-q2_K 42
+
+few_nerd_nat small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+few_nerd_nat small qwen2.5:32b mixtral:8x7b-instruct-v0.1-q4_0 42
+few_nerd_nat small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+few_nerd_nat small llama3:latest llama3.3:70b-instruct-q2_K 42
+few_nerd_nat small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+few_nerd_nat small qwen2.5:7b llama3.3:70b-instruct-q2_K 42
+
+few_event small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+few_event small qwen2.5:32b mixtral:8x7b-instruct-v0.1-q4_0 42
+few_event small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+few_event small llama3:latest llama3.3:70b-instruct-q2_K 42
+few_event small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+few_event small qwen2.5:7b llama3.3:70b-instruct-q2_K 42
+
+stackex small llama3.3:70b-instruct-q2_K llama3.3:70b-instruct-q2_K 42
+stackex small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+stackex small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+stackex small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+stackex small llama3:latest llama3.3:70b-instruct-q2_K 42
+stackex small gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+
+arxiv small llama3.3:70b-instruct-q2_K llama3.3:70b-instruct-q2_K 42
+arxiv small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+arxiv small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+arxiv small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+arxiv small llama3:latest llama3.3:70b-instruct-q2_K 42
+arxiv small qwen2.5:7b llama3.3:70b-instruct-q2_K 42
+
+reddit small llama3.3:70b-instruct-q2_K llama3.3:70b-instruct-q2_K 42
+reddit small llama3.3:70b-instruct-q2_K qwen2.5:32b 42
+reddit small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+reddit small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+reddit small llama3:latest llama3.3:70b-instruct-q2_K 42
+reddit small gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+
+go_emotions small deepseek-r1:32b qwen2.5:32b 42
+go_emotions small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+go_emotions small mistral:7b-instruct-q4_K_M qwen2.5:32b 42
+go_emotions small llama3:8b-instruct-q4_K_M qwen2.5:32b 42
+go_emotions small qwen2.5:32b qwen2.5:32b 42
+go_emotions small deepseek-r1:32b mixtral:8x7b-instruct-v0.1-q4_0 42
+
+clinc_domain small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+clinc_domain small mixtral:8x7b-instruct-v0.1-q4_0 qwen2.5:32b 42
+clinc_domain small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+clinc_domain small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+clinc_domain small gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+clinc_domain small llama3.1:8b-instruct-q8_0 llama3.3:70b-instruct-q2_K 42
+
+mtop_domain small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+mtop_domain small mixtral:8x7b-instruct-v0.1-q4_0 qwen2.5:32b 42
+mtop_domain small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+mtop_domain small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+mtop_domain small gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+mtop_domain small llama3.1:8b-instruct-q8_0 llama3.3:70b-instruct-q2_K 42
+
+massive_domain small mixtral:8x7b-instruct-v0.1-q4_0 llama3.3:70b-instruct-q2_K 42
+massive_domain small mixtral:8x7b-instruct-v0.1-q4_0 qwen2.5:32b 42
+massive_domain small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+massive_domain small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+massive_domain small gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+massive_domain small llama3.1:8b-instruct-q8_0 llama3.3:70b-instruct-q2_K 42
+
+# --- 10 EXTRA (pour atteindre 100, cross “personas” plus agressif) ---
+clinc150 small deepseek-r1:32b qwen2.5:7b 42
+clinc150 small qwen2.5:32b llama3.3:70b-instruct-q2_K 42
+bank77 small deepseek-r1:32b mixtral:8x7b-instruct-v0.1-q4_0 42
+bank77 small llama3.3:70b-instruct-q2_K llama3.3:70b-instruct-q2_K 42
+few_rel_nat small qwen2.5:32b llama3:latest 42
+few_rel_nat small llama3.3:70b-instruct-q2_K llama3.3:70b-instruct-q2_K 42
+reddit small qwen2.5:7b qwen2.5:32b 42
+reddit small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42
+massive_domain small mixtral:8x7b-instruct-v0.1-q4_0 mixtral:8x7b-instruct-v0.1-q4_0 42
+arxiv small deepseek-r1:32b llama3.3:70b-instruct-q2_K 42

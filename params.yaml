@@ -1,0 +1,6 @@
+run:
+  dataset: clinc150
+  scale: small
+  llm_triplet: deepseek-r1:32b
+  llm_pairs: qwen2.5:32b
+  seed: 42
