@@ -139,3 +139,32 @@ stages:
       md5: afc7e043eb8964b9328adaeb35883f3f.dir
       size: 186669
       nfiles: 1
+  prepare_small@mtop_intent:
+    cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh mtop_intent 
+      small 42
+    deps:
+    - path: scripts/run_prepare_data_only.sh
+      hash: md5
+      md5: 928adcecc6406f0c69d58f628e6d94f0
+      size: 4358
+      isexec: true
+    - path: src/data/prepare_data.py
+      hash: md5
+      md5: 12723d6bb836083228d26fc25e4f84da
+      size: 30962
+    params:
+      params.yaml:
+        run.seed: 42
+    outs:
+    - path: data/raw/mtop_intent_small_eval.csv
+      hash: md5
+      md5: 98ab2586120edaafa25296fee9652759
+      size: 91162
+    - path: data/raw/mtop_intent_small_train.csv
+      hash: md5
+      md5: 77183c36768a5e5a1f8956520ec72213
+      size: 632066
+    - path: src/clusterllm/datasets/mtop_intent/small.jsonl
+      hash: md5
+      md5: ffad5470dd5e568b58278aae39b94346
+      size: 1115520
