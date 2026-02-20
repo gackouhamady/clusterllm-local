@@ -1,61 +1,122 @@
-# Python
+# =========================
+# Python / Virtualenv
+# =========================
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
 *.pyd
 .venv/
 .env
 
-# Tests
+# =========================
+# Tests / Typecheck
+# =========================
 .pytest_cache/
+.mypy_cache/
+
+# =========================
 # Docs
+# =========================
 docs/build/
-# Editors
+
+# =========================
+# Editors / OS
+# =========================
 .vscode/
 .idea/
-# OS
 .DS_Store
-# Experiment outputs
+
+# =========================
+# Project outputs / caches
+# =========================
 B[Embeddings]/
 C[Clustering]/
 D[Cluster]/
-# Caches
-.mypy_cache/
+
+# DVC temp / secrets
+.dvc/tmp/
 .dvc/tmp/gdrive-user-credentials.json
-datasets/
+.gdrive/
+
+# Secrets (DO NOT COMMIT)
+creds.json
+cellular-effect-451211-f5-*.json
+
+# Generic caches / runs
+.cache/
+runs/
+_backup_dvc/
+
+# Large artifacts (usually tracked by DVC, not Git)
+*.hdf5
+*.pkl
+*.safetensors
+*.bin
+
+# =========================
+# Generated results (ignore)
+# =========================
 sampled_triplet_results/
+src/clusterllm/perspective/triplet_prediction/sampled_triplet_results/
+src/clusterllm/perspective/predict_triplet/predicted_triplet_results/
 src/clusterllm/perspective/finetuning/converted_triplet_results/
-# generated results (keep DVC metadata)
+src/clusterllm/perspective/finetuning/checkpoints/
+
+src/clusterllm/granularity/predicted_pair_results/
+src/clusterllm/granularity/sampled_pair_results/
+src/clusterllm/granularity/predicted_num_clusters_results/
+
+# If you want to keep DVC metadata inside predicted_num_clusters_results tracked:
 src/clusterllm/granularity/predicted_num_clusters_results/**/*
 !src/clusterllm/granularity/predicted_num_clusters_results/**/*.dvc
 !src/clusterllm/granularity/predicted_num_clusters_results/**/.gitignore
 
-src/clusterllm/perspective/triplet_prediction/sampled_triplet_results/
-src/clusterllm/granularity/predicted_pair_results/
-src/clusterllm/granularity/sampled_pair_results/
-src/clusterllm/perspective/finetuning/checkpoints/
-*.hdf5
-*.pkl
-.gdrive/
-.dvc/tmp/
-# secrets (DO NOT COMMIT)
-creds.json
-cellular-effect-451211-f5-*.json
-# generated results
-src/clusterllm/granularity/predicted_num_clusters_results/
-src/clusterllm/perspective/predict_triplet/predicted_triplet_results/
+# =========================
+# Datasets (IMPORTANT)
+# =========================
+# Ignore any top-level or nested folder named "datasets/"
+/datasets/
 
-# datasets managed by DVC inside this tree
+# BUT allow the repo-managed datasets directory used by your pipeline
+!src/
+!src/clusterllm/
+!src/clusterllm/datasets/
+!src/clusterllm/datasets/**
+
+# (Optional) ignore src/data/data/ as you had
 src/data/data/
-.cache/
-runs/
-*.hdf5
-*.safetensors
-*.bin
-__pycache__/
-.DS_Store
-.dvc/scripts/
-_backup_dvc/
+
+# =========================
+# DVC metadata (MUST be tracked)
+# =========================
+!*.dvc
+!dvc.yaml
+!dvc.lock
+!.dvcignore
+!.dvc/**
+
+# (Extra safety) allow DVC files inside src/clusterllm/datasets explicitly
+!src/clusterllm/datasets/**/*.dvc
+
+# =========================
+# Misc
+# =========================
 poetry
 prompts.json
 sitecustomize.py.bak
+
+!dvcfiles/
+!dvcfiles/**
+
+
+# --- allow repo datasets folder (needed by pipeline + DVC) ---
+!src/
+!src/clusterllm/
+!src/clusterllm/datasets/
+!src/clusterllm/datasets/**
+
+# --- DVC metadata must NOT be ignored ---
+!*.dvc
+!dvc.yaml
+!dvc.lock
+!.dvcignore
+!.dvc/**
