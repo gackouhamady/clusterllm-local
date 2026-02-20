@@ -439,3 +439,64 @@ newest_file() {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | tee "$NC_OUT/num_clusters.txt"
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     echo "DONE. Result: $NC_OUT/num_clusters.txt"
+
+
+
+
+# ------------------------------------------------------------------
+# FINAL) Write a generic summary metric (stable path for DVC)
+# ------------------------------------------------------------------
+SUMMARY_DIR="$ROOT/runs/summary/full_pipeline_2llms/$ds/$sc"
+mkdir -p "$SUMMARY_DIR"
+
+SUMMARY_JSON="$SUMMARY_DIR/summary.json"
+
+python - <<PY
+import json, os, hashlib
+
+ds = ${ds@Q}
+sc = ${sc@Q}
+llm_triplet = ${llm_triplet@Q}
+llm_pairs = ${llm_pairs@Q}
+seed = int(${SEED@Q})
+run_tag = ${run_tag@Q}
+
+num_clusters_txt = ${NC_OUT@Q} + "/num_clusters.txt"
+estimated_k = None
+top10 = None
+real_k = None
+
+if os.path.exists(num_clusters_txt):
+    txt = open(num_clusters_txt, "r", encoding="utf-8", errors="ignore").read().splitlines()
+    for line in txt:
+        if line.startswith("REAL K:"):
+            real_k = int(line.split(":",1)[1].strip())
+        if line.startswith("ESTIMATED K:"):
+            estimated_k = int(line.split(":",1)[1].strip())
+        if line.startswith("TOP 10 CANDIDATES:"):
+            # line like: TOP 10 CANDIDATES: [163, 157, ...]
+            rhs = line.split(":",1)[1].strip()
+            try:
+                top10 = json.loads(rhs.replace("'", '"'))
+            except Exception:
+                top10 = rhs
+
+out = {
+  "dataset": ds,
+  "scale": sc,
+  "llm_triplet": llm_triplet,
+  "llm_pairs": llm_pairs,
+  "seed": seed,
+  "run_tag": run_tag,
+  "num_clusters_txt": num_clusters_txt,
+  "real_k": real_k,
+  "estimated_k": estimated_k,
+  "top10_candidates": top10,
+}
+
+os.makedirs(os.path.dirname(${SUMMARY_JSON@Q}), exist_ok=True)
+with open(${SUMMARY_JSON@Q}, "w", encoding="utf-8") as f:
+    json.dump(out, f, indent=2, ensure_ascii=False)
+
+print("WROTE_SUMMARY:", ${SUMMARY_JSON@Q})
+PY                                                                                                                                                                                                                                                                                                                                                  

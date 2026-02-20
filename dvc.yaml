@@ -24,15 +24,12 @@ stages:
       - run.llm_pairs
       - run.seed
     outs:
-      # Données préparées + embeddings (on suit les dossiers, cache off car gros/volatils)
-      - path: src/clusterllm/datasets/${run.dataset}
-        cache: false
-
-      # Tous les artefacts "runs/" produits par le pipeline
-      - path: runs/perspective
-        cache: false
-      - path: runs/granularity
-        cache: false
+      - src/clusterllm/datasets/${run.dataset}:
+          cache: false
+      - runs/perspective:
+          cache: false
+      - runs/granularity:
+          cache: false
     metrics:
-      # Résultat final lisible (num_clusters.txt)
-      - runs/granularity/num_clusters/${run.dataset}/${run.scale}
+      - runs/summary/full_pipeline_2llms/${run.dataset}/${run.scale}/summary.json:
+          cache: false
