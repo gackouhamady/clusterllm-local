@@ -68,12 +68,30 @@ make install
 ### 2. Data Setup (DVC)
 
 We use DVC to version control datasets (Bank77, FewRel, etc.) and cached embeddings.
+```bash
+## Prepare data   from  source ( HF)
+
+chmod +x scripts/run_prepare_data_only.sh
+
+# single 
+ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh mtop_intent small
+## All small
+
+ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh all small 42
+
+## All large
+ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh all large 42
+```
+```bash
+# Push data to remote storage (Drive/S3)
+dvc push
+```
 
 ```bash
 # Pull data from remote storage (Drive/S3)
 dvc pull
-
 ```
+
 # Run  :
 ## bash  
 ```bash
