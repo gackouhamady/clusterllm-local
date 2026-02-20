@@ -114,23 +114,34 @@ bash scripts/run_full_pipeline_one_dataset_two_llms.sh clinc150 small deepseek-r
 ```
 
 ## DVC run
+To continue using **Poetry** for  experiment runs, We should follow the commands below. These are designed to ensure that **DVC** correctly interacts with the isolated environment where  LLM tools and dependencies are installed.
 
-### Lunch 1 run
+### 1. Launch a Single Run
+
+Use this command to execute a single experiment. The `-S` flags allow you to override parameters defined in your `params.yaml` directly from the terminal.
 
 ```bash
-dvc exp run -s full_pipeline_2llms \
+# Run a single experiment through Poetry
+poetry run dvc exp run -s full_pipeline_2llms \
   -S run.dataset=clinc150 \
   -S run.scale=small \
   -S run.llm_triplet="llama3.2:3b-instruct-q8_0" \
   -S run.llm_pairs="qwen2.5:32b" \
   -S run.seed=42
+
 ```
 
-## DVC run   for grids (100 configs) + execution in 4 //  jobs
+### 2. Run a Grid of 100 Configurations
+
+For large-scale testing (like the 14 datasets mentioned in the paper ), We can queue experiments and run them in parallel.
+
+**Step A: Queue the experiments**
+This loop reads your configuration file and adds each task to the DVC queue without starting them yet.
 
 ```bash
+# Queue 100 experiments
 while read -r ds sc lt lp seed; do
-  dvc exp run --queue -s full_pipeline_2llms \
+  poetry run dvc exp run --queue -s full_pipeline_2llms \
     -S run.dataset="$ds" \
     -S run.scale="$sc" \
     -S run.llm_triplet="$lt" \
@@ -138,7 +149,6 @@ while read -r ds sc lt lp seed; do
     -S run.seed="$seed"
 done < configs/grid_100.txt
 
-dvc exp run --run-all --jobs 4
 ```
 
 ---
