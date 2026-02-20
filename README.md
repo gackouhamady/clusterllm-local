@@ -75,12 +75,43 @@ dvc pull
 
 ```
 # Run  :
+## bash  
 ```bash
 # Full pipeline (end-to-end) in ONE command
 # Args: <dataset> <scale> <llm_triplet> <llm_pairs> [seed]
 bash scripts/run_full_pipeline_one_dataset_two_llms.sh clinc150 small deepseek-r1:32b qwen2.5:32b 42
 
+ 
 ```
+
+## DVC run
+
+### Lunch 1 run
+
+```bash
+dvc exp run -s full_pipeline_2llms \
+  -S run.dataset=clinc150 \
+  -S run.scale=small \
+  -S run.llm_triplet="llama3.2:3b-instruct-q8_0" \
+  -S run.llm_pairs="qwen2.5:32b" \
+  -S run.seed=42
+```
+
+## DVC run   for grids (100 configs) + execution in 4 //  jobs
+
+```bash
+while read -r ds sc lt lp seed; do
+  dvc exp run --queue -s full_pipeline_2llms \
+    -S run.dataset="$ds" \
+    -S run.scale="$sc" \
+    -S run.llm_triplet="$lt" \
+    -S run.llm_pairs="$lp" \
+    -S run.seed="$seed"
+done < configs/grid_100.txt
+
+dvc exp run --run-all --jobs 4
+```
+
 ---
 
 ##  Methodology
