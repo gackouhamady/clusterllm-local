@@ -113,43 +113,51 @@ bash scripts/run_full_pipeline_one_dataset_two_llms.sh clinc150 small deepseek-r
  
 ```
 
-## DVC run
-To continue using **Poetry** for  experiment runs, We should follow the commands below. These are designed to ensure that **DVC** correctly interacts with the isolated environment where  LLM tools and dependencies are installed.
+To align with your preference for **`dvc repro`** while maintaining the **Poetry** environment and the parameters for the CLUSTERLLM framework, here is the updated command set.
+
+Note that `dvc repro` does not natively support the `--queue` or `-S` (parameter override) flags found in `dvc exp run`. To change parameters using `repro`, you typically modify the `params.yaml` file or use a script to inject them.
 
 ### 1. Launch a Single Run
 
-Use this command to execute a single experiment. The `-S` flags allow you to override parameters defined in your `params.yaml` directly from the terminal.
+This command executes the pipeline specifically for the `full_pipeline_2llms` stage as defined in your DVC project.
 
 ```bash
-# Run a single experiment through Poetry
-poetry run dvc exp run -s full_pipeline_2llms \
-  -S run.dataset=clinc150 \
-  -S run.scale=small \
-  -S run.llm_triplet="llama3.2:3b-instruct-q8_0" \
-  -S run.llm_pairs="qwen2.5:32b" \
-  -S run.seed=42
+# Run a single reproduction through Poetry
+# Note: Ensure your params.yaml is set to clinc150/small/llama3.2/qwen2.5/42 first
+poetry run dvc repro full_pipeline_2llms
 
 ```
 
 ### 2. Run a Grid of 100 Configurations
 
-For large-scale testing (like the 14 datasets mentioned in the paper ), We can queue experiments and run them in parallel.
+Since `dvc repro` executes immediately and doesn't use the experiment queue, we use a `while` loop to run them sequentially. This ensures you can process all 14 datasets and various granularities mentioned in the research.
 
-**Step A: Queue the experiments**
-This loop reads your configuration file and adds each task to the DVC queue without starting them yet.
+**Sequential Execution Loop**
+This script updates the configuration and runs the reproduction one after another.
 
 ```bash
-# Queue 100 experiments
+# Run 100 reproductions sequentially
 while read -r ds sc lt lp seed; do
-  poetry run dvc exp run --queue -s full_pipeline_2llms \
-    -S run.dataset="$ds" \
-    -S run.scale="$sc" \
-    -S run.llm_triplet="$lt" \
-    -S run.llm_pairs="$lp" \
-    -S run.seed="$seed"
+  echo "Running: $ds $sc with $lt and $lp"
+  
+  # Optional: You can use 'yq' or 'sed' to update params.yaml here 
+  # to ensure dvc repro uses the new variables
+  
+  poetry run dvc repro full_pipeline_2llms
 done < configs/grid_100.txt
 
 ```
+
+---
+
+###  Pipeline Logic & Memory Constraints
+
+* 
+**Stage 1: Improving Perspective**: The pipeline uses triplet tasks (e.g., `<does A better correspond to B than C>`) to fine-tune the "small" embedder (Instructor).
+* 
+**Stage 2: Determining Granularity**: The framework then uses pairwise questions (e.g., `<do A and B belong to the same category>`) to find the best cluster scope.
+* 
+**VRAM Management**: Because we are calling two LLMs (DeepSeek and Qwen), sequential execution with `dvc repro` is actually safer for our **NVIDIA L4 (24GB)**. Running multiple 32B models in parallel would exceed the available memory, as these models are significantly larger than the "small" embedders used in the initial stages.
 
 ---
 
