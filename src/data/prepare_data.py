@@ -522,20 +522,20 @@ def build_tasks(
                                      allow_remote_code_env=allow_remote_code_env)
         train = _normalize(df_train, "text", "label")
         test = _normalize(df_test, "text", "label")
-        return _sample_df(train, 15638, seed), _sample_df(test, 2236, seed)
+        return _sample_df(train, 15667, seed), _sample_df(test, 4386, seed)
 
-    tasks.append(Task("mtop_intent", 15638, 2236, load_mtop_intent))
+    tasks.append(Task("mtop_intent", 15667, 4386, load_mtop_intent))
 
     def load_mtop_domain() -> Tuple[pd.DataFrame, pd.DataFrame]:
-        df_train = load_from_datasets("mteb/mtop_intent", split="train", config="en", allow_remote_code=True,
+        df_train = load_from_datasets("mteb/mtop_domain", split="train", config="en", allow_remote_code=True,
                                       allow_remote_code_env=allow_remote_code_env)
-        df_test = load_from_datasets("mteb/mtop_intent", split="test", config="en", allow_remote_code=True,
+        df_test = load_from_datasets("mteb/mtop_domain", split="test", config="en", allow_remote_code=True,
                                      allow_remote_code_env=allow_remote_code_env)
         train = _normalize(df_train, "text", "domain")
         test = _normalize(df_test, "text", "domain")
-        return _sample_df(train, 15667, seed), _sample_df(test, 2235, seed)
+        return _sample_df(train, 15667, seed), _sample_df(test, 4386, seed)
 
-    tasks.append(Task("mtop_domain", 15667, 2235, load_mtop_domain))
+    tasks.append(Task("mtop_domain", 15667, 4386, load_mtop_domain))
 
     def load_massive_intent() -> Tuple[pd.DataFrame, pd.DataFrame]:
         try:
@@ -549,9 +549,9 @@ def build_tasks(
 
         train = _normalize(df_train, "text", "label")
         test = _normalize(df_test, "text", "label")
-        return _sample_df(train, 11510, seed), _sample_df(test, 2029, seed)
+        return _sample_df(train, 11510, seed), _sample_df(test, 2974, seed)
 
-    tasks.append(Task("massive_intent", 11510, 2029, load_massive_intent))
+    tasks.append(Task("massive_intent", 11510, 2974, load_massive_intent))
 
     def load_massive_domain() -> Tuple[pd.DataFrame, pd.DataFrame]:
         try:
@@ -565,9 +565,9 @@ def build_tasks(
 
         train = _normalize(df_train, "text", "scenario")
         test = _normalize(df_test, "text", "scenario")
-        return _sample_df(train, 11514, seed), _sample_df(test, 2030, seed)
+        return _sample_df(train, 11514, seed), _sample_df(test, 2974, seed)
 
-    tasks.append(Task("massive_domain", 11514, 2030, load_massive_domain))
+    tasks.append(Task("massive_domain", 11514, 2974, load_massive_domain))
 
     def load_mteb_topic(hf_id: str) -> Callable[[], Tuple[pd.DataFrame, pd.DataFrame]]:
         def _load() -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -589,9 +589,9 @@ def build_tasks(
 
         return _load
 
-    tasks.append(Task("stackex", 50000, 5000, load_mteb_topic("mteb/stackexchange-clustering")))
-    tasks.append(Task("arxiv", 50000, 5000, load_mteb_topic("mteb/arxiv-clustering-p2p")))
-    tasks.append(Task("reddit", 50000, 5000, load_mteb_topic("mteb/reddit-clustering")))
+    tasks.append(Task("stackex", 50000, 4156, load_mteb_topic("mteb/stackexchange-clustering")))
+    tasks.append(Task("arxiv", 50000, 3674, load_mteb_topic("mteb/arxiv-clustering-p2p")))
+    tasks.append(Task("reddit", 50000, 3217, load_mteb_topic("mteb/reddit-clustering")))
 
     def load_go_emotions() -> Tuple[pd.DataFrame, pd.DataFrame]:
         hf_id = "google-research-datasets/go_emotions"
@@ -616,9 +616,10 @@ def build_tasks(
             train = _normalize(raw_train, "text", "labels" if "labels" in raw_train.columns else "label")
             test = _normalize(raw_test, "text", "labels" if "labels" in raw_test.columns else "label")
 
-        return _sample_df(train, 23485, seed), _sample_df(test, 3010, seed)
+        return _sample_df(train, 23485, seed), _sample_df(test, 5940, seed)
 
-    tasks.append(Task("go_emotions", 23485, 3010, load_go_emotions))
+    tasks.append(Task("go_emotions", 23485, 5940, load_go_emotions))
+    
 
 
 
@@ -647,12 +648,14 @@ def build_tasks(
         df = _ensure_text_label(df)
         df = _shuffle_df(df, seed)
 
-        large = _sample_df(df, 50000, seed)
-        small = _sample_df(df, 5000, seed)
+        # FewRel
+        large = _sample_df(df, 40320, seed)
+        small = _sample_df(df, 4480, seed)
+
 
         return large, small
 
-    tasks.append(Task("few_rel_nat", 50000, 5000, load_few_rel_nat))
+    tasks.append(Task("few_rel_nat", 40320, 4480, load_few_rel_nat))
 
 
     def load_few_nerd_nat() -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -675,12 +678,14 @@ def build_tasks(
         df = _ensure_text_label(df)
         df = _shuffle_df(df, seed)
 
+        
         large = _sample_df(df, 50000, seed)
-        small = _sample_df(df, 5000, seed)
+        small = _sample_df(df, 3789, seed)
+
 
         return large, small
 
-    tasks.append(Task("few_nerd_nat", 50000, 5000, load_few_nerd_nat))
+    tasks.append(Task("few_nerd_nat", 50000, 3789, load_few_nerd_nat))
 
 
     def load_few_event() -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -704,12 +709,14 @@ def build_tasks(
         df = _ensure_text_label(df)
         df = _shuffle_df(df, seed)
 
-        large = _sample_df(df, 50000, seed)
-        small = _sample_df(df, 5000, seed)
+    
+        # FewEvent
+        large = _sample_df(df, 18969, seed)
+        small = _sample_df(df, 4742, seed)
 
         return large, small
 
-    tasks.append(Task("few_event", 50000, 5000, load_few_event))
+    tasks.append(Task("few_event", 18969, 4742, load_few_event))
 
 
     def load_clinc_domain() -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -730,12 +737,12 @@ def build_tasks(
         df = _ensure_text_label(df)
         df = _shuffle_df(df, seed)
 
-        large = _sample_df(df, 50000, seed)
-        small = _sample_df(df, 5000, seed)
+        large = _sample_df(df, 15000, seed)
+        small = _sample_df(df, 4500, seed)
 
         return large, small
 
-    tasks.append(Task("clinc_domain", 50000, 5000, load_clinc_domain))
+    tasks.append(Task("clinc_domain", 50000,  4500, load_clinc_domain))
 
 
     return tasks
