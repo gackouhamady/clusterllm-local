@@ -82,6 +82,14 @@ ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh all small 42
 ## All large
 ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh all large 42
 ```
+##  Prepare Push Pull Sync
+```bash
+chmod +x scripts/dvc_prepare_and_sync.sh
+ALLOW_REMOTE_CODE=1 scripts/dvc_prepare_and_sync.sh push mtop_intent small 42
+ALLOW_REMOTE_CODE=1 scripts/dvc_prepare_and_sync.sh push all small 42
+ALLOW_REMOTE_CODE=1 scripts/dvc_prepare_and_sync.sh push all small 42
+scripts/dvc_prepare_and_sync.sh pull all small
+```
 ```bash
 # Push data to remote storage (Drive/S3)
 dvc push
@@ -91,6 +99,9 @@ dvc push
 # Pull data from remote storage (Drive/S3)
 dvc pull
 ```
+
+
+
 
 # Run  :
 ## bash  
