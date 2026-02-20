@@ -1,10 +1,9 @@
-````markdown
 # ClusterLLM-local — DVC CLI Cheat Sheet (Data vs Models, 2-machine workflow)
 
 This repo is organized around two separate concerns:
 
 - **Data pipeline (HF → JSONL/CSV):** produces versioned dataset artifacts in stable paths.
-- **Model pipeline (2 LLMs):** consumes the prepared dataset artifacts and writes model/run outputs.
+- **Model pipeline (2 LLMs):** consumes the prepared dataset artifacts and writes model outputs.
 
 The goal is: you run **only DVC commands** (no manual bash), and `dvc pull` restores the exact same files in the exact same locations.
 
@@ -21,7 +20,8 @@ Your `dvc.yaml` should expose these stages:
 List available stages:
 ```bash
 dvc stage list
-````
+
+```
 
 ### Required params
 
@@ -48,36 +48,41 @@ git rm -r --cached src/clusterllm/datasets/*/*_train.jsonl src/clusterllm/datase
 git rm -r --cached data/raw/*_train.csv data/raw/*_eval.csv
 git add .gitignore
 git commit -m "Stop tracking generated data in Git; track via DVC"
+
 ```
 
 ---
 
 ## A) Data pipeline (HF → JSONL/CSV)
 
+*(Note: Ensure your parameters like `run.seed` are set in `params.yaml` before running these reproduction commands.)*
+
 ### A1) Prepare ONE dataset (small)
 
-Preferred (safe): stage target is positional; override only what you need.
-
 ```bash
-dvc exp run prepare_small@mtop_intent -S run.seed=42
+dvc repro prepare_small@mtop_intent
+
 ```
 
 ### A2) Prepare ONE dataset (large)
 
 ```bash
-dvc exp run prepare_large@mtop_intent -S run.seed=42
+dvc repro prepare_large@mtop_intent
+
 ```
 
 ### A3) Prepare ALL datasets (small)
 
 ```bash
 dvc repro prepare_small
+
 ```
 
 ### A4) Prepare ALL datasets (large)
 
 ```bash
 dvc repro prepare_large
+
 ```
 
 Expected outputs (stable paths):
@@ -90,28 +95,22 @@ Expected outputs (stable paths):
 
 ## B) Model pipeline (Full pipeline: 1 dataset, 2 LLMs)
 
-### B1) Run full pipeline (explicit params on CLI)
+### B1) Reproduce full pipeline
+
+First, ensure your `params.yaml` contains the desired configuration (e.g., `run.dataset=mtop_intent`, `run.scale=small`, `run.llm_triplet="deepseek-r1:32b"`, `run.llm_pairs="qwen2.5:32b"`, `run.seed=42`).
 
 ```bash
-dvc exp run full_pipeline_2llms \
-  -S run.dataset=mtop_intent \
-  -S run.scale=small \
-  -S run.llm_triplet="deepseek-r1:32b" \
-  -S run.llm_pairs="qwen2.5:32b" \
-  -S run.seed=42
+dvc repro full_pipeline_2llms
+
 ```
 
-### B2) Run full pipeline with auto-pull if data is missing
+### B2) Reproduce full pipeline with auto-pull if data is missing
 
 Use this when the dataset artifacts might not be present locally.
 
 ```bash
-dvc exp run --pull full_pipeline_2llms \
-  -S run.dataset=mtop_intent \
-  -S run.scale=small \
-  -S run.llm_triplet="deepseek-r1:32b" \
-  -S run.llm_pairs="qwen2.5:32b" \
-  -S run.seed=42
+dvc repro --pull full_pipeline_2llms
+
 ```
 
 Stable metric output:
@@ -128,18 +127,21 @@ Keep sync commands short and standard:
 
 ```bash
 dvc push
+
 ```
 
 ### C2) Pull everything tracked by DVC
 
 ```bash
 dvc pull
+
 ```
 
 ### C3) Pull only one dataset file (fast)
 
 ```bash
 dvc pull src/clusterllm/datasets/mtop_intent/large.jsonl
+
 ```
 
 After `dvc pull`, the model pipeline will find:
@@ -147,37 +149,23 @@ After `dvc pull`, the model pipeline will find:
 
 ---
 
-## D) “Git stash apply merge conflicts” (what it means and the clean fix)
+## D) Bypassing the "Git stash apply merge conflicts" (The clean fix)
 
-`dvc exp run` uses **git stash** under the hood. If your workspace is not clean (modified/untracked files),
-stash re-apply can conflict (often on `dvc.lock` or internal `.dvc/*` files).
+Because `dvc exp run` uses **git stash** under the hood, it causes stash re-apply conflicts (often on `dvc.lock` or internal `.dvc/*` files) if your workspace is not clean.
 
-### D1) Make the workspace clean (recommended)
+By switching entirely to **`dvc repro`**, we skip the DVC experimentation stash mechanism.
 
-```bash
-rm -f .dvc/dvc.md  # remove untracked file if it exists
-git add .dvc/.gitignore dvc.lock
-git commit -m "DVC bookkeeping (.dvc/.gitignore, dvc.lock)"
-```
+### D1) The Golden Rule
 
-Then rerun:
+To ensure stash conflicts never reproduce again:
 
-```bash
-dvc exp run prepare_large@mtop_intent -S run.seed=42
-```
-
-### D2) Avoid stash entirely (use a temp workspace)
-
-```bash
-dvc exp run --temp prepare_large@mtop_intent -S run.seed=42
-```
-
-### D3) If you do not need CLI overrides, prefer `dvc repro`
-
-When `run.seed` is already set in `params.yaml`:
+1. Edit your parameter values directly in `params.yaml` (do not use `-S` CLI overrides).
+2. Save the file.
+3. Run standard reproduction:
 
 ```bash
 dvc repro prepare_large@mtop_intent
+
 ```
 
 ---
@@ -186,10 +174,11 @@ dvc repro prepare_large@mtop_intent
 
 ### Machine A (prepare + version + push)
 
-1. Build data with DVC:
+1. Set `run.seed: 42` in `params.yaml`, then build data with DVC:
 
 ```bash
-dvc exp run prepare_large@mtop_intent -S run.seed=42
+dvc repro prepare_large@mtop_intent
+
 ```
 
 2. Commit metadata and push artifacts:
@@ -199,14 +188,16 @@ git add dvc.lock dvc.yaml params.yaml
 git commit -m "Prepare mtop_intent large (seed=42)"
 dvc push
 git push
+
 ```
 
-### Machine B (pull the exact same data + run models)
+### Machine B (pull the exact same data + reproduce models)
 
 1. Get code + DVC metadata:
 
 ```bash
 git pull
+
 ```
 
 2. Restore artifacts (either all or just what you need):
@@ -215,17 +206,14 @@ git pull
 dvc pull
 # or minimal:
 dvc pull src/clusterllm/datasets/mtop_intent/large.jsonl
+
 ```
 
-3. Run the model pipeline (consumes the pulled JSONL):
+3. Update `params.yaml` for your target models, then reproduce the model pipeline (consumes the pulled JSONL):
 
 ```bash
-dvc exp run --pull full_pipeline_2llms \
-  -S run.dataset=mtop_intent \
-  -S run.scale=large \
-  -S run.llm_triplet="deepseek-r1:32b" \
-  -S run.llm_pairs="qwen2.5:32b" \
-  -S run.seed=42
+dvc repro --pull full_pipeline_2llms
+
 ```
 
 ---
@@ -236,19 +224,19 @@ Check what will be reproduced:
 
 ```bash
 dvc status
+
 ```
 
 Visualize dependencies:
 
 ```bash
 dvc dag
+
 ```
 
 List tracked artifacts:
 
 ```bash
 dvc list . --dvc-only
-```
 
-```
 ```

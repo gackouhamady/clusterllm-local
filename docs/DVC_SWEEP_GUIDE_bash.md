@@ -1,170 +1,185 @@
 # 🚀 DVC Sweep Guide – Full Pipeline (2 LLMs)
 
-Ce guide explique comment :
+This guide explains how to:
 
-* Mettre en queue 100 scénarios
-* Les exécuter en parallèle
-* Lancer un seul scénario
-* Voir les résultats
-* Nettoyer la queue
-* Lancer un scénario spécifique parmi tous
+* Queue 100 scenarios
+* Execute them in parallel
+* Reproduce a single scenario
+* View the results
+* Clean the queue
+* Reproduce a specific scenario among all
 
 ---
 
-# 📂 Prérequis
+# 📂 Prerequisites
 
-Structure attendue :
+Expected structure:
 
-```
+```text
 scripts/
-  run_full_pipeline_one_dataset_two_llms.sh
+  repro_full_pipeline_one_dataset_two_llms.sh
   sweep_full_pipeline_2llms.sh
 
 configs/
   grid_small.txt
   grid_large.txt
-```
-
-Stage DVC attendu dans `dvc.yaml` :
 
 ```
+
+Expected DVC stage in `dvc.yaml`:
+
+```text
 full_pipeline_2llms
+
 ```
 
 ---
 
-# 🧩 Format du fichier grid
+# 🧩 Grid file format
 
 `configs/grid_small.txt`
 
-Chaque ligne = 1 scénario :
+Each line = 1 scenario:
 
-```
+```text
 # dataset scale llm_triplet llm_pairs seed
 clinc150 small deepseek-r1:32b qwen2.5:32b 42
 bank77 small llama3.2:3b-instruct-q8_0 qwen2.5:7b 42
 reddit small deepseek-r1:32b llama3.1:8b-instruct-q8_0 42
+
 ```
 
-* 5 colonnes obligatoires
-* Les lignes vides sont ignorées
-* Les lignes commençant par `#` sont ignorées
+* 5 mandatory columns
+* Empty lines are ignored
+* Lines starting with `#` are ignored
 
 ---
 
-# 🔁 Commandes principales
+# 🔁 Main commands
 
 ---
 
-## A) Mettre en queue les 100 scénarios (sans lancer)
+## A) Queue all 100 scenarios (without reproducing)
 
 ```bash
 bash scripts/sweep_full_pipeline_2llms.sh queue configs/grid_100.txt
+
 ```
 
-Cela :
+This:
 
-* Ajoute tous les scénarios à la queue DVC
-* Ne lance rien
+* Adds all scenarios to your script's queue
+* Does not reproduce anything yet
 
 ---
 
-## B) Lancer tous les scénarios en parallèle (4 jobs)
+## B) Reproduce all scenarios in parallel (4 jobs)
 
 ```bash
-bash scripts/sweep_full_pipeline_2llms.sh run configs/grid_small.txt 4
+bash scripts/sweep_full_pipeline_2llms.sh repro configs/grid_small.txt 4
+
 ```
 
-Cela :
+This:
 
-1. Met en queue tous les scénarios
-2. Lance tous les runs en parallèle avec 4 workers
+1. Queues all scenarios
+2. Reproduces all pipelines in parallel using 4 workers
 
 ---
-- Ceci va de  meme  pour  le  configs/grid_large.txt
 
+* This also applies to `configs/grid_large.txt`
 
-## C) Lancer un seul scénario “à la main”
+## C) Reproduce a single scenario "by hand"
+
+*(Note: Since `dvc repro` does not accept `-S` for inline overrides, update your `params.yaml` file with the desired values first.)*
 
 ```bash
-dvc exp run -s full_pipeline_2llms \
-  -S run.dataset=clinc150 \
-  -S run.scale=small \
-  -S run.llm_triplet=deepseek-r1:32b \
-  -S run.llm_pairs=qwen2.5:32b \
-  -S run.seed=42
+dvc repro full_pipeline_2llms
+
 ```
 
 ---
 
-## D) Voir les résultats
+## D) View the results
 
 ```bash
 bash scripts/sweep_full_pipeline_2llms.sh show
+
 ```
 
-Équivalent à :
+Equivalent to (if your script registers experiments):
 
 ```bash
 dvc exp show
+
 ```
 
 ---
 
-## E) Nettoyer la queue
+## E) Clean the queue
 
 ```bash
 bash scripts/sweep_full_pipeline_2llms.sh clean
+
 ```
 
 ---
 
-# 🎯 Lancer un seul scénario parmi les 100
+# 🎯 Reproduce a single scenario out of the 100
 
 ---
 
-## Option 1 – Créer un fichier temporaire
+## Option 1 – Create a temporary file
 
-Créer :
+Create:
 
-```
+```text
 configs/one_small.txt
-```
-
-Contenu :
 
 ```
+
+Content:
+
+```text
 clinc150 small deepseek-r1:32b qwen2.5:32b 42
+
 ```
 
-Puis :
+Then:
 
 ```bash
-bash scripts/sweep_full_pipeline_2llms.sh run configs/one_small.txt 4
+bash scripts/sweep_full_pipeline_2llms.sh repro configs/one_small.txt 4
+
 ```
-- Meme   pour  configs/one_large.txt
+
+* Same for `configs/one_large.txt`
+
 ---
 
-## Option 2 – Modifier temporairement grid_small.txt
+## Option 2 – Temporarily modify grid_small.txt
 
-Supprimer toutes les lignes sauf celle voulue, puis :
+Delete all lines except the one you want, then:
 
 ```bash
-bash scripts/sweep_full_pipeline_2llms.sh run configs/grid_small.txt 4
+bash scripts/sweep_full_pipeline_2llms.sh repro configs/grid_small.txt 4
+
 ```
-- Meme  pour   configs/one_large.txt
+
+* Same for `configs/one_large.txt`
+
 ---
 
-# 🧠 Workflow recommandé
+# 🧠 Recommended Workflow
 
-### 1️⃣ Générer ou modifier grid
+### 1️⃣ Generate or modify grid
 
-```
+```text
 configs/grid_small.txt
-- ou configs/grid_small.txt
+- or configs/grid_large.txt
+
 ```
 
-### 2️⃣ Mettre en queue
+### 2️⃣ Queue
 
 ```bash
 bash scripts/sweep_full_pipeline_2llms.sh queue configs/grid_small.txt
@@ -173,54 +188,60 @@ bash scripts/sweep_full_pipeline_2llms.sh queue configs/grid_large.txt
 
 ```
 
-### 3️⃣ Lancer en parallèle
+### 3️⃣ Reproduce in parallel
 
 ```bash
-dvc exp run --run-all --jobs 4
+bash scripts/sweep_full_pipeline_2llms.sh repro configs/grid_small.txt 4
+
 ```
 
-### 4️⃣ Voir résultats
+*(Using your custom script to handle the parallel jobs instead of standard DVC experiment queues)*
+
+### 4️⃣ View results
 
 ```bash
 dvc exp show
+
 ```
 
 ---
 
-# ⚡ Exemple réel
+# ⚡ Real-world Example
 
 ```bash
-bash scripts/sweep_full_pipeline_2llms.sh run configs/grid_small.txt 4
+bash scripts/sweep_full_pipeline_2llms.sh repro configs/grid_small.txt 4
 # or 
-bash scripts/sweep_full_pipeline_2llms.sh run configs/grid_large.txt 4
+bash scripts/sweep_full_pipeline_2llms.sh repro configs/grid_large.txt 4
+
 ```
 
-Cela :
+This:
 
-* Enqueue 100 configs
-* Lance 4 en parallèle
-* Continue jusqu’à fin
-* Tous les outputs sont dans `runs/`
-
----
-
-# 📌 Résumé
-
-| Action       | Commande                                 |
-| ------------ | ---------------------------------------- |
-| Queue        | `sweep_full_pipeline_2llms.sh queue`     |
-| Run parallel | `sweep_full_pipeline_2llms.sh run`       |
-| Single run   | `dvc exp run -s full_pipeline_2llms ...` |
-| Show results | `dvc exp show`                           |
-| Clean queue  | `sweep_full_pipeline_2llms.sh clean`     |
+* Enqueues 100 configs
+* Reproduces 4 in parallel
+* Continues until finished
+* All outputs are in `runs/`
 
 ---
 
-# ✅ Bonnes pratiques
+# 📌 Summary
 
-* Toujours vérifier que le script accepte bien les args
-* Ne pas écraser les variables après le bloc args
-* Utiliser `--jobs` adapté à ta VRAM
-* Ne pas mettre `runs/` en cache DVC si volumineux
+| Action | Command |
+| --- | --- |
+| Queue | `sweep_full_pipeline_2llms.sh queue` |
+| Parallel repro | `sweep_full_pipeline_2llms.sh repro` |
+| Single repro | Update `params.yaml` then `dvc repro ...` |
+| Show results | `dvc exp show` |
+| Clean queue | `sweep_full_pipeline_2llms.sh clean` |
 
 ---
+
+# ✅ Best Practices
+
+* Always verify that the script correctly accepts the arguments
+* Do not overwrite variables after the args block
+* Use `--jobs` (or script worker count) adapted to your VRAM
+* Do not put `runs/` in the DVC cache if it is too large
+
+---
+
