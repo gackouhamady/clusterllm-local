@@ -2,8 +2,8 @@ run:
   dataset: clinc150
   scale: small
   seed: 42
-  llm_triplet: llama3:latest
-  llm_pairs: qwen2.5:32b
+  llm_triplet: llama3.2:3b-instruct-q8_0
+  llm_pairs: qwen2.5:7b
 
 datasets:
   all:

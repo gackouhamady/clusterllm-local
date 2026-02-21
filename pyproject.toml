@@ -45,6 +45,7 @@ tokenizers = "^0.22.2"
 pyarrow = "<20"
 huggingface-hub = ">=0.23.0"
 accelerate = "^1.12.0"
+nltk = "^3.9.2"
 
 
 [tool.poetry.group.dev.dependencies]
