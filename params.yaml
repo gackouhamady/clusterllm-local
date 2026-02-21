@@ -1,5 +1,5 @@
 run:
-  dataset: clinc150
+  dataset: bank77
   scale: small
   seed: 42
   llm_triplet: llama3.2:3b-instruct-q8_0

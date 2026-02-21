@@ -318,6 +318,10 @@ test -f "$PROMPT_TEMPLATE" || die "missing prompt template: $PROMPT_TEMPLATE"
 PROMPT_RUN_DIR="$ROOT/runs/granularity/prompts/$ds/$sc/$run_tag/$llm_pairs_dir"
 mkdir -p "$PROMPT_RUN_DIR"
 
+# FIX 1: ensure the expected output directory exists
+mkdir -p "$GRAN_DIR/predicted_pair_results"
+
+# FIX 2: do NOT swallow errors (remove "|| true")
 python "$GRAN_DIR/sample_pairs_for_prompt.py" \
   --prompt_path "$PROMPT_TEMPLATE" \
   --sampled_pair_path "$cluster_json" \
@@ -325,8 +329,7 @@ python "$GRAN_DIR/sample_pairs_for_prompt.py" \
   --dataset "$ds" \
   --num_sampled 200 \
   --num_for_prompt 4 \
-  --seed "$SEED" \
-  || true
+  --seed "$SEED"
 
 GEN_PROMPT="$(newest_file "$GRAN_DIR/predicted_pair_results"/*.json)"
 test -f "${GEN_PROMPT:-}" || die "sample_pairs_for_prompt produced no prompt json in $GRAN_DIR/predicted_pair_results"
