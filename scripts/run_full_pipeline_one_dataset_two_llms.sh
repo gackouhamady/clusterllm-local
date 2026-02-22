@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 # File name: scripts/run_full_pipeline_one_dataset_two_llms.sh
-# Usage:
-#   chmod +x scripts/run_full_pipeline_one_dataset_two_llms.sh
-#   ./scripts/run_full_pipeline_one_dataset_two_llms.sh
 #
 # Robust end-to-end pipeline (2 LLMs):
 #   - llm_triplet: used ONLY for triplet prediction (Stage 3) -> drives finetune + FT embeddings
 #   - llm_pairs  : used ONLY for pair prediction   (Stage 7.2) -> drives num_clusters estimation
 #
 # Stages:
-#   stage0: data -> jsonl
+#   stage0: data -> jsonl (handled by separate DVC stages / scripts)
 #   stage1: baseline embeddings
 #   stage2: sample triplets
 #   stage3: predict triplets (ollama, llm_triplet)
@@ -20,32 +17,43 @@
 
 set -euo pipefail
 
-# Auto-detect repo root = parent of scripts/
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# -----------------------------
+# Repo root and PYTHONPATH
+# -----------------------------
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 export PYTHONPATH="$ROOT/src:${PYTHONPATH:-}"
 
-OLLAMA_BASE_URL="http://127.0.0.1:11434"
-SEED=42
+# -----------------------------
+# Defaults (override via args)
+# -----------------------------
+OLLAMA_BASE_URL="${OLLAMA_BASE_URL:-http://127.0.0.1:11434}"
+SEED="${SEED:-42}"
 
-# ====== CHOOSE HERE ======
-ds="massive_intent"          # any folder name inside: $ROOT/src/clusterllm/datasets/<ds>/
-sc="small"                   # small | large
+# choose defaults here
+ds="${ds:-massive_intent}"          # dataset folder name in: $ROOT/src/clusterllm/datasets/<ds>/
+sc="${sc:-small}"                   # small | large
+llm_triplet="${llm_triplet:-deepseek-r1:32b}"  # Stage 3
+llm_pairs="${llm_pairs:-qwen2.5:32b}"          # Stage 7.2
 
-# 2 LLMs:
-llm_triplet="deepseek-r1:32b"  # used at Stage 3 (triplets)
-llm_pairs="qwen2.5:32b"        # used at Stage 7.2 (pairs)
-# =========================
+# LLM decoding (more reproducible when temp low)
+TRIPLET_TEMPERATURE="${TRIPLET_TEMPERATURE:-0.2}"
+PAIRS_TEMPERATURE="${PAIRS_TEMPERATURE:-0.0}"
+OLLAMA_TIMEOUT="${OLLAMA_TIMEOUT:-600}"
+OLLAMA_NUM_PREDICT="${OLLAMA_NUM_PREDICT:-16}"
 
-# ------------------------------------------------------------------
-# Args override (no other edits needed)
-# Usage:
-#   ./scripts/run_full_pipeline_one_dataset_two_llms.sh <dataset> <scale> <llm_triplet> <llm_pairs> [seed]
-# Example:
-#   ./scripts/run_full_pipeline_one_dataset_two_llms.sh clinc150 small deepseek-r1:32b qwen2.5:32b 42
-# ------------------------------------------------------------------
-
+# -----------------------------
+# Usage
+# -----------------------------
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  echo "Usage: $0 <dataset> <scale> <llm_triplet> <llm_pairs> [seed]" >&2
+  cat >&2 <<EOF
+Usage: $0 <dataset> <scale> <llm_triplet> <llm_pairs> [seed]
+
+Example:
+  $0 clinc150 small deepseek-r1:32b qwen2.5:32b 42
+
+Environment overrides (optional):
+  OLLAMA_BASE_URL, TRIPLET_TEMPERATURE, PAIRS_TEMPERATURE, OLLAMA_TIMEOUT, OLLAMA_NUM_PREDICT
+EOF
   exit 0
 fi
 
@@ -55,49 +63,72 @@ if [[ -n "${3:-}" ]]; then llm_triplet="$3"; fi
 if [[ -n "${4:-}" ]]; then llm_pairs="$4"; fi
 if [[ -n "${5:-}" ]]; then SEED="$5"; fi
 
-if [[ -z "${ds:-}" || -z "${sc:-}" || -z "${llm_triplet:-}" || -z "${llm_pairs:-}" ]]; then
-  echo "ERROR: missing args. Need: <dataset> <scale> <llm_triplet> <llm_pairs> [seed]" >&2
-  echo "Example: $0 clinc150 small deepseek-r1:32b qwen2.5:32b 42" >&2
-  exit 1
-fi
+# -----------------------------
+# Validation
+# -----------------------------
+die() { echo "ERROR: $*" >&2; exit 1; }
+log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
-if [[ "$sc" != "small" && "$sc" != "large" ]]; then
-  echo "ERROR: scale must be small|large, got: $sc" >&2
-  exit 1
-fi
+[[ -n "${ds:-}" && -n "${sc:-}" && -n "${llm_triplet:-}" && -n "${llm_pairs:-}" ]] \
+  || die "Missing args. Need: <dataset> <scale> <llm_triplet> <llm_pairs> [seed]"
 
-llm_triplet_dir="$(echo "$llm_triplet" | sed 's/:/__/g')"
-llm_pairs_dir="$(echo "$llm_pairs" | sed 's/:/__/g')"
+[[ "$sc" == "small" || "$sc" == "large" ]] || die "scale must be small|large, got: $sc"
+
+command -v python >/dev/null 2>&1 || die "python not found in PATH"
+command -v bash >/dev/null 2>&1 || die "bash not found in PATH"
+
+# -----------------------------
+# Path-safe tags
+# -----------------------------
+sanitize_tag() {
+  # replace / : space with __ to make safe folder names
+  echo "$1" | sed -E 's/[\/:[:space:]]+/__/g'
+}
+
+llm_triplet_dir="$(sanitize_tag "$llm_triplet")"
+llm_pairs_dir="$(sanitize_tag "$llm_pairs")"
 run_tag="t=${llm_triplet_dir}__p=${llm_pairs_dir}"
 
+# -----------------------------
+# Project directories
+# -----------------------------
 DATA_DIR="$ROOT/src/clusterllm/datasets"
 PRED_TRIPLET_DIR="$ROOT/src/clusterllm/perspective/predict_triplet"
 FT_DIR="$ROOT/src/clusterllm/perspective/finetuning"
 GRAN_DIR="$ROOT/src/clusterllm/granularity"
-PREP="$ROOT/src/data/prepare_data.py"
 
-# ------------------------------------------------------------------
-# Helpers
-# ------------------------------------------------------------------
-die() { echo "ERROR: $*" >&2; exit 1; }
-
-# Find newest file matching pattern; empty if none
+# -----------------------------
+# Helper: pick newest file from a glob (robust)
+# -----------------------------
 newest_file() {
   local pattern="$1"
-  ls -t $pattern 2>/dev/null | head -n 1 || true
+  python - "$pattern" <<'PY'
+import glob, os, sys
+pat = sys.argv[1]
+files = glob.glob(pat)
+if not files:
+    sys.exit(0)
+latest = max(files, key=lambda p: os.path.getmtime(p))
+print(latest)
+PY
 }
 
-DATA_DIR="$ROOT/src/clusterllm/datasets"
-PREP="$ROOT/src/data/prepare_data.py"
+log "ROOT=$ROOT"
+log "dataset=$ds scale=$sc seed=$SEED"
+log "llm_triplet=$llm_triplet llm_pairs=$llm_pairs"
+log "run_tag=$run_tag"
+log "OLLAMA_BASE_URL=$OLLAMA_BASE_URL"
+log "TRIPLET_TEMPERATURE=$TRIPLET_TEMPERATURE PAIRS_TEMPERATURE=$PAIRS_TEMPERATURE"
 
 # ------------------------------------------------------------------
-# STAGE 0 REMOVED: data must already exist
+# STAGE 0: data must already exist
 # ------------------------------------------------------------------
-test -f "$DATA_DIR/$ds/$sc.jsonl" || die "Missing $DATA_DIR/$ds/$sc.jsonl. Run: scripts/run_prepare_data_only.sh $ds $sc"
+test -f "$DATA_DIR/$ds/$sc.jsonl" || die "Missing $DATA_DIR/$ds/$sc.jsonl. Run: scripts/run_prepare_data_only.sh $ds $sc $SEED"
 
 # ------------------------------------------------------------------
-# STAGE 1) Embeddings (baseline Instructor) -> ${sc}_embeds.hdf5
+# STAGE 1) Baseline embeddings -> ${sc}_embeds.hdf5
 # ------------------------------------------------------------------
+log "Stage 1: baseline embeddings"
 python "$FT_DIR/get_embedding.py" \
   --model_name "hkunlp/instructor-large" \
   --task_name "$ds" \
@@ -111,15 +142,17 @@ python "$FT_DIR/get_embedding.py" \
   --overwrite
 
 # ------------------------------------------------------------------
-# STAGE 2) Sample triplets -> runs/perspective/triplets/<ds>/<sc>/
+# STAGE 2) Sample triplets
 # ------------------------------------------------------------------
-mkdir -p "$ROOT/runs/perspective/triplets/$ds/$sc"
+log "Stage 2: sample triplets"
+TRIPLET_OUT="$ROOT/runs/perspective/triplets/$ds/$sc"
+mkdir -p "$TRIPLET_OUT"
 
 python "$PRED_TRIPLET_DIR/triplet_sampling.py" \
   --dataset "$ds" \
   --data_path "$DATA_DIR/$ds/$sc.jsonl" \
   --embed_path "$DATA_DIR/$ds/${sc}_embeds.hdf5" \
-  --output_dir "$ROOT/runs/perspective/triplets/$ds/$sc" \
+  --output_dir "$TRIPLET_OUT" \
   --scale "$sc" \
   --num_queries 1024 \
   --large_ent_prop 0.2 \
@@ -128,15 +161,16 @@ python "$PRED_TRIPLET_DIR/triplet_sampling.py" \
   --seed "$SEED"
 
 # ------------------------------------------------------------------
-# STAGE 3) Predict triplets with Ollama LLM (llm_triplet)
-# -> runs/perspective/triplet_preds/<ds>/<sc>/<run_tag>/<llm_triplet_dir>/
+# STAGE 3) Predict triplets (llm_triplet)
 # ------------------------------------------------------------------
-mkdir -p "$ROOT/runs/perspective/triplet_preds/$ds/$sc/$run_tag/$llm_triplet_dir"
+log "Stage 3: predict triplets with ollama ($llm_triplet)"
+TRIPLET_PRED_OUT="$ROOT/runs/perspective/triplet_preds/$ds/$sc/$run_tag/$llm_triplet_dir"
+mkdir -p "$TRIPLET_PRED_OUT"
 
 python "$PRED_TRIPLET_DIR/predict.py" \
   --dataset "$ds" \
-  --input_dir "$ROOT/runs/perspective/triplets/$ds/$sc" \
-  --output_dir "$ROOT/runs/perspective/triplet_preds/$ds/$sc/$run_tag/$llm_triplet_dir" \
+  --input_dir "$TRIPLET_OUT" \
+  --output_dir "$TRIPLET_PRED_OUT" \
   --model_name "$llm_triplet" \
   --delay 0 \
   --max_trials 5 \
@@ -144,19 +178,18 @@ python "$PRED_TRIPLET_DIR/predict.py" \
   --num_responses 1 \
   --ollama-base-url "$OLLAMA_BASE_URL" \
   --ollama-model "$llm_triplet" \
-  --ollama-timeout 600 \
-  --ollama-temperature 0.5 \
-  --ollama-num-predict 10
+  --ollama-timeout "$OLLAMA_TIMEOUT" \
+  --ollama-temperature "$TRIPLET_TEMPERATURE" \
+  --ollama-num-predict "$OLLAMA_NUM_PREDICT"
 
-PRED_DIR="$ROOT/runs/perspective/triplet_preds/$ds/$sc/$run_tag/$llm_triplet_dir"
-pred_json="$(newest_file "$PRED_DIR"/*.json)"
-test -f "$pred_json" || die "no pred json in $PRED_DIR"
-echo "pred_json=$pred_json"
+pred_json="$(newest_file "$TRIPLET_PRED_OUT"/*.json)"
+test -f "${pred_json:-}" || die "No triplet prediction json found in $TRIPLET_PRED_OUT"
+log "pred_json=$pred_json"
 
 # ------------------------------------------------------------------
-# STAGE 4) Convert triplets -> converted_triplets/<ds>/<sc>/<run_tag>/<llm_triplet_dir>/
-# Run inside FT_DIR so prompts.json is found
+# STAGE 4) Convert triplets
 # ------------------------------------------------------------------
+log "Stage 4: convert triplets"
 CONV_DIR="$ROOT/runs/perspective/converted_triplets/$ds/$sc/$run_tag/$llm_triplet_dir"
 mkdir -p "$CONV_DIR"
 
@@ -170,8 +203,9 @@ mkdir -p "$CONV_DIR"
 )
 
 standard_train_json="$(newest_file "$CONV_DIR"/*train*.json)"
-test -f "$standard_train_json" || die "convert_triplet did not create a train json in $CONV_DIR"
+test -f "${standard_train_json:-}" || die "convert_triplet did not create a train json in $CONV_DIR"
 
+# try self conversion (optional)
 (
   cd "$FT_DIR"
   python "convert_triplet_self.py" \
@@ -184,22 +218,23 @@ test -f "$standard_train_json" || die "convert_triplet did not create a train js
 )
 
 self_train_json="$(newest_file "$CONV_DIR"/*self*train*.json)"
-if [ -f "${self_train_json:-}" ]; then
+if [[ -f "${self_train_json:-}" ]]; then
   train_json="$self_train_json"
 else
   train_json="$standard_train_json"
 fi
-test -f "$train_json" || die "no train json found in $CONV_DIR"
-echo "train_json=$train_json"
+test -f "${train_json:-}" || die "No train json found in $CONV_DIR"
+log "train_json=$train_json"
 
 # ------------------------------------------------------------------
-# STAGE 5) Finetune Instructor (driven by llm_triplet triplets)
+# STAGE 5) Finetune Instructor
 # ------------------------------------------------------------------
+log "Stage 5: finetune instructor"
 OUT_CKPT="$ROOT/runs/perspective/checkpoints/$ds/$sc/$run_tag/$llm_triplet_dir"
 rm -rf "$OUT_CKPT"
 mkdir -p "$OUT_CKPT"
 
-export PYTORCH_ALLOC_CONF="expandable_segments:True"
+export PYTORCH_ALLOC_CONF="${PYTORCH_ALLOC_CONF:-expandable_segments:True}"
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 
 python "$FT_DIR/finetune.py" \
@@ -215,60 +250,16 @@ python "$FT_DIR/finetune.py" \
   --logging_steps 5
 
 # ------------------------------------------------------------------
-# PATCH get_embedding.py to support safetensors checkpoints (idempotent)
+# OPTIONAL PATCH: safetensors support for get_embedding.py (portable)
+# (You should ideally fix get_embedding.py directly, but this keeps pipeline stable.)
 # ------------------------------------------------------------------
-python - <<'PY'
-import pathlib, re
-
-root = pathlib.Path.home() / "clusterllm-local"
-path = root / "src/clusterllm/perspective/finetuning/get_embedding.py"
-txt = path.read_text(encoding="utf-8")
-
-# 1) Ensure safetensors import
-if "from safetensors.torch import load_file as safe_load_file" not in txt:
-    m = re.search(r"(^\s*import\s+torch\s*$)", txt, flags=re.MULTILINE)
-    if m:
-        insert_at = m.end()
-        txt = txt[:insert_at] + "\nfrom safetensors.torch import load_file as safe_load_file\n" + txt[insert_at:]
-    else:
-        # fallback: prepend (minimal)
-        txt = "from safetensors.torch import load_file as safe_load_file\n" + txt
-
-# 2) Prefer .bin, fallback to model.safetensors if missing (keep indentation)
-pat_state_path = r'(^[ \t]*)state_path\s*=\s*os\.path\.join\(args\.checkpoint,\s*"pytorch_model\.bin"\)'
-m = re.search(pat_state_path, txt, flags=re.MULTILINE)
-if m and "model.safetensors" not in txt:
-    indent = m.group(1)
-    repl = (
-        f'{indent}state_path = os.path.join(args.checkpoint, "pytorch_model.bin")\n'
-        f'{indent}if not os.path.exists(state_path):\n'
-        f'{indent}    alt = os.path.join(args.checkpoint, "model.safetensors")\n'
-        f'{indent}    if os.path.exists(alt):\n'
-        f'{indent}        state_path = alt'
-    )
-    txt = re.sub(pat_state_path, repl, txt, count=1, flags=re.MULTILINE)
-
-# 3) Load safetensors when applicable (keep indentation)
-pat_load = r'(^[ \t]*)state_dict\s*=\s*torch\.load\(state_path,\s*map_location="cpu"\)'
-m = re.search(pat_load, txt, flags=re.MULTILINE)
-if m:
-    indent = m.group(1)
-    repl = (
-        f"{indent}if str(state_path).endswith('.safetensors'):\n"
-        f"{indent}    state_dict = safe_load_file(str(state_path))\n"
-        f"{indent}else:\n"
-        f"{indent}    state_dict = torch.load(state_path, map_location=\"cpu\")"
-    )
-    txt = re.sub(pat_load, repl, txt, count=1, flags=re.MULTILINE)
-
-path.write_text(txt, encoding="utf-8")
-print("PATCHED:", path)
-PY
+log "Patch (idempotent): get_embedding.py safetensors support"
+python "$ROOT/scripts/patch_get_embedding_safetensors.py" --repo-root "$ROOT" || true
 
 # ------------------------------------------------------------------
-# STAGE 6) Embeddings with finetuned checkpoint -> used in Granularity
-# NOTE: FT embeddings depend on llm_triplet (because checkpoint does)
+# STAGE 6) Embeddings with finetuned checkpoint
 # ------------------------------------------------------------------
+log "Stage 6: finetuned embeddings"
 FT_EMB="$DATA_DIR/$ds/${sc}_embeds__ft__${run_tag}__${llm_triplet_dir}.hdf5"
 
 python "$FT_DIR/get_embedding.py" \
@@ -284,22 +275,23 @@ python "$FT_DIR/get_embedding.py" \
   --measure \
   --overwrite
 
+test -f "$FT_EMB" || die "Missing finetuned embedding file: $FT_EMB"
+log "feat_path=$FT_EMB"
+
 # ------------------------------------------------------------------
-# STAGE 7) Granularity: sample_pairs -> prompt -> predict_pairs (llm_pairs) -> predict_num_clusters
+# STAGE 7) Granularity
 # ------------------------------------------------------------------
-feat_path="$FT_EMB"
-test -f "$feat_path" || die "missing finetuned embedding file: $feat_path"
-echo "feat_path=$feat_path"
 
 # 7.0 Sample pairs
-PAIR_OUT="$ROOT/runs/granularity/sampled_pairs/$ds/$sc"
+log "Stage 7.0: sample pairs"
+PAIR_OUT="$ROOT/runs/granularity/sampled_pairs/$ds/$sc/$run_tag"
 mkdir -p "$PAIR_OUT"
 
 python "$GRAN_DIR/sample_pairs.py" \
   --dataset "$ds" \
   --embed_method "instructor" \
   --data_path "$DATA_DIR/$ds/$sc.jsonl" \
-  --feat_path "$feat_path" \
+  --feat_path "$FT_EMB" \
   --scale "$sc" \
   --k 1 \
   --out_dir "$PAIR_OUT" \
@@ -308,20 +300,19 @@ python "$GRAN_DIR/sample_pairs.py" \
   --seed "$SEED"
 
 cluster_json="$(newest_file "$PAIR_OUT"/*.json)"
-test -f "${cluster_json:-}" || die "no cluster_json in $PAIR_OUT"
-echo "cluster_json=$cluster_json"
+test -f "${cluster_json:-}" || die "No cluster_json in $PAIR_OUT"
+log "cluster_json=$cluster_json"
 
-# 7.1 Generate prompt for THIS run
+# 7.1 Generate prompt for THIS run (DO NOT overwrite template)
+log "Stage 7.1: generate prompt"
 PROMPT_TEMPLATE="$FT_DIR/prompts.json"
-test -f "$PROMPT_TEMPLATE" || die "missing prompt template: $PROMPT_TEMPLATE"
+test -f "$PROMPT_TEMPLATE" || die "Missing prompt template: $PROMPT_TEMPLATE"
 
 PROMPT_RUN_DIR="$ROOT/runs/granularity/prompts/$ds/$sc/$run_tag/$llm_pairs_dir"
+rm -rf "$PROMPT_RUN_DIR"
 mkdir -p "$PROMPT_RUN_DIR"
+PROMPT_RUN="$PROMPT_RUN_DIR/prompt.json"
 
-# FIX 1: ensure the expected output directory exists
-mkdir -p "$GRAN_DIR/predicted_pair_results"
-
-# FIX 2: do NOT swallow errors (remove "|| true")
 python "$GRAN_DIR/sample_pairs_for_prompt.py" \
   --prompt_path "$PROMPT_TEMPLATE" \
   --sampled_pair_path "$cluster_json" \
@@ -329,20 +320,17 @@ python "$GRAN_DIR/sample_pairs_for_prompt.py" \
   --dataset "$ds" \
   --num_sampled 200 \
   --num_for_prompt 4 \
-  --seed "$SEED"
+  --seed "$SEED" \
+  --out_dir "$PROMPT_RUN_DIR"
 
-GEN_PROMPT="$(newest_file "$GRAN_DIR/predicted_pair_results"/*.json)"
-test -f "${GEN_PROMPT:-}" || die "sample_pairs_for_prompt produced no prompt json in $GRAN_DIR/predicted_pair_results"
+test -f "$PROMPT_RUN" || die "Prompt not created: $PROMPT_RUN"
+log "PROMPT_RUN=$PROMPT_RUN"
 
-PROMPT_RUN="$PROMPT_RUN_DIR/prompt.json"
-cp -f "$GEN_PROMPT" "$PROMPT_RUN"
-echo "PROMPT_RUN=$PROMPT_RUN"
-
-# 7.2 predict_pairs (llm_pairs)
+# 7.2 predict_pairs (IMPORTANT: use PROMPT_RUN, not PROMPT_TEMPLATE)
+log "Stage 7.2: predict pairs with ollama ($llm_pairs)"
 PPAIR_WORK="$ROOT/runs/granularity/_work_predict_pairs/$ds/$sc/$run_tag/$llm_pairs_dir"
 rm -rf "$PPAIR_WORK"
 mkdir -p "$PPAIR_WORK"
-echo "PPAIR_WORK=$PPAIR_WORK"
 
 MARKER="$PPAIR_WORK/.start_predict_pairs"
 touch "$MARKER"
@@ -352,72 +340,50 @@ touch "$MARKER"
   python "$GRAN_DIR/predict_pairs.py" \
     --dataset "$ds" \
     --data_path "$cluster_json" \
-    --prompt_file "$PROMPT_TEMPLATE" \
+    --prompt_file "$PROMPT_RUN" \
     --delay 0 \
     --max_trials 5 \
     --save_every 50 \
     --overwrite \
     --ollama-base-url "$OLLAMA_BASE_URL" \
     --ollama-model "$llm_pairs" \
-    --ollama-timeout 600 \
-    --ollama-temperature 0.5 \
-    --ollama-num-predict 10
+    --ollama-timeout "$OLLAMA_TIMEOUT" \
+    --ollama-temperature "$PAIRS_TEMPERATURE" \
+    --ollama-num-predict "$OLLAMA_NUM_PREDICT"
 )
 
-CANDIDATES="$(
-  find "$PPAIR_WORK" -type f -name "*.json" -newer "$MARKER" \
-    ! -path "$PROMPT_RUN" \
-    -print0 | xargs -0 -r ls -t 2>/dev/null || true
+# find newest json after marker (predictions)
+RAW_PRED_PAIRS="$(python - "$PPAIR_WORK" "$MARKER" <<'PY'
+import os, sys
+work = sys.argv[1]
+marker = sys.argv[2]
+t0 = os.path.getmtime(marker)
+cands = []
+for root, _, files in os.walk(work):
+    for fn in files:
+        if not fn.endswith(".json"):
+            continue
+        p = os.path.join(root, fn)
+        if os.path.getmtime(p) > t0:
+            cands.append(p)
+if not cands:
+    sys.exit(0)
+cands.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+print(cands[0])
+PY
 )"
 
-RAW_PRED_PAIRS=""
-
-for f in $CANDIDATES; do
-  if python - "$f" <<'PY'
-import json, sys
-
-p = sys.argv[1]
-try:
-    x = json.load(open(p, "r", encoding="utf-8"))
-except Exception:
-    sys.exit(1)
-
-def ok(obj):
-    if isinstance(obj, list):
-        return len(obj) > 0
-    if isinstance(obj, dict):
-        for k in ("results", "preds", "predictions", "pairs", "data"):
-            if k in obj and isinstance(obj[k], list) and len(obj[k]) > 0:
-                return True
-        return len(obj) > 0
-    return False
-
-sys.exit(0 if ok(x) else 1)
-PY
-  then
-    RAW_PRED_PAIRS="$f"
-    break
-  fi
-done
-
-test -f "${RAW_PRED_PAIRS:-}" || {
-  echo "ERROR: could not identify predicted pairs json under $PPAIR_WORK"
-  echo "DEBUG candidates (after marker):"
-  printf "%s\n" $CANDIDATES | sed 's/^/  - /'
-  echo "DEBUG all files:"
-  find "$PPAIR_WORK" -maxdepth 6 -type f -print 2>/dev/null | sed 's/^/  - /'
-  exit 1
-}
-
-echo "RAW_PRED_PAIRS=$RAW_PRED_PAIRS"
+test -f "${RAW_PRED_PAIRS:-}" || die "Could not find predicted pairs json under $PPAIR_WORK"
+log "RAW_PRED_PAIRS=$RAW_PRED_PAIRS"
 
 PPAIR_OUT="$ROOT/runs/granularity/predicted_pair_results/$ds/$sc/$run_tag/$llm_pairs_dir"
 mkdir -p "$PPAIR_OUT"
 pred_pairs_json="$PPAIR_OUT/pred_pairs.json"
 cp -f "$RAW_PRED_PAIRS" "$pred_pairs_json"
-echo "pred_pairs_json=$pred_pairs_json"
+log "pred_pairs_json=$pred_pairs_json"
 
 # 7.3 predict_num_clusters
+log "Stage 7.3: predict num_clusters"
 NC_OUT="$ROOT/runs/granularity/num_clusters/$ds/$sc/$run_tag/$llm_pairs_dir"
 mkdir -p "$NC_OUT"
 
@@ -431,14 +397,14 @@ python "$GRAN_DIR/predict_num_clusters.py" \
   --max_clusters 200 \
   | tee "$NC_OUT/num_clusters.txt"
 
-echo "DONE. Result: $NC_OUT/num_clusters.txt"
+log "DONE. Result: $NC_OUT/num_clusters.txt"
 
 # ------------------------------------------------------------------
-# FINAL) Write a generic summary metric (stable path for DVC)
+# FINAL) Write summary metric (stable path for DVC)
 # ------------------------------------------------------------------
+log "Write summary.json (DVC metric)"
 SUMMARY_DIR="$ROOT/runs/summary/full_pipeline_2llms/$ds/$sc"
 mkdir -p "$SUMMARY_DIR"
-
 SUMMARY_JSON="$SUMMARY_DIR/summary.json"
 
 python - <<PY
@@ -457,12 +423,14 @@ top10 = None
 real_k = None
 
 if os.path.exists(num_clusters_txt):
-    txt = open(num_clusters_txt, "r", encoding="utf-8", errors="ignore").read().splitlines()
-    for line in txt:
+    lines = open(num_clusters_txt, "r", encoding="utf-8", errors="ignore").read().splitlines()
+    for line in lines:
         if line.startswith("REAL K:"):
-            real_k = int(line.split(":", 1)[1].strip())
+            try: real_k = int(line.split(":", 1)[1].strip())
+            except: pass
         if line.startswith("ESTIMATED K:"):
-            estimated_k = int(line.split(":", 1)[1].strip())
+            try: estimated_k = int(line.split(":", 1)[1].strip())
+            except: pass
         if line.startswith("TOP 10 CANDIDATES:"):
             rhs = line.split(":", 1)[1].strip()
             try:
@@ -477,6 +445,9 @@ out = {
   "llm_pairs": llm_pairs,
   "seed": seed,
   "run_tag": run_tag,
+  "ollama_base_url": ${OLLAMA_BASE_URL@Q},
+  "triplet_temperature": float(${TRIPLET_TEMPERATURE@Q}),
+  "pairs_temperature": float(${PAIRS_TEMPERATURE@Q}),
   "num_clusters_txt": num_clusters_txt,
   "real_k": real_k,
   "estimated_k": estimated_k,

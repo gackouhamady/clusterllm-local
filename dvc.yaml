@@ -11,6 +11,7 @@ stages:
         - src/data/prepare_data.py
       params:
         - run.seed
+        - datasets.all
       outs:
         - src/clusterllm/datasets/${item}/small.jsonl
         - data/raw/${item}_small_train.csv
@@ -28,10 +29,11 @@ stages:
         - src/data/prepare_data.py
       params:
         - run.seed
+        - datasets.all
       outs:
         - src/clusterllm/datasets/${item}/large.jsonl
         - data/raw/${item}_large_train.csv
-        - data/raw/${item}_large_eval.csv
+        - data/raw/${item}_large_train.csv
 
   full_pipeline_2llms:
     cmd: >-
@@ -39,6 +41,7 @@ stages:
       ${run.dataset} ${run.scale} ${run.llm_triplet} ${run.llm_pairs} ${run.seed}
     deps:
       - scripts/run_full_pipeline_one_dataset_two_llms.sh
+      - scripts/patch_get_embedding_safetensors.py
       - src/clusterllm/datasets/${run.dataset}/${run.scale}.jsonl
       - src/clusterllm/perspective/predict_triplet/triplet_sampling.py
       - src/clusterllm/perspective/predict_triplet/predict.py
@@ -46,11 +49,11 @@ stages:
       - src/clusterllm/perspective/finetuning/convert_triplet_self.py
       - src/clusterllm/perspective/finetuning/finetune.py
       - src/clusterllm/perspective/finetuning/get_embedding.py
+      - src/clusterllm/perspective/finetuning/prompts.json
       - src/clusterllm/granularity/sample_pairs.py
       - src/clusterllm/granularity/sample_pairs_for_prompt.py
       - src/clusterllm/granularity/predict_pairs.py
       - src/clusterllm/granularity/predict_num_clusters.py
-      - src/clusterllm/perspective/finetuning/prompts.json
     params:
       - run.dataset
       - run.scale

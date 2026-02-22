@@ -473,6 +473,17 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
         run.seed: 42
     outs:
     - path: data/raw/bank77_small_eval.csv
@@ -1009,3 +1020,86 @@ stages:
       hash: md5
       md5: effa6f56a3f761459607a045be770fee
       size: 2611036
+  full_pipeline_2llms:
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh bank77 small 
+      llama3:8b-instruct-q4_K_M llama3:8b-instruct-q4_K_M 42
+    deps:
+    - path: scripts/patch_get_embedding_safetensors.py
+      hash: md5
+      md5: 07f37a3d38b35dd73c97dafa8d0f06c9
+      size: 2390
+    - path: scripts/run_full_pipeline_one_dataset_two_llms.sh
+      hash: md5
+      md5: b487ce2169f0c29660fb4647a3d0a05f
+      size: 15267
+      isexec: true
+    - path: src/clusterllm/datasets/bank77/small.jsonl
+      hash: md5
+      md5: 0f59d93a45d42cfc4c84069b448e065d
+      size: 1100472
+    - path: src/clusterllm/granularity/predict_num_clusters.py
+      hash: md5
+      md5: f32689d2d4df9e36473a28a64329c65b
+      size: 5621
+    - path: src/clusterllm/granularity/predict_pairs.py
+      hash: md5
+      md5: 5e4d68473e59fab36d680bf34e83b50b
+      size: 11247
+    - path: src/clusterllm/granularity/sample_pairs.py
+      hash: md5
+      md5: ded7f444594a1851fa61f5c0b0353115
+      size: 5393
+    - path: src/clusterllm/granularity/sample_pairs_for_prompt.py
+      hash: md5
+      md5: e58368426dbb91b0ffe1347c6584fc72
+      size: 8001
+    - path: src/clusterllm/perspective/finetuning/convert_triplet.py
+      hash: md5
+      md5: a9a62868c019ee3a28cfffb0f5a7c224
+      size: 4064
+    - path: src/clusterllm/perspective/finetuning/convert_triplet_self.py
+      hash: md5
+      md5: abf2fbf2ea83c0a7a38115f794e649ef
+      size: 2832
+    - path: src/clusterllm/perspective/finetuning/finetune.py
+      hash: md5
+      md5: 88fba1a8f4438b63efd1665d33a05b05
+      size: 15881
+    - path: src/clusterllm/perspective/finetuning/get_embedding.py
+      hash: md5
+      md5: 7f8a6fb8b36e64ff3eff3081f66ecfdc
+      size: 6912
+    - path: src/clusterllm/perspective/finetuning/prompts.json
+      hash: md5
+      md5: 619dcba700529a7b99fe2481bed35903
+      size: 31495
+    - path: src/clusterllm/perspective/predict_triplet/predict.py
+      hash: md5
+      md5: e026a361b071adb68937846bc3463a13
+      size: 6658
+    - path: src/clusterllm/perspective/predict_triplet/triplet_sampling.py
+      hash: md5
+      md5: 0443c5ed9ca0ab8ac8cfe68b69cd7ef0
+      size: 4514
+    params:
+      params.yaml:
+        run.dataset: bank77
+        run.llm_pairs: llama3:8b-instruct-q4_K_M
+        run.llm_triplet: llama3:8b-instruct-q4_K_M
+        run.scale: small
+        run.seed: 42
+    outs:
+    - path: runs/granularity
+      hash: md5
+      md5: 878c32d4140b9c34c31cdc4942c91ec7.dir
+      size: 553814518
+      nfiles: 8
+    - path: runs/perspective
+      hash: md5
+      md5: 5735aef1b7a526230bd820198ab02dd2.dir
+      size: 5639255515
+      nfiles: 17
+    - path: runs/summary/full_pipeline_2llms/bank77/small/summary.json
+      hash: md5
+      md5: c27e90cfbcc2a5a476d2b220b0ed7a03
+      size: 696

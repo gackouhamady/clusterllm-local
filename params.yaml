@@ -1,24 +1,19 @@
 run:
   dataset: bank77
   scale: small
+  llm_triplet: llama3:8b-instruct-q4_K_M
+  llm_pairs: llama3:8b-instruct-q4_K_M 
   seed: 42
-  llm_triplet: llama3.2:3b-instruct-q8_0
-  llm_pairs: qwen2.5:7b
 
 datasets:
   all:
-  - bank77
-  - clinc_intent
-  - clinc150
-  - mtop_intent
-  - mtop_domain
-  - massive_intent
-  - massive_domain
-  - stackex
-  - arxiv
-  - reddit
-  - go_emotions
-  - few_rel_nat
-  - few_nerd_nat
-  - few_event
-  - clinc_domain
+    - bank77
+    - clinc150
+    - massive_intent
+    - massive_domain
+    - mtop_intent
+    - mtop_domain
+    - go_emotions
+    - reddit
+    - stackex
+    - arxiv

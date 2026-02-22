@@ -127,3 +127,14 @@ data/raw/*.csv
 src/clusterllm/datasets/*/*.jsonl
 src/clusterllm/datasets/*/*_train.jsonl
 src/clusterllm/datasets/*/*_eval.jsonl
+
+
+# Embeddings / gros artefacts
+**/*.hdf5
+**/*.h5
+**/*.safetensors
+**/*.bin
+
+# Si tu veux ignorer tous les datasets sauf les metrics JSON
+src/clusterllm/datasets/**
+!src/clusterllm/datasets/**/*.json
