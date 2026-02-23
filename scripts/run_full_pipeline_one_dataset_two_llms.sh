@@ -349,7 +349,6 @@ touch "$MARKER"
     --max_trials 5 \
     --save_every 50 \
     --overwrite \
-    --num_threads 16 \
     --ollama-base-url "$OLLAMA_BASE_URL" \
     --ollama-model "$llm_pairs" \
     --ollama-timeout "$OLLAMA_TIMEOUT" \

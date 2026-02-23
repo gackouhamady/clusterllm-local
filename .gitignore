@@ -1,155 +1,88 @@
-# =========================
-# Python / Virtualenv
-# =========================
+# ==========================================
+# 1. Python, OS & Environnement
+# ==========================================
 __pycache__/
 *.py[cod]
 *.pyd
 .venv/
 .env
-
-# =========================
-# Tests / Typecheck
-# =========================
 .pytest_cache/
 .mypy_cache/
-
-# =========================
-# Docs
-# =========================
-docs/build/
-
-# =========================
-# Editors / OS
-# =========================
 .vscode/
 .idea/
 .DS_Store
+docs/build/
+sitecustomize.py.bak
 
-# =========================
-# Project outputs / caches
-# =========================
+# ==========================================
+# 2. Sécurité & Clés (NE JAMAIS PUSHER)
+# ==========================================
+creds.json
+*credentials*.json
+cellular-effect-*.json
+.gdrive/
+
+# ==========================================
+# 3. Fichiers Lourds & Modèles (Gérés par DVC)
+# ==========================================
+# Bloque absolument ces extensions partout dans le projet
+*.hdf5
+*.h5
+*.safetensors
+*.bin
+*.pkl
+*.pt
+*.pth
+
+# ==========================================
+# 4. Données brutes et générées
+# ==========================================
+data/raw/*.csv
+src/clusterllm/datasets/**/*.jsonl
+
+# ==========================================
+# 5. Dossiers temporaires et caches
+# ==========================================
+.cache/
+.dvc/tmp/
+_backup_dvc/
 B[Embeddings]/
 C[Clustering]/
 D[Cluster]/
 
-# DVC temp / secrets
-.dvc/tmp/
-.dvc/tmp/gdrive-user-credentials.json
-.gdrive/
+# ==========================================
+# 6. Résultats intermédiaires (Évite de polluer Git)
+# ==========================================
+# On ignore les dossiers contenant des milliers de JSONs intermédiaires
+runs/perspective/triplets/
+runs/perspective/triplet_preds/
+runs/perspective/converted_triplets/
+runs/perspective/checkpoints/
+runs/granularity/sampled_pairs/
+runs/granularity/prompts/
+runs/granularity/_work_predict_pairs/
+runs/granularity/predicted_pair_results/
 
-# Secrets (DO NOT COMMIT)
-creds.json
-cellular-effect-451211-f5-*.json
-
-# Generic caches / runs
-.cache/
-runs/
-_backup_dvc/
-
-# Large artifacts (usually tracked by DVC, not Git)
-*.hdf5
-*.pkl
-*.safetensors
-*.bin
-
-# =========================
-# Generated results (ignore)
-# =========================
-sampled_triplet_results/
 src/clusterllm/perspective/triplet_prediction/sampled_triplet_results/
 src/clusterllm/perspective/predict_triplet/predicted_triplet_results/
 src/clusterllm/perspective/finetuning/converted_triplet_results/
 src/clusterllm/perspective/finetuning/checkpoints/
-
 src/clusterllm/granularity/predicted_pair_results/
 src/clusterllm/granularity/sampled_pair_results/
-src/clusterllm/granularity/predicted_num_clusters_results/
 
-# If you want to keep DVC metadata inside predicted_num_clusters_results tracked:
-src/clusterllm/granularity/predicted_num_clusters_results/**/*
-!src/clusterllm/granularity/predicted_num_clusters_results/**/*.dvc
-!src/clusterllm/granularity/predicted_num_clusters_results/**/.gitignore
+# Note : Les dossiers utiles comme `runs/summary/` ou 
+# `runs/granularity/num_clusters/` NE SONT PAS ignorés ici, 
+# donc leurs .json et .txt seront bien poussés sur GitHub !
 
-# =========================
-# Datasets (IMPORTANT)
-# =========================
-# Ignore any top-level or nested folder named "datasets/"
-/datasets/
-
-# BUT allow the repo-managed datasets directory used by your pipeline
-!src/
-!src/clusterllm/
-!src/clusterllm/datasets/
-!src/clusterllm/datasets/**
-
-# (Optional) ignore src/data/data/ as you had
-src/data/data/
-
-# =========================
-# DVC metadata (MUST be tracked)
-# =========================
+# ==========================================
+# 7. Forcer Git à suivre les fichiers DVC
+# ==========================================
 !*.dvc
 !dvc.yaml
 !dvc.lock
 !.dvcignore
-!.dvc/**
 
-# (Extra safety) allow DVC files inside src/clusterllm/datasets explicitly
-!src/clusterllm/datasets/**/*.dvc
-
-# =========================
-# Misc
-# =========================
-poetry
+# ==========================================
+# 8. Autres exclusions spécifiques
+# ==========================================
 prompts.json
-sitecustomize.py.bak
-
-!dvcfiles/
-!dvcfiles/**
-
-
-# --- allow repo datasets folder (needed by pipeline + DVC) ---
-!src/
-!src/clusterllm/
-!src/clusterllm/datasets/
-!src/clusterllm/datasets/**
-
-# --- DVC metadata must NOT be ignored ---
-!*.dvc
-!dvc.yaml
-!dvc.lock
-!.dvcignore
-!.dvc/**
-
-
-# generated prepared data (tracked by DVC)
-data/raw/*.csv
-src/clusterllm/datasets/*/*.jsonl
-src/clusterllm/datasets/*/*_train.jsonl
-src/clusterllm/datasets/*/*_eval.jsonl
-
-
-# Embeddings / gros artefacts
-**/*.hdf5
-**/*.h5
-**/*.safetensors
-**/*.bin
-
-# Si tu veux ignorer tous les datasets sauf les metrics JSON
-src/clusterllm/datasets/**
-!src/clusterllm/datasets/**/*.json
-
-
-
-src/clusterllm/datasets/massive_intent/small_embeds.hdf5
-src/clusterllm/datasets/reddit/small_embeds.hdf5
-src/clusterllm/datasets/mtop_domain/small_embeds.hdf5
-src/clusterllm/datasets/go_emotions/small_embeds.hdf5
-src/clusterllm/datasets/massive_domain/small_embeds.hdf5
-
-
-src/clusterllm/datasets/go_emotions/small_embeds.hdf5
-src/clusterllm/datasets/massive_domain/small_embeds.hdf5
-src/clusterllm/datasets/massive_intent/small_embeds.hdf5
-src/clusterllm/datasets/mtop_domain/small_embeds.hdf5
-src/clusterllm/datasets/reddit/small_embeds.hdf5*.hdf5
