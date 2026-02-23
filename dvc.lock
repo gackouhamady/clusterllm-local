@@ -195,24 +195,36 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/mtop_intent_large_eval.csv
-      hash: md5
-      md5: 62e64e06b36079be74afc5c5c9391003
-      size: 178221
     - path: data/raw/mtop_intent_large_train.csv
       hash: md5
-      md5: 77183c36768a5e5a1f8956520ec72213
-      size: 632066
+      md5: 42cd11fa56e7235413555c4052cec025
+      size: 633235
     - path: src/clusterllm/datasets/mtop_intent/large.jsonl
       hash: md5
-      md5: fdfa67a14eb13ab913b3bd048d7c6cba
-      size: 1249753
+      md5: de9e5995fd82f2031b7cc4330634419a
+      size: 1251560
   prepare_small@stackex:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh stackex small
       42
@@ -228,6 +240,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/stackex_small_eval.csv
@@ -257,6 +285,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/few_event_small_eval.csv
@@ -376,6 +420,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/clinc_domain_small_eval.csv
@@ -405,6 +465,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/clinc_intent_small_eval.csv
@@ -614,6 +690,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/few_rel_nat_small_eval.csv
@@ -643,6 +735,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/few_nerd_nat_small_eval.csv
@@ -728,6 +836,11 @@ stages:
         - reddit
         - stackex
         - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/arxiv_small_eval.csv
@@ -753,16 +866,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/stackex_large_eval.csv
-      hash: md5
-      md5: bc84b896582de98c560c4ff0c670dd5b
-      size: 376329
     - path: data/raw/stackex_large_train.csv
       hash: md5
       md5: c673b3ed178071aab47b6ffb9a6b6015
@@ -782,16 +907,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/few_nerd_nat_large_eval.csv
-      hash: md5
-      md5: f3ef54baac3435111ca7f2a9910307c1
-      size: 811663
     - path: data/raw/few_nerd_nat_large_train.csv
       hash: md5
       md5: f3ef54baac3435111ca7f2a9910307c1
@@ -811,16 +948,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/clinc_intent_large_eval.csv
-      hash: md5
-      md5: 123d1bd5b60661e073532a884b37216d
-      size: 200689
     - path: data/raw/clinc_intent_large_train.csv
       hash: md5
       md5: a29bfe54c989649cd142204081e7696b
@@ -840,24 +989,36 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/mtop_domain_large_eval.csv
-      hash: md5
-      md5: 2b6e12944a7bf8298aeb24861c0be0e0
-      size: 91118
     - path: data/raw/mtop_domain_large_train.csv
       hash: md5
-      md5: 42cd11fa56e7235413555c4052cec025
-      size: 633235
+      md5: 2ce920e7638bddcaee45b040f1a91d54
+      size: 622070
     - path: src/clusterllm/datasets/mtop_domain/large.jsonl
       hash: md5
-      md5: 9b31b0bf36ca8025f9caa40fa6d1db9f
-      size: 1117261
+      md5: 44d69f0ea0fe38b70f67732c1e44fd20
+      size: 1237337
   prepare_large@clinc_domain:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh clinc_domain 
       large 42
@@ -869,16 +1030,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/clinc_domain_large_eval.csv
-      hash: md5
-      md5: 8eac3e71d28c1afcacceeda2d47587da
-      size: 228261
     - path: data/raw/clinc_domain_large_train.csv
       hash: md5
       md5: d604e23f52794f0a549be6e5b7b37bbb
@@ -898,16 +1071,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/few_rel_nat_large_eval.csv
-      hash: md5
-      md5: 3a5dd5dee8f197be290b75cd5884aff9
-      size: 909080
     - path: data/raw/few_rel_nat_large_train.csv
       hash: md5
       md5: 3a5dd5dee8f197be290b75cd5884aff9
@@ -927,16 +1112,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/massive_intent_large_eval.csv
-      hash: md5
-      md5: 485a8cb5ba84e988fa4e72d65c517587
-      size: 147263
     - path: data/raw/massive_intent_large_train.csv
       hash: md5
       md5: 2d13dee198c67dc9f9743b91b6615748
@@ -956,16 +1153,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/bank77_large_eval.csv
-      hash: md5
-      md5: f2e48ccb7eb8360f24db85516d847a7f
-      size: 179757
     - path: data/raw/bank77_large_train.csv
       hash: md5
       md5: c516feb2542bafbc31d9e8681f772b51
@@ -985,16 +1194,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/reddit_large_eval.csv
-      hash: md5
-      md5: 9bd325c867ffeb088bc1f45271ef1a86
-      size: 258093
     - path: data/raw/reddit_large_train.csv
       hash: md5
       md5: 0570ef5a3c0ca7877bd728ae2235f4db
@@ -1014,16 +1235,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/arxiv_large_eval.csv
-      hash: md5
-      md5: c6268a48fd84e5a40bc6dc22e87ca789
-      size: 3720582
     - path: data/raw/arxiv_large_train.csv
       hash: md5
       md5: b74c1f58c27bdefcdd9a522eeea64dd7
@@ -1043,16 +1276,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/massive_domain_large_eval.csv
-      hash: md5
-      md5: 485a8cb5ba84e988fa4e72d65c517587
-      size: 147263
     - path: data/raw/massive_domain_large_train.csv
       hash: md5
       md5: 3758592b0ff577f44658242029513ad6
@@ -1072,16 +1317,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/go_emotions_large_eval.csv
-      hash: md5
-      md5: 68290e3cb5c1b0d1c51237ae783df8f5
-      size: 407427
     - path: data/raw/go_emotions_large_train.csv
       hash: md5
       md5: e832fad2fd2952603cb053d7b565dafa
@@ -1101,16 +1358,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/clinc150_large_eval.csv
-      hash: md5
-      md5: 123d1bd5b60661e073532a884b37216d
-      size: 200689
     - path: data/raw/clinc150_large_train.csv
       hash: md5
       md5: a29bfe54c989649cd142204081e7696b
@@ -1130,16 +1399,28 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: d0093087a48d64b278c412a2e812925f
-      size: 31019
+      md5: 1c00330657dda0013d17d228afd53d95
+      size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
-    - path: data/raw/few_event_large_eval.csv
-      hash: md5
-      md5: d7cf2012e7d360f6f6f65866156f9b6c
-      size: 1198427
     - path: data/raw/few_event_large_train.csv
       hash: md5
       md5: d7cf2012e7d360f6f6f65866156f9b6c
@@ -1149,7 +1430,7 @@ stages:
       md5: effa6f56a3f761459607a045be770fee
       size: 2611036
   full_pipeline_2llms:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh mtop_intent 
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh mtop_domain 
       small mistral:7b-instruct-q4_K_M mistral:7b-instruct-q4_K_M 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
@@ -1161,10 +1442,10 @@ stages:
       md5: cc08099b9aa281d1ce381d1f7cce963c
       size: 15406
       isexec: true
-    - path: src/clusterllm/datasets/mtop_intent/small.jsonl
+    - path: src/clusterllm/datasets/mtop_domain/small.jsonl
       hash: md5
-      md5: de9e5995fd82f2031b7cc4330634419a
-      size: 1251560
+      md5: 44d69f0ea0fe38b70f67732c1e44fd20
+      size: 1237337
     - path: src/clusterllm/granularity/predict_num_clusters.py
       hash: md5
       md5: f32689d2d4df9e36473a28a64329c65b
@@ -1211,7 +1492,7 @@ stages:
       size: 4514
     params:
       params.yaml:
-        run.dataset: mtop_intent
+        run.dataset: mtop_domain
         run.llm_pairs: mistral:7b-instruct-q4_K_M
         run.llm_triplet: mistral:7b-instruct-q4_K_M
         run.scale: small
@@ -1219,15 +1500,15 @@ stages:
     outs:
     - path: runs/granularity
       hash: md5
-      md5: b4997cbff19bbecb0a4b1329d8449b69.dir
-      size: 1336940293
+      md5: c19b652ad65313b125179b97976774a6.dir
+      size: 1337798389
       nfiles: 8
     - path: runs/perspective
       hash: md5
-      md5: e45524f9039688a2d539e8b998062e79.dir
-      size: 5626542901
+      md5: d4f976c2e2db29c7b6a6a88519f3dcd9.dir
+      size: 5635110702
       nfiles: 17
-    - path: runs/summary/full_pipeline_2llms/mtop_intent/small/summary.json
+    - path: runs/summary/full_pipeline_2llms/mtop_domain/small/summary.json
       hash: md5
-      md5: 4c1aac373966a0871b9a339c07be64e9
-      size: 705
+      md5: 1568c4f2d4913dfc8a54d21d37e3f4df
+      size: 698
