@@ -1,8 +1,8 @@
 run:
-  dataset: mtop_domain
+  dataset: bank77
   scale: small
-  llm_triplet: mistral:7b-instruct-q4_K_M
-  llm_pairs: mistral:7b-instruct-q4_K_M
+  llm_triplet: gemma:7b-instruct-q4_K_M
+  llm_pairs: gemma:7b-instruct-q4_K_M
   seed: 42
 
 datasets:
@@ -22,3 +22,4 @@ datasets:
     - few_rel_nat
     - clinc_intent
     - clinc_domain
+
