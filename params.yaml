@@ -1,8 +1,8 @@
 run:
-  dataset: clinc150
+  dataset: massive_intent
   scale: small
-  llm_triplet: llama3:8b-instruct-q4_K_M
-  llm_pairs: llama3:8b-instruct-q4_K_M 
+  llm_triplet: mistral:7b-instruct-q4_K_M
+  llm_pairs: mistral:7b-instruct-q4_K_M
   seed: 42
 
 datasets:

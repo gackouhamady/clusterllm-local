@@ -154,6 +154,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/mtop_intent_small_eval.csv
@@ -270,6 +286,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/massive_intent_small_eval.csv
@@ -299,6 +331,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/reddit_small_eval.csv
@@ -397,6 +445,11 @@ stages:
         - reddit
         - stackex
         - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/clinc150_small_eval.csv
@@ -426,6 +479,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/go_emotions_small_eval.csv
@@ -455,6 +524,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/massive_domain_small_eval.csv
@@ -495,6 +580,11 @@ stages:
         - reddit
         - stackex
         - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/bank77_small_eval.csv
@@ -582,6 +672,22 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
+        - few_event
+        - few_nerd_nat
+        - few_rel_nat
+        - clinc_intent
+        - clinc_domain
         run.seed: 42
     outs:
     - path: data/raw/mtop_domain_small_eval.csv
@@ -1043,8 +1149,8 @@ stages:
       md5: effa6f56a3f761459607a045be770fee
       size: 2611036
   full_pipeline_2llms:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh clinc150 small 
-      llama3:8b-instruct-q4_K_M llama3:8b-instruct-q4_K_M 42
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh massive_domain 
+      small mistral:7b-instruct-q4_K_M mistral:7b-instruct-q4_K_M 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
       hash: md5
@@ -1052,13 +1158,13 @@ stages:
       size: 2390
     - path: scripts/run_full_pipeline_one_dataset_two_llms.sh
       hash: md5
-      md5: b487ce2169f0c29660fb4647a3d0a05f
-      size: 15267
+      md5: e2d3a8ebba973459e66a515595c6a944
+      size: 15385
       isexec: true
-    - path: src/clusterllm/datasets/clinc150/small.jsonl
+    - path: src/clusterllm/datasets/massive_domain/small.jsonl
       hash: md5
-      md5: a6f2082bb4d5ab72fb3abc75e3d83d20
-      size: 1292397
+      md5: be89299896901537e8eb2cac3c8a9c27
+      size: 1071657
     - path: src/clusterllm/granularity/predict_num_clusters.py
       hash: md5
       md5: f32689d2d4df9e36473a28a64329c65b
@@ -1073,8 +1179,8 @@ stages:
       size: 5393
     - path: src/clusterllm/granularity/sample_pairs_for_prompt.py
       hash: md5
-      md5: e58368426dbb91b0ffe1347c6584fc72
-      size: 8001
+      md5: d3c7ef559b70e51f931744abfcd33344
+      size: 8234
     - path: src/clusterllm/perspective/finetuning/convert_triplet.py
       hash: md5
       md5: a9a62868c019ee3a28cfffb0f5a7c224
@@ -1097,31 +1203,31 @@ stages:
       size: 31495
     - path: src/clusterllm/perspective/predict_triplet/predict.py
       hash: md5
-      md5: e026a361b071adb68937846bc3463a13
-      size: 6658
+      md5: 0806f177630a76fac9d7ef97fa1c07c7
+      size: 6762
     - path: src/clusterllm/perspective/predict_triplet/triplet_sampling.py
       hash: md5
       md5: 0443c5ed9ca0ab8ac8cfe68b69cd7ef0
       size: 4514
     params:
       params.yaml:
-        run.dataset: clinc150
-        run.llm_pairs: llama3:8b-instruct-q4_K_M
-        run.llm_triplet: llama3:8b-instruct-q4_K_M
+        run.dataset: massive_domain
+        run.llm_pairs: mistral:7b-instruct-q4_K_M
+        run.llm_triplet: mistral:7b-instruct-q4_K_M
         run.scale: small
         run.seed: 42
     outs:
     - path: runs/granularity
       hash: md5
-      md5: b894bd3d789a7e5e8f7594d2889fba65.dir
-      size: 1263340496
+      md5: 8d7dd7529c27e8d82e73a5d48d9b4a76.dir
+      size: 686830321
       nfiles: 8
     - path: runs/perspective
       hash: md5
-      md5: 3a3c565d5fe9b375e8e0d349b51aed99.dir
-      size: 5635674526
+      md5: 56ecf00c1a3238e2c7a080bdd2ddc7ae.dir
+      size: 5635499006
       nfiles: 17
-    - path: runs/summary/full_pipeline_2llms/clinc150/small/summary.json
+    - path: runs/summary/full_pipeline_2llms/massive_domain/small/summary.json
       hash: md5
-      md5: 71c337f930cecc578a0453b7cf631d05
-      size: 703
+      md5: e7a0923bd73e4b15f7fd75bbda676750
+      size: 710

@@ -136,7 +136,7 @@ python "$FT_DIR/get_embedding.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --result_file "$DATA_DIR/$ds/${sc}_embeds.hdf5" \
   --prompt "Represent the text for clustering." \
-  --batch_size 128 \
+  --batch_size 512 \
   --scale "$sc" \
   --measure \
   --overwrite
@@ -242,8 +242,8 @@ python "$FT_DIR/finetune.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --train_file "$train_json" \
   --output_dir "$OUT_CKPT" \
-  --per_device_train_batch_size 1 \
-  --gradient_accumulation_steps 16 \
+  --per_device_train_batch_size 4 \
+  --gradient_accumulation_steps 1 \
   --learning_rate 2e-6 \
   --num_train_epochs 1 \
   --bf16 \
@@ -269,7 +269,7 @@ python "$FT_DIR/get_embedding.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --result_file "$FT_EMB" \
   --prompt "Represent the text for clustering." \
-  --batch_size 128 \
+  --batch_size 512 \
   --checkpoint "$OUT_CKPT" \
   --scale "$sc" \
   --measure \
