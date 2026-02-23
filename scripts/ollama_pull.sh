@@ -19,8 +19,9 @@ MODELS=(
   "llama3:8b-instruct-q4_K_M"
 )
 
-PARALLEL=4
-HOST="0.0.0.0:11434"   # mets "127.0.0.1:11434" si tu veux seulement local
+# ---> MODIFIÉ ICI : Passage à 16 pour maximiser l'utilisation du GPU
+PARALLEL=16
+HOST="127.0.0.1:11434"   # mets "127.0.0.1:11434" si tu veux seulement local
 
 need_root() {
   if [[ "${EUID}" -ne 0 ]]; then

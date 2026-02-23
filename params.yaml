@@ -1,5 +1,5 @@
 run:
-  dataset: massive_intent
+  dataset: mtop_intent
   scale: small
   llm_triplet: mistral:7b-instruct-q4_K_M
   llm_pairs: mistral:7b-instruct-q4_K_M

@@ -146,3 +146,10 @@ src/clusterllm/datasets/reddit/small_embeds.hdf5
 src/clusterllm/datasets/mtop_domain/small_embeds.hdf5
 src/clusterllm/datasets/go_emotions/small_embeds.hdf5
 src/clusterllm/datasets/massive_domain/small_embeds.hdf5
+
+
+src/clusterllm/datasets/go_emotions/small_embeds.hdf5
+src/clusterllm/datasets/massive_domain/small_embeds.hdf5
+src/clusterllm/datasets/massive_intent/small_embeds.hdf5
+src/clusterllm/datasets/mtop_domain/small_embeds.hdf5
+src/clusterllm/datasets/reddit/small_embeds.hdf5*.hdf5

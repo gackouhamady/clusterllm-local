@@ -297,7 +297,7 @@ def predict(args):
         except Exception as e:
             return idx, False, f"process_one exception: {repr(e)}"
 
-    max_workers = int(os.environ.get("OLLAMA_NUM_PARALLEL", 4))
+    max_workers = int(os.environ.get("OLLAMA_NUM_PARALLEL", 16))
     print(f"🚀 Lancement des PAIRES ({model_name}) avec {max_workers} requêtes en parallèle...")
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as ex:

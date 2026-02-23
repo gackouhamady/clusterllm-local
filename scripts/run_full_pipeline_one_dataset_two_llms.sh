@@ -176,6 +176,7 @@ python "$PRED_TRIPLET_DIR/predict.py" \
   --max_trials 5 \
   --save_every 50 \
   --num_responses 1 \
+  --num_threads 16 \
   --ollama-base-url "$OLLAMA_BASE_URL" \
   --ollama-model "$llm_triplet" \
   --ollama-timeout "$OLLAMA_TIMEOUT" \
@@ -229,6 +230,8 @@ log "train_json=$train_json"
 # ------------------------------------------------------------------
 # STAGE 5) Finetune Instructor
 # ------------------------------------------------------------------
+export PYTORCH_ALLOC_CONF="expandable_segments:True"
+export CUDA_VISIBLE_DEVICES="0"
 log "Stage 5: finetune instructor"
 OUT_CKPT="$ROOT/runs/perspective/checkpoints/$ds/$sc/$run_tag/$llm_triplet_dir"
 rm -rf "$OUT_CKPT"
@@ -244,6 +247,7 @@ python "$FT_DIR/finetune.py" \
   --output_dir "$OUT_CKPT" \
   --per_device_train_batch_size 4 \
   --gradient_accumulation_steps 1 \
+  --gradient_checkpointing True \
   --learning_rate 2e-6 \
   --num_train_epochs 1 \
   --bf16 \
@@ -345,6 +349,7 @@ touch "$MARKER"
     --max_trials 5 \
     --save_every 50 \
     --overwrite \
+    --num_threads 16 \
     --ollama-base-url "$OLLAMA_BASE_URL" \
     --ollama-model "$llm_pairs" \
     --ollama-timeout "$OLLAMA_TIMEOUT" \

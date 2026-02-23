@@ -117,7 +117,7 @@ def predict(args):
         datum["prediction"] = results
         return idx, True
 
-    max_workers = 4 # Parallélisme (doit correspondre à OLLAMA_NUM_PARALLEL)
+    max_workers = args.num_threads # Parallélisme (doit correspondre à OLLAMA_NUM_PARALLEL)
     save_counter = 0
 
     print(f"🚀 Lancement de l'inférence avec {max_workers} requêtes en parallèle...")
@@ -168,6 +168,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_trials", type=int, default=5)
     parser.add_argument("--save_every", type=int, default=50)
     parser.add_argument("--num_responses", type=int, default=1)
+    parser.add_argument("--num_threads", type=int, default=16, help="Parallélisme LLM")
 
     # Add Ollama config flags (host, model, temp, etc.)
     add_ollama_cli_args(parser)
