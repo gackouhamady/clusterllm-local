@@ -6,17 +6,26 @@ import random
 from typing import Any, Dict, List, Tuple
 
 dataset2lp = {
-    "arxiv": "domain",
+    # Intent / Domain (banking & assistants)
     "bank77": "intent",
-    "clinc_intent": "intent",
     "clinc150": "intent",
-    "go_emotions": "emotion",
-    "massive_domain": "domain",
+    "clinc_intent": "intent",
+    "clinc_domain": "domain",
     "massive_intent": "intent",
-    "mtop_domain": "domain",
+    "massive_domain": "domain",
     "mtop_intent": "intent",
+    "mtop_domain": "domain",
+
+    # Emotion / Topic / Domain
+    "go_emotions": "emotion",
     "reddit": "topic",
     "stackex": "topic",
+    "arxiv": "domain",
+
+    # Few-shot / type discovery style
+    "few_event": "event",
+    "few_nerd_nat": "entity",
+    "few_rel_nat": "relation",
 }
 
 def _norm_yesno(x: Any) -> str:

@@ -386,6 +386,17 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
         run.seed: 42
     outs:
     - path: data/raw/clinc150_small_eval.csv
@@ -600,6 +611,17 @@ stages:
       size: 31020
     params:
       params.yaml:
+        datasets.all:
+        - bank77
+        - clinc150
+        - massive_intent
+        - massive_domain
+        - mtop_intent
+        - mtop_domain
+        - go_emotions
+        - reddit
+        - stackex
+        - arxiv
         run.seed: 42
     outs:
     - path: data/raw/arxiv_small_eval.csv
@@ -1021,7 +1043,7 @@ stages:
       md5: effa6f56a3f761459607a045be770fee
       size: 2611036
   full_pipeline_2llms:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh bank77 small 
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh clinc150 small 
       llama3:8b-instruct-q4_K_M llama3:8b-instruct-q4_K_M 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
@@ -1033,10 +1055,10 @@ stages:
       md5: b487ce2169f0c29660fb4647a3d0a05f
       size: 15267
       isexec: true
-    - path: src/clusterllm/datasets/bank77/small.jsonl
+    - path: src/clusterllm/datasets/clinc150/small.jsonl
       hash: md5
-      md5: 0f59d93a45d42cfc4c84069b448e065d
-      size: 1100472
+      md5: a6f2082bb4d5ab72fb3abc75e3d83d20
+      size: 1292397
     - path: src/clusterllm/granularity/predict_num_clusters.py
       hash: md5
       md5: f32689d2d4df9e36473a28a64329c65b
@@ -1083,7 +1105,7 @@ stages:
       size: 4514
     params:
       params.yaml:
-        run.dataset: bank77
+        run.dataset: clinc150
         run.llm_pairs: llama3:8b-instruct-q4_K_M
         run.llm_triplet: llama3:8b-instruct-q4_K_M
         run.scale: small
@@ -1091,15 +1113,15 @@ stages:
     outs:
     - path: runs/granularity
       hash: md5
-      md5: 878c32d4140b9c34c31cdc4942c91ec7.dir
-      size: 553814518
+      md5: b894bd3d789a7e5e8f7594d2889fba65.dir
+      size: 1263340496
       nfiles: 8
     - path: runs/perspective
       hash: md5
-      md5: 5735aef1b7a526230bd820198ab02dd2.dir
-      size: 5639255515
+      md5: 3a3c565d5fe9b375e8e0d349b51aed99.dir
+      size: 5635674526
       nfiles: 17
-    - path: runs/summary/full_pipeline_2llms/bank77/small/summary.json
+    - path: runs/summary/full_pipeline_2llms/clinc150/small/summary.json
       hash: md5
-      md5: c27e90cfbcc2a5a476d2b220b0ed7a03
-      size: 696
+      md5: 71c337f930cecc578a0453b7cf631d05
+      size: 703

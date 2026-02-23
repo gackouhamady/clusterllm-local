@@ -1,5 +1,5 @@
 run:
-  dataset: bank77
+  dataset: clinc150
   scale: small
   llm_triplet: llama3:8b-instruct-q4_K_M
   llm_pairs: llama3:8b-instruct-q4_K_M 
@@ -17,3 +17,8 @@ datasets:
     - reddit
     - stackex
     - arxiv
+    - few_event
+    - few_nerd_nat
+    - few_rel_nat
+    - clinc_intent
+    - clinc_domain
