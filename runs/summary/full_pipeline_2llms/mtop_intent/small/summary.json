@@ -1,0 +1,26 @@
+{
+  "dataset": "mtop_intent",
+  "scale": "small",
+  "llm_triplet": "mistral:7b-instruct-q4_K_M",
+  "llm_pairs": "mistral:7b-instruct-q4_K_M",
+  "seed": 42,
+  "run_tag": "t=mistral__7b-instruct-q4_K_M__p=mistral__7b-instruct-q4_K_M",
+  "ollama_base_url": "http://127.0.0.1:11434",
+  "triplet_temperature": 0.2,
+  "pairs_temperature": 0.0,
+  "num_clusters_txt": "/home/hamady_gackou_work/clusterllm-local/runs/granularity/num_clusters/mtop_intent/small/t=mistral__7b-instruct-q4_K_M__p=mistral__7b-instruct-q4_K_M/mistral__7b-instruct-q4_K_M/num_clusters.txt",
+  "real_k": 113,
+  "estimated_k": 13,
+  "top10_candidates": [
+    13,
+    46,
+    12,
+    15,
+    45,
+    11,
+    14,
+    17,
+    44,
+    47
+  ]
+}

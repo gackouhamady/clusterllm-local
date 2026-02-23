@@ -1149,7 +1149,7 @@ stages:
       md5: effa6f56a3f761459607a045be770fee
       size: 2611036
   full_pipeline_2llms:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh massive_domain 
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh mtop_intent 
       small mistral:7b-instruct-q4_K_M mistral:7b-instruct-q4_K_M 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
@@ -1158,21 +1158,21 @@ stages:
       size: 2390
     - path: scripts/run_full_pipeline_one_dataset_two_llms.sh
       hash: md5
-      md5: e2d3a8ebba973459e66a515595c6a944
-      size: 15385
+      md5: cc08099b9aa281d1ce381d1f7cce963c
+      size: 15406
       isexec: true
-    - path: src/clusterllm/datasets/massive_domain/small.jsonl
+    - path: src/clusterllm/datasets/mtop_intent/small.jsonl
       hash: md5
-      md5: be89299896901537e8eb2cac3c8a9c27
-      size: 1071657
+      md5: de9e5995fd82f2031b7cc4330634419a
+      size: 1251560
     - path: src/clusterllm/granularity/predict_num_clusters.py
       hash: md5
       md5: f32689d2d4df9e36473a28a64329c65b
       size: 5621
     - path: src/clusterllm/granularity/predict_pairs.py
       hash: md5
-      md5: 5e4d68473e59fab36d680bf34e83b50b
-      size: 11247
+      md5: 90e1a0d1f11854490758d24e8eb90f63
+      size: 11248
     - path: src/clusterllm/granularity/sample_pairs.py
       hash: md5
       md5: ded7f444594a1851fa61f5c0b0353115
@@ -1211,7 +1211,7 @@ stages:
       size: 4514
     params:
       params.yaml:
-        run.dataset: massive_domain
+        run.dataset: mtop_intent
         run.llm_pairs: mistral:7b-instruct-q4_K_M
         run.llm_triplet: mistral:7b-instruct-q4_K_M
         run.scale: small
@@ -1219,15 +1219,15 @@ stages:
     outs:
     - path: runs/granularity
       hash: md5
-      md5: 8d7dd7529c27e8d82e73a5d48d9b4a76.dir
-      size: 686830321
+      md5: b4997cbff19bbecb0a4b1329d8449b69.dir
+      size: 1336940293
       nfiles: 8
     - path: runs/perspective
       hash: md5
-      md5: 56ecf00c1a3238e2c7a080bdd2ddc7ae.dir
-      size: 5635499006
+      md5: e45524f9039688a2d539e8b998062e79.dir
+      size: 5626542901
       nfiles: 17
-    - path: runs/summary/full_pipeline_2llms/massive_domain/small/summary.json
+    - path: runs/summary/full_pipeline_2llms/mtop_intent/small/summary.json
       hash: md5
-      md5: e7a0923bd73e4b15f7fd75bbda676750
-      size: 710
+      md5: 4c1aac373966a0871b9a339c07be64e9
+      size: 705
