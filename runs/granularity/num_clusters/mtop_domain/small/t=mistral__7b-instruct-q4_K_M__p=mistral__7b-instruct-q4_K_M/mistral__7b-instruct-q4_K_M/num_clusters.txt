@@ -1,0 +1,11 @@
+Loading hierarchy from: /home/hamady_gackou_work/clusterllm-local/runs/granularity/sampled_pairs/mtop_domain/small/t=mistral__7b-instruct-q4_K_M__p=mistral__7b-instruct-q4_K_M/mtop_domain_embed=instructor_s=small_k=1_multigran2-200_seed=42.json
+Loading LLM predictions from: /home/hamady_gackou_work/clusterllm-local/runs/granularity/predicted_pair_results/mtop_domain/small/t=mistral__7b-instruct-q4_K_M__p=mistral__7b-instruct-q4_K_M/mistral__7b-instruct-q4_K_M/pred_pairs.json
+Computing cluster assignments for search range...
+Calculating consistency scores (Beta=0.92) for K in 2..200
+
+==============================
+DATASET: mtop_domain
+REAL K: 11
+ESTIMATED K: 7
+TOP 10 CANDIDATES: [7, 4, 12, 6, 3, 50, 47, 41, 11, 8]
+==============================
