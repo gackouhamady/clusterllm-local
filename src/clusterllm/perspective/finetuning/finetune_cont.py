@@ -163,6 +163,33 @@ class InstructorTrainer(Seq2SeqTrainer):
         labels_another = torch.zeros(all_another_scores.size(0)).long().to(embeddings_query.device)
         loss += nn.CrossEntropyLoss()(all_another_scores, labels_another)
 
+        # ==========================
+        # CHANGE (LOSS ONLY): add anti-collapse regularizers without touching the rest of the pipeline
+        # (1) Triplet-margin regularizer (FaceNet-style)
+        # (2) Variance anti-collapse regularizer (VICReg-style)
+        # ==========================
+
+        # Hyperparameters (kept local to avoid changing args/configs elsewhere)
+        margin = 0.2          # gamma
+        w_trip = 0.5          # weight for triplet-margin term
+        w_var = 1.0           # weight for variance anti-collapse term
+        var_target = 1.0      # target per-dimension std (VICReg-style)
+        eps = 1e-4
+
+        # (1) Triplet-margin: max(0, gamma + s(q,n) - s(q,p))
+        if w_trip > 0:
+            sim_qp = similarity_fct(embeddings_query, embeddings_pos)  # (B,)
+            sim_qn = similarity_fct(embeddings_query, embeddings_neg)  # (B,)
+            trip_loss = torch.relu(margin + sim_qn - sim_qp).mean()
+            loss = loss + w_trip * trip_loss
+
+        # (2) Variance anti-collapse: encourage non-zero variance per dimension across the batch
+        if w_var > 0:
+            z = torch.cat([embeddings_query, embeddings_pos, embeddings_neg], dim=0)  # (3B, d)
+            std = torch.sqrt(z.var(dim=0, unbiased=False) + eps)                     # (d,)
+            var_loss = torch.relu(var_target - std).mean()
+            loss = loss + w_var * var_loss
+
         return loss
 
 
@@ -363,13 +390,13 @@ def main():
         )
 
     label_pad_token_id = -100 if data_args.overwrite_cache else tokenizer.pad_token_id
-    data_collator =  default_data_collator
+    data_collator = default_data_collator
 
     trainer = InstructorTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=None, 
+        eval_dataset=None,
         data_collator=data_collator,
         compute_metrics=None,
     )
@@ -394,12 +421,13 @@ def main():
             state_dict = safe_load_file(ckpt_safe)
             model.load_state_dict(state_dict)
         else:
-            raise FileNotFoundError(f"init_checkpoint set but no pytorch_model.bin/model.safetensors in {model_args.init_checkpoint}")
+            raise FileNotFoundError(
+                f"init_checkpoint set but no pytorch_model.bin/model.safetensors in {model_args.init_checkpoint}"
+            )
 
     train_result = trainer.train(resume_from_checkpoint=checkpoint)
     trainer.save_model()
     tokenizer.save_pretrained(training_args.output_dir)
-
 
     metrics = train_result.metrics
     metrics["train_samples"] = len(train_dataset)

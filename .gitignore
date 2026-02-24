@@ -85,4 +85,6 @@ src/clusterllm/granularity/sampled_pair_results/
 # ==========================================
 # 8. Autres exclusions spécifiques
 # ==========================================
-prompts.json
+prompts.json*.json
+runs_cont/
+runs/
