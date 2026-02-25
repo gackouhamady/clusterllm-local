@@ -15,6 +15,25 @@
 #   stage6: embeddings from finetuned checkpoint
 #   stage7: granularity (sample_pairs -> prompt -> predict_pairs (llm_pairs) -> predict_num_clusters)
 
+
+#--------------------------------------------------#
+# Optimisation des calculs CPU pour scikit-learn et numpy
+export OMP_NUM_THREADS=$(nproc)
+export MKL_NUM_THREADS=$(nproc)
+export OPENBLAS_NUM_THREADS=$(nproc)
+export NUMEXPR_NUM_THREADS=$(nproc)
+#----------------------------------------------------#
+
+
+# Fonction pour vider la mémoire GPU d'Ollama
+free_gpu_ollama() {
+    local model_name=$1
+    echo "🧹 Libération de la VRAM pour le modèle Ollama : $model_name"
+    curl -s http://localhost:11434/api/generate -d '{"model": "'"$model_name"'", "keep_alive": 0}' > /dev/null
+    sleep 2 # Pause de sécurité pour laisser la VRAM se vider
+}
+
+
 set -euo pipefail
 
 # -----------------------------
@@ -182,6 +201,9 @@ python "$PRED_TRIPLET_DIR/predict.py" \
   --ollama-timeout "$OLLAMA_TIMEOUT" \
   --ollama-temperature "$TRIPLET_TEMPERATURE" \
   --ollama-num-predict "$OLLAMA_NUM_PREDICT"
+
+
+free_gpu_ollama "$llm_triplet"
 
 pred_json="$(newest_file "$TRIPLET_PRED_OUT"/*.json)"
 test -f "${pred_json:-}" || die "No triplet prediction json found in $TRIPLET_PRED_OUT"
@@ -355,6 +377,10 @@ touch "$MARKER"
     --ollama-temperature "$PAIRS_TEMPERATURE" \
     --ollama-num-predict "$OLLAMA_NUM_PREDICT"
 )
+
+
+
+free_gpu_ollama "$llm_pairs" # <-- NOUVEAU
 
 # find newest json after marker (predictions)
 RAW_PRED_PAIRS="$(python - "$PPAIR_WORK" "$MARKER" <<'PY'

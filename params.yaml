@@ -1,15 +1,15 @@
 run:
-  dataset: massive_domain
+  dataset: bank77
   scale: small
-  llm_triplet:  llama3.2:3b-instruct-q8_0
-  llm_pairs:  llama3.2:3b-instruct-q8_0
+  llm_triplet:  gemma:7b-instruct-q4_K_M 
+  llm_pairs:  llama3.3:70b-instruct-q2_K
   seed: 42
 
 run2llms:
-  dataset: massive_domain
+  dataset: bank77
   scale: small
-  llm_triplet: llama3.2:3b-instruct-q8_0
-  llm_pairs: llama3.2:3b-instruct-q8_0
+  llm_triplet: gemma:7b-instruct-q4_K_M 
+  llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 datasets:

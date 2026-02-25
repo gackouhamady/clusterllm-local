@@ -1,9 +1,37 @@
 #!/usr/bin/env python3
+"""
+sample_pairs_for_prompt_cont.py
+
+Stage 7.1 prompt builder for pairwise granularity supervision.
+
+Contribution #3 (Uncertainty- and noise-aware supervision) EXTENSION
+-------------------------------------------------------------------
+This script DOES NOT change the original prompt template logic or the core
+pos/neg selection logic. It ONLY EXTENDS the pipeline to optionally use
+self-consistency uncertainty signals (from predicted pairs) to choose cleaner
+demonstration examples.
+
+Optional input:
+  --uncertainty_path : JSON produced by predict_pairs_cont.py (or compatible),
+                       containing per-pair fields such as:
+                         sent1_idx, sent2_idx, num_clusters, p_yes, entropy, weight
+
+If provided and usable:
+  - We enrich sampled pairs with p_yes/entropy/weight when indices match.
+  - We prefer more confident demonstrations by sorting with entropy ascending
+    (lower entropy = more confident), while preserving the original num_clusters
+    ranking preference (pos: small K; neg: large K).
+  - If fields are missing or file is absent, behavior is unchanged.
+
+Backward compatibility:
+  - If --uncertainty_path is not provided (default), behavior is identical.
+"""
+
 import argparse
 import json
 import os
 import random
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Optional
 
 dataset2lp = {
     # Intent / Domain (banking & assistants)
@@ -110,6 +138,76 @@ def _extract_pairs(sampled_pairs_json: Any) -> List[Dict[str, Any]]:
         return sampled_pairs_json
     raise ValueError("Unsupported sampled pairs schema (expected dict with test_inputs/pairs/... or list).")
 
+def _safe_float(x: Any) -> Optional[float]:
+    try:
+        v = float(x)
+    except Exception:
+        return None
+    if v != v:  # NaN
+        return None
+    return v
+
+def _clip01(v: float) -> float:
+    if v < 0.0:
+        return 0.0
+    if v > 1.0:
+        return 1.0
+    return v
+
+def _load_uncertainty_map(path: Optional[str]) -> Dict[Tuple[int, int, Optional[int]], Dict[str, float]]:
+    """
+    Load a mapping for quick lookup:
+      (sent1_idx, sent2_idx, num_clusters|None) -> {"p_yes":..., "entropy":..., "weight":...}
+    Accepts predicted pairs outputs that are either:
+      - dict with 'test_inputs' or 'pairs' list
+      - list of dicts directly
+    """
+    if not path or not os.path.exists(path):
+        return {}
+
+    obj = _load_json(path)
+    if isinstance(obj, dict):
+        items = obj.get("test_inputs", obj.get("pairs", []))
+        if not isinstance(items, list):
+            items = [obj] if isinstance(obj, dict) else []
+    elif isinstance(obj, list):
+        items = obj
+    else:
+        items = []
+
+    out: Dict[Tuple[int, int, Optional[int]], Dict[str, float]] = {}
+    for it in items:
+        if not isinstance(it, dict):
+            continue
+        if "sent1_idx" not in it or "sent2_idx" not in it:
+            continue
+
+        i = int(it["sent1_idx"])
+        j = int(it["sent2_idx"])
+        a, b = (i, j) if i <= j else (j, i)
+        step = it.get("num_clusters")
+        step_i: Optional[int] = int(step) if step is not None else None
+
+        p_yes = _safe_float(it.get("p_yes"))
+        ent = _safe_float(it.get("entropy"))
+        w = _safe_float(it.get("weight"))
+
+        rec: Dict[str, float] = {}
+        if p_yes is not None:
+            rec["p_yes"] = _clip01(p_yes)
+        if ent is not None:
+            rec["entropy"] = float(ent)
+        if w is not None:
+            rec["weight"] = _clip01(w)
+
+        if rec:
+            out[(a, b, step_i)] = rec
+            # also store pair-only fallback
+            if (a, b, None) not in out:
+                out[(a, b, None)] = rec
+
+    return out
+
 def main(args: argparse.Namespace) -> None:
     random.seed(args.seed)
 
@@ -131,6 +229,10 @@ def main(args: argparse.Namespace) -> None:
     if len(data) == 0:
         raise ValueError(f"Empty dataset file: {args.data_path}")
 
+    # Optional Contribution #3 uncertainty enrichment
+    unc_map = _load_uncertainty_map(getattr(args, "uncertainty_path", None))
+    use_unc = bool(unc_map)
+
     # Sample pairs
     n = min(args.num_sampled, len(all_pairs_raw))
     if n <= 0:
@@ -144,6 +246,25 @@ def main(args: argparse.Namespace) -> None:
             p["output"] = _norm_yesno(p["output"])
         elif "prediction" in p:
             p["output"] = _norm_yesno(p["prediction"])
+
+        # Contribution #3: enrich with p_yes/entropy/weight if available
+        if use_unc and "sent1_idx" in p and "sent2_idx" in p:
+            i = int(p["sent1_idx"])
+            j = int(p["sent2_idx"])
+            a, b = (i, j) if i <= j else (j, i)
+            step = p.get("num_clusters")
+            step_i: Optional[int] = int(step) if step is not None else None
+            rec = unc_map.get((a, b, step_i)) or unc_map.get((a, b, None))
+            if rec:
+                if "p_yes" in rec:
+                    p["p_yes"] = rec["p_yes"]
+                if "entropy" in rec:
+                    p["entropy"] = rec["entropy"]
+                if "weight" in rec:
+                    p["weight"] = rec["weight"]
+                # If no hard output, derive from soft p_yes
+                if "output" not in p and "p_yes" in p:
+                    p["output"] = "Yes" if float(p["p_yes"]) >= 0.5 else "No"
 
     # Split pos/neg with fallback if missing labels
     pos = [p for p in sampled if _norm_yesno(p.get("output", "")) == "Yes"]
@@ -166,9 +287,24 @@ def main(args: argparse.Namespace) -> None:
         except Exception:
             return default
 
+    # Contribution #3: prefer confident demo pairs when uncertainty is available.
+    # We keep the original num_clusters preference and ONLY refine ordering by entropy (ascending).
+    def ent(x: Dict[str, Any], default: float) -> float:
+        try:
+            v = _safe_float(x.get("entropy"))
+            return float(v) if v is not None else default
+        except Exception:
+            return default
+
     # Choose best examples
-    pos_sorted = sorted(pos, key=lambda x: nc(x, 1e18))[: args.num_for_prompt]
-    neg_sorted = sorted(neg, key=lambda x: nc(x, -1e18), reverse=True)[: args.num_for_prompt]
+    if use_unc:
+        # pos: small K, then low entropy
+        pos_sorted = sorted(pos, key=lambda x: (nc(x, 1e18), ent(x, 1e18)))[: args.num_for_prompt]
+        # neg: large K, then low entropy
+        neg_sorted = sorted(neg, key=lambda x: (-nc(x, -1e18), ent(x, 1e18)))[: args.num_for_prompt]
+    else:
+        pos_sorted = sorted(pos, key=lambda x: nc(x, 1e18))[: args.num_for_prompt]
+        neg_sorted = sorted(neg, key=lambda x: nc(x, -1e18), reverse=True)[: args.num_for_prompt]
 
     if len(pos_sorted) == 0 or len(neg_sorted) == 0:
         raise ValueError(
@@ -225,5 +361,14 @@ if __name__ == "__main__":
     parser.add_argument("--num_for_prompt", type=int, default=4)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--out_dir", type=str, required=True)
+
+    # Contribution #3 (optional): uncertainty-aware demo selection
+    parser.add_argument(
+        "--uncertainty_path",
+        type=str,
+        default=None,
+        help="Optional predicted pairs JSON (with p_yes/entropy/weight) to pick cleaner prompt demonstrations.",
+    )
+
     args = parser.parse_args()
     main(args)

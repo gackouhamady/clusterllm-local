@@ -6,6 +6,39 @@
 #   - llm_pairs  : used ONLY for pair prediction   (Stage 7.2) -> drives num_clusters estimation
 #
 # All CANONICAL artifacts are written with *_cont* names and stable paths.
+#
+# ------------------------------------------------------------------
+# Contribution #3 integration – uncertainty-aware supervision pipeline support
+#
+# This script adds OPTIONAL, backward-compatible parameter propagation to enable:
+#   - Triplet self-consistency (multiple LLM responses per query)
+#   - Triplet active re-query (additional responses for uncertain items)
+#   - Pair self-consistency (multiple LLM responses per pair)
+#   - Pair active re-query (additional responses for uncertain items)
+#   - Soft-label / soft-constraint propagation to downstream stages
+#
+# New optional env vars (defaults preserve original behavior):
+#   TRIPLET_NUM_RESPONSES, TRIPLET_REQUERY_THRESHOLD, TRIPLET_REQUERY_EXTRA
+#   PAIRS_NUM_RESPONSES,   PAIRS_REQUERY_THRESHOLD,   PAIRS_REQUERY_EXTRA
+# ------------------------------------------------------------------
+
+
+#--------------------------------------------------#
+# Optimisation des calculs CPU pour scikit-learn et numpy
+export OMP_NUM_THREADS=$(nproc)
+export MKL_NUM_THREADS=$(nproc)
+export OPENBLAS_NUM_THREADS=$(nproc)
+export NUMEXPR_NUM_THREADS=$(nproc)
+#----------------------------------------------------#
+
+
+# Fonction pour vider la mémoire GPU d'Ollama
+free_gpu_ollama() {
+    local model_name=$1
+    echo "🧹 Libération de la VRAM pour le modèle Ollama : $model_name"
+    curl -s http://localhost:11434/api/generate -d '{"model": "'"$model_name"'", "keep_alive": 0}' > /dev/null
+    sleep 2 # Pause de sécurité pour laisser la VRAM se vider
+}
 
 set -euo pipefail
 
@@ -32,6 +65,17 @@ OLLAMA_TIMEOUT="${OLLAMA_TIMEOUT:-600}"
 OLLAMA_NUM_PREDICT="${OLLAMA_NUM_PREDICT:-16}"
 
 # -----------------------------
+# Contribution #3 (optional) knobs (backward-compatible)
+# -----------------------------
+TRIPLET_NUM_RESPONSES="${TRIPLET_NUM_RESPONSES:-1}"
+TRIPLET_REQUERY_THRESHOLD="${TRIPLET_REQUERY_THRESHOLD:-0.65}"
+TRIPLET_REQUERY_EXTRA="${TRIPLET_REQUERY_EXTRA:-4}"
+
+PAIRS_NUM_RESPONSES="${PAIRS_NUM_RESPONSES:-1}"
+PAIRS_REQUERY_THRESHOLD="${PAIRS_REQUERY_THRESHOLD:-0.65}"
+PAIRS_REQUERY_EXTRA="${PAIRS_REQUERY_EXTRA:-4}"
+
+# -----------------------------
 # Usage
 # -----------------------------
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
@@ -40,6 +84,15 @@ Usage: $0 <dataset> <scale> <llm_triplet> <llm_pairs> [seed]
 
 Example:
   $0 clinc150 small deepseek-r1:32b qwen2.5:32b 42
+
+Optional env vars (Contribution #3):
+  TRIPLET_NUM_RESPONSES         (default: 1)
+  TRIPLET_REQUERY_THRESHOLD     (default: 0.65)
+  TRIPLET_REQUERY_EXTRA         (default: 4)
+
+  PAIRS_NUM_RESPONSES           (default: 1)
+  PAIRS_REQUERY_THRESHOLD       (default: 0.65)
+  PAIRS_REQUERY_EXTRA           (default: 4)
 EOF
   exit 0
 fi
@@ -62,6 +115,17 @@ log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 [[ "$sc" == "small" || "$sc" == "large" ]] || die "scale must be small|large, got: $sc"
 command -v python >/dev/null 2>&1 || die "python not found in PATH"
 command -v bash >/dev/null 2>&1 || die "bash not found in PATH"
+
+# Validate new knobs only insofar as needed (keeps backward behavior unchanged)
+if [[ "${TRIPLET_NUM_RESPONSES:-1}" != "1" || "${PAIRS_NUM_RESPONSES:-1}" != "1" ]]; then
+  [[ "$TRIPLET_NUM_RESPONSES" =~ ^[0-9]+$ ]] || die "TRIPLET_NUM_RESPONSES must be an int, got: $TRIPLET_NUM_RESPONSES"
+  [[ "$TRIPLET_REQUERY_EXTRA" =~ ^[0-9]+$ ]] || die "TRIPLET_REQUERY_EXTRA must be an int, got: $TRIPLET_REQUERY_EXTRA"
+  [[ "$TRIPLET_REQUERY_THRESHOLD" =~ ^[0-9]+([.][0-9]+)?$ ]] || die "TRIPLET_REQUERY_THRESHOLD must be a float, got: $TRIPLET_REQUERY_THRESHOLD"
+
+  [[ "$PAIRS_NUM_RESPONSES" =~ ^[0-9]+$ ]] || die "PAIRS_NUM_RESPONSES must be an int, got: $PAIRS_NUM_RESPONSES"
+  [[ "$PAIRS_REQUERY_EXTRA" =~ ^[0-9]+$ ]] || die "PAIRS_REQUERY_EXTRA must be an int, got: $PAIRS_REQUERY_EXTRA"
+  [[ "$PAIRS_REQUERY_THRESHOLD" =~ ^[0-9]+([.][0-9]+)?$ ]] || die "PAIRS_REQUERY_THRESHOLD must be a float, got: $PAIRS_REQUERY_THRESHOLD"
+fi
 
 sanitize_tag() { echo "$1" | sed -E 's/[\/:[:space:]]+/__/g'; }
 llm_triplet_dir="$(sanitize_tag "$llm_triplet")"
@@ -100,6 +164,15 @@ print(latest)
 PY
 }
 
+# -----------------------------
+# Helper: check whether a python script supports a CLI flag
+# -----------------------------
+supports_flag() {
+  local script_path="$1"
+  local flag="$2"
+  python "$script_path" -h 2>&1 | grep -q -- "$flag" || python "$script_path" --help 2>&1 | grep -q -- "$flag"
+}
+
 log "PIPELINE=CONTRIB_2LLMS_CONT"
 log "ROOT=$ROOT"
 log "dataset=$ds scale=$sc seed=$SEED"
@@ -108,6 +181,8 @@ log "run_tag_cont=$run_tag_cont"
 log "OLLAMA_BASE_URL=$OLLAMA_BASE_URL"
 log "TRIPLET_TEMPERATURE=$TRIPLET_TEMPERATURE PAIRS_TEMPERATURE=$PAIRS_TEMPERATURE"
 log "ART_DIR=$ART_DIR"
+log "TRIPLET_NUM_RESPONSES=$TRIPLET_NUM_RESPONSES TRIPLET_REQUERY_THRESHOLD=$TRIPLET_REQUERY_THRESHOLD TRIPLET_REQUERY_EXTRA=$TRIPLET_REQUERY_EXTRA"
+log "PAIRS_NUM_RESPONSES=$PAIRS_NUM_RESPONSES PAIRS_REQUERY_THRESHOLD=$PAIRS_REQUERY_THRESHOLD PAIRS_REQUERY_EXTRA=$PAIRS_REQUERY_EXTRA"
 
 # ------------------------------------------------------------------
 # STAGE 0: data must already exist (CONT VERSION)
@@ -128,7 +203,7 @@ python "$FT_DIR/get_embedding_cont.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --result_file "$BASE_EMB_CONT" \
   --prompt "Represent the text for clustering." \
-  --batch_size 512 \
+  --batch_size 64 \
   --scale "$sc" \
   --measure \
   --overwrite
@@ -149,8 +224,8 @@ python "$PRED_TRIPLET_DIR/triplet_sampling_cont.py" \
   --output_dir "$TRIPLET_OUT" \
   --scale "$sc" \
   --num_queries 1024 \
-  --large_ent_prop 0.2 \
-  --close_cluster_prop 0.0 \
+  --large_ent_prop 0.30 \
+  --close_cluster_prop 0.05 \
   --max_distance 67 \
   --seed "$SEED"
 
@@ -161,22 +236,46 @@ log "Stage 3: predict triplets with ollama (CONTRIB llm_triplet=$llm_triplet)"
 TRIPLET_PRED_OUT="$WORK_DIR/triplet_preds_cont"
 mkdir -p "$TRIPLET_PRED_OUT"
 
-python "$PRED_TRIPLET_DIR/predict_cont.py" \
-  --dataset "$ds" \
-  --input_dir "$TRIPLET_OUT" \
-  --output_dir "$TRIPLET_PRED_OUT" \
-  --model_name "$llm_triplet" \
-  --delay 0 \
-  --max_trials 5 \
-  --save_every 50 \
-  --num_responses 1 \
-  --num_threads 16 \
-  --ollama-base-url "$OLLAMA_BASE_URL" \
-  --ollama-model "$llm_triplet" \
-  --ollama-timeout "$OLLAMA_TIMEOUT" \
-  --ollama-temperature "$TRIPLET_TEMPERATURE" \
-  --ollama-num-predict "$OLLAMA_NUM_PREDICT"
+PREDICT_TRIPLET_SCRIPT="$PRED_TRIPLET_DIR/predict_cont.py"
 
+triplet_cmd=(
+  python "$PREDICT_TRIPLET_SCRIPT"
+  --dataset "$ds"
+  --input_dir "$TRIPLET_OUT"
+  --output_dir "$TRIPLET_PRED_OUT"
+  --model_name "$llm_triplet"
+  --delay 0
+  --max_trials 5
+  --save_every 50
+  --num_responses "$TRIPLET_NUM_RESPONSES"
+  --num_threads 16
+  --ollama-base-url "$OLLAMA_BASE_URL"
+  --ollama-model "$llm_triplet"
+  --ollama-timeout "$OLLAMA_TIMEOUT"
+  --ollama-temperature "$TRIPLET_TEMPERATURE"
+  --ollama-num-predict "$OLLAMA_NUM_PREDICT"
+)
+
+# Optional (Contribution #3): active re-query flags, only when enabled and supported
+if [[ "$TRIPLET_NUM_RESPONSES" -gt 1 ]]; then
+  if supports_flag "$PREDICT_TRIPLET_SCRIPT" "--requery_threshold"; then
+    triplet_cmd+=(--requery_threshold "$TRIPLET_REQUERY_THRESHOLD")
+  elif [[ "${TRIPLET_REQUERY_EXTRA}" -gt 0 ]]; then
+    die "predict_cont.py does not support --requery_threshold but triplet re-query is enabled"
+  fi
+
+  if supports_flag "$PREDICT_TRIPLET_SCRIPT" "--requery_extra"; then
+    triplet_cmd+=(--requery_extra "$TRIPLET_REQUERY_EXTRA")
+  elif [[ "${TRIPLET_REQUERY_EXTRA}" -gt 0 ]]; then
+    die "predict_cont.py does not support --requery_extra but triplet re-query is enabled"
+  fi
+fi
+
+"${triplet_cmd[@]}"
+
+free_gpu_ollama "$llm_triplet"
+
+# 2. Sauvegarde des résultats
 pred_json_raw="$(newest_file "$TRIPLET_PRED_OUT"/*.json)"
 test -f "${pred_json_raw:-}" || die "No triplet prediction json found in $TRIPLET_PRED_OUT"
 
@@ -193,9 +292,17 @@ log "Stage 4: convert triplets"
 CONV_DIR="$WORK_DIR/converted_triplets_cont"
 mkdir -p "$CONV_DIR"
 
+# Prefer soft converter if present (Contribution #3); otherwise keep original behavior.
+CONVERT_TRIPLET_SOFT="$FT_DIR/convert_triplet_soft_cont.py"
+CONVERT_TRIPLET_STD="$FT_DIR/convert_triplet_cont.py"
+CONVERT_TRIPLET_TO_USE="convert_triplet_cont.py"
+if [[ -f "$CONVERT_TRIPLET_SOFT" ]]; then
+  CONVERT_TRIPLET_TO_USE="convert_triplet_soft_cont.py"
+fi
+
 (
   cd "$FT_DIR"
-  python "convert_triplet_cont.py" \
+  python "$CONVERT_TRIPLET_TO_USE" \
     --dataset "$ds" \
     --pred_path "$PRED_TRIPLETS_CONT" \
     --output_path "$CONV_DIR" \
@@ -203,7 +310,7 @@ mkdir -p "$CONV_DIR"
 )
 
 standard_train_raw="$(newest_file "$CONV_DIR"/*train*.json)"
-test -f "${standard_train_raw:-}" || die "convert_triplet_cont did not create a train json in $CONV_DIR"
+test -f "${standard_train_raw:-}" || die "$CONVERT_TRIPLET_TO_USE did not create a train json in $CONV_DIR"
 
 (
   cd "$FT_DIR"
@@ -243,12 +350,15 @@ python "$FT_DIR/finetune_cont.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --train_file "$TRAIN_CONT" \
   --output_dir "$OUT_CKPT" \
-  --per_device_train_batch_size 4 \
+  --max_source_length 128 \
+  --per_device_train_batch_size 16 \
   --gradient_accumulation_steps 1 \
-  --gradient_checkpointing True \
   --learning_rate 2e-6 \
   --num_train_epochs 1 \
-  --bf16 \
+  --bf16 True \
+  --optim "adamw_torch_fused" \
+  --dataloader_num_workers 4 \
+  --max_train_samples 1024 \
   --logging_steps 5
 
 # ------------------------------------------------------------------
@@ -270,7 +380,7 @@ python "$FT_DIR/get_embedding_cont.py" \
   --cache_dir "$ROOT/.cache/hf" \
   --result_file "$FT_EMB_CONT" \
   --prompt "Represent the text for clustering." \
-  --batch_size 512 \
+  --batch_size 64 \
   --checkpoint "$OUT_CKPT" \
   --scale "$sc" \
   --measure \
@@ -343,22 +453,53 @@ mkdir -p "$PPAIR_WORK"
 MARKER="$PPAIR_WORK/.start_predict_pairs_cont"
 touch "$MARKER"
 
+PREDICT_PAIRS_SCRIPT="$GRAN_DIR/predict_pairs_cont.py"
+
+pairs_cmd=(
+  python "$PREDICT_PAIRS_SCRIPT"
+  --dataset "$ds"
+  --data_path "$CLUSTER_RESULTS_CONT"
+  --prompt_file "$PROMPT_CONT"
+  --delay 0
+  --max_trials 5
+  --save_every 50
+  --overwrite
+  --ollama-base-url "$OLLAMA_BASE_URL"
+  --ollama-model "$llm_pairs"
+  --ollama-timeout "$OLLAMA_TIMEOUT"
+  --ollama-temperature "$PAIRS_TEMPERATURE"
+  --ollama-num-predict "$OLLAMA_NUM_PREDICT"
+)
+
+# Optional (Contribution #3): pair self-consistency + active re-query, only if supported/enabled
+if supports_flag "$PREDICT_PAIRS_SCRIPT" "--num_responses"; then
+  pairs_cmd+=(--num_responses "$PAIRS_NUM_RESPONSES")
+elif [[ "$PAIRS_NUM_RESPONSES" -gt 1 ]]; then
+  die "predict_pairs_cont.py does not support --num_responses but PAIRS_NUM_RESPONSES>1 was requested"
+fi
+
+if [[ "$PAIRS_NUM_RESPONSES" -gt 1 ]]; then
+  if supports_flag "$PREDICT_PAIRS_SCRIPT" "--requery_threshold"; then
+    pairs_cmd+=(--requery_threshold "$PAIRS_REQUERY_THRESHOLD")
+  elif [[ "${PAIRS_REQUERY_EXTRA}" -gt 0 ]]; then
+    die "predict_pairs_cont.py does not support --requery_threshold but pair re-query is enabled"
+  fi
+
+  if supports_flag "$PREDICT_PAIRS_SCRIPT" "--requery_extra"; then
+    pairs_cmd+=(--requery_extra "$PAIRS_REQUERY_EXTRA")
+  elif [[ "${PAIRS_REQUERY_EXTRA}" -gt 0 ]]; then
+    die "predict_pairs_cont.py does not support --requery_extra but pair re-query is enabled"
+  fi
+fi
+
 (
   cd "$PPAIR_WORK"
-  python "$GRAN_DIR/predict_pairs_cont.py" \
-    --dataset "$ds" \
-    --data_path "$CLUSTER_RESULTS_CONT" \
-    --prompt_file "$PROMPT_CONT" \
-    --delay 0 \
-    --max_trials 5 \
-    --save_every 50 \
-    --overwrite \
-    --ollama-base-url "$OLLAMA_BASE_URL" \
-    --ollama-model "$llm_pairs" \
-    --ollama-timeout "$OLLAMA_TIMEOUT" \
-    --ollama-temperature "$PAIRS_TEMPERATURE" \
-    --ollama-num-predict "$OLLAMA_NUM_PREDICT"
+  "${pairs_cmd[@]}"
 )
+
+
+
+free_gpu_ollama "$llm_pairs" 
 
 RAW_PRED_PAIRS="$(python - "$PPAIR_WORK" "$MARKER" <<'PY'
 import os, sys
@@ -389,15 +530,26 @@ log "PRED_PAIRS_CONT=$PRED_PAIRS_CONT"
 log "Stage 7.3: predict num_clusters"
 NUM_CLUSTERS_CONT="$ART_DIR/num_clusters_cont.txt"
 
-python "$GRAN_DIR/predict_num_clusters_cont.py" \
-  --dataset "$ds" \
-  --data_path "$DATA_JSONL_CONT" \
-  --clustering_results "$CLUSTER_RESULTS_CONT" \
-  --pred_path "$PRED_PAIRS_CONT" \
-  --scale "$sc" \
-  --min_clusters 2 \
-  --max_clusters 200 \
-  | tee "$NUM_CLUSTERS_CONT"
+PREDICT_K_SCRIPT="$GRAN_DIR/predict_num_clusters_cont.py"
+k_cmd=(
+  python "$PREDICT_K_SCRIPT"
+  --dataset "$ds"
+  --data_path "$DATA_JSONL_CONT"
+  --clustering_results "$CLUSTER_RESULTS_CONT"
+  --pred_path "$PRED_PAIRS_CONT"
+  --scale "$sc"
+  --min_clusters 2
+  --max_clusters 200
+)
+
+# Optional (Contribution #3): soft constraints, only if supported
+if supports_flag "$PREDICT_K_SCRIPT" "--soft_constraints"; then
+  k_cmd+=(--soft_constraints)
+elif supports_flag "$PREDICT_K_SCRIPT" "--use_soft_constraints"; then
+  k_cmd+=(--use_soft_constraints)
+fi
+
+"${k_cmd[@]}" | tee "$NUM_CLUSTERS_CONT"
 
 test -f "$NUM_CLUSTERS_CONT" || die "Missing $NUM_CLUSTERS_CONT"
 

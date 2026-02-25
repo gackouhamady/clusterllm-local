@@ -195,8 +195,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -217,14 +217,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/mtop_intent_large_eval.csv
+      hash: md5
+      md5: 4465860061444970d192c2a626273214
+      size: 177699
     - path: data/raw/mtop_intent_large_train.csv
       hash: md5
-      md5: 42cd11fa56e7235413555c4052cec025
-      size: 633235
+      md5: 081345f2eab01630722e20d56d8ba987
+      size: 631991
     - path: src/clusterllm/datasets/mtop_intent/large.jsonl
       hash: md5
-      md5: de9e5995fd82f2031b7cc4330634419a
-      size: 1251560
+      md5: 1852131826d93f088022971102504293
+      size: 1249130
   prepare_small@stackex:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh stackex small
       42
@@ -416,8 +420,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: a597aff78cceb0e36a0580a4502c4c73
-      size: 32542
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -596,8 +600,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: a597aff78cceb0e36a0580a4502c4c73
-      size: 32542
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -620,16 +624,16 @@ stages:
     outs:
     - path: data/raw/massive_domain_small_eval.csv
       hash: md5
-      md5: 105976c0b83816d544894eb4cdc69770
-      size: 148130
+      md5: 6e6464b771d61a210b63a29bd9ef6a2c
+      size: 113444
     - path: data/raw/massive_domain_small_train.csv
       hash: md5
-      md5: 884f0806e6dc0bf77ef18f588cfb5458
-      size: 575559
+      md5: 444e9fdd5d9d8702dd708a95def11870
+      size: 441024
     - path: src/clusterllm/datasets/massive_domain/small.jsonl
       hash: md5
-      md5: fe83c6be5a1e2b4f8d310c557c40c2b4
-      size: 1071379
+      md5: 01cf4e1a83a81b244a6dd120a480617a
+      size: 873182
   prepare_small@bank77:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh bank77 small 
       42
@@ -641,8 +645,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: a597aff78cceb0e36a0580a4502c4c73
-      size: 32542
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -866,8 +870,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -888,14 +892,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/stackex_large_eval.csv
+      hash: md5
+      md5: 632e82bd6a6b4651fcf5923b2c09cea1
+      size: 369386
     - path: data/raw/stackex_large_train.csv
       hash: md5
-      md5: c673b3ed178071aab47b6ffb9a6b6015
-      size: 4510795
+      md5: 50d12c43141249c0394b3e1b349ebfba
+      size: 4455069
     - path: src/clusterllm/datasets/stackex/large.jsonl
       hash: md5
-      md5: e1efe5723469b06d8480412222a14efd
-      size: 6169069
+      md5: 321aa1c346ecb0b95add98a288d89ca3
+      size: 6109338
   prepare_large@few_nerd_nat:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh few_nerd_nat 
       large 42
@@ -907,8 +915,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -929,14 +937,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/few_nerd_nat_large_eval.csv
+      hash: md5
+      md5: 1c60c241c191845e928dd2ce18041db9
+      size: 811663
     - path: data/raw/few_nerd_nat_large_train.csv
       hash: md5
-      md5: f3ef54baac3435111ca7f2a9910307c1
-      size: 811663
+      md5: d49d282225e77459460cfb3c47795d88
+      size: 10695638
     - path: src/clusterllm/datasets/few_nerd_nat/large.jsonl
       hash: md5
-      md5: e1a05ba3fa33f29ee23cfb8efc5b5aa4
-      size: 1791640
+      md5: bf983820f953b08230c0f56a5da14368
+      size: 12702095
   prepare_large@clinc_intent:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh clinc_intent 
       large 42
@@ -948,8 +960,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -970,14 +982,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/clinc_intent_large_eval.csv
+      hash: md5
+      md5: 6e2b3eaa209317850ac1212ff6de27e9
+      size: 199945
     - path: data/raw/clinc_intent_large_train.csv
       hash: md5
-      md5: a29bfe54c989649cd142204081e7696b
-      size: 665120
+      md5: 16bd11bad148fe8df8e62d9bdaaa1344
+      size: 665157
     - path: src/clusterllm/datasets/clinc_intent/large.jsonl
       hash: md5
-      md5: a6f2082bb4d5ab72fb3abc75e3d83d20
-      size: 1292397
+      md5: 97b52e15036aa01c8d4b5e8ed9a346b5
+      size: 1291786
   prepare_large@mtop_domain:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh mtop_domain 
       large 42
@@ -989,8 +1005,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1011,14 +1027,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/mtop_domain_large_eval.csv
+      hash: md5
+      md5: 5270d30898f24740f969ade5b7882271
+      size: 174740
     - path: data/raw/mtop_domain_large_train.csv
       hash: md5
-      md5: 2ce920e7638bddcaee45b040f1a91d54
-      size: 622070
+      md5: cc425ae9962796047b71e5591d114e3b
+      size: 621982
     - path: src/clusterllm/datasets/mtop_domain/large.jsonl
       hash: md5
-      md5: 44d69f0ea0fe38b70f67732c1e44fd20
-      size: 1237337
+      md5: 134e5aa27b620888b0a898b9c2444773
+      size: 1236798
   prepare_large@clinc_domain:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh clinc_domain 
       large 42
@@ -1030,8 +1050,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1052,14 +1072,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/clinc_domain_large_eval.csv
+      hash: md5
+      md5: 8eb1918a697f1d133c9ec1637eda677a
+      size: 229209
     - path: data/raw/clinc_domain_large_train.csv
       hash: md5
       md5: d604e23f52794f0a549be6e5b7b37bbb
       size: 762599
     - path: src/clusterllm/datasets/clinc_domain/large.jsonl
       hash: md5
-      md5: c2218320daa39c669bf4d203a70ebcf2
-      size: 1456382
+      md5: 03ec59c711b5180b9f81ed48dfa08d38
+      size: 1457302
   prepare_large@few_rel_nat:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh few_rel_nat 
       large 42
@@ -1071,8 +1095,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1093,14 +1117,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/few_rel_nat_large_eval.csv
+      hash: md5
+      md5: 74f6b10c4c81055de4ecec004c9123c6
+      size: 909080
     - path: data/raw/few_rel_nat_large_train.csv
       hash: md5
-      md5: 3a5dd5dee8f197be290b75cd5884aff9
-      size: 909080
+      md5: 5ad86d1ca589c2d3d09780a38fd7b7c6
+      size: 8187361
     - path: src/clusterllm/datasets/few_rel_nat/large.jsonl
       hash: md5
-      md5: 685d2a6afc71b9b23af4aa4047c46230
-      size: 2019036
+      md5: 1af60ec12f4fb444baa8906ed9eed363
+      size: 10100812
   prepare_large@massive_intent:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh 
       massive_intent large 42
@@ -1112,8 +1140,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1134,14 +1162,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/massive_intent_large_eval.csv
+      hash: md5
+      md5: 83e09c6b48f5810a6272e41850c8d12a
+      size: 148161
     - path: data/raw/massive_intent_large_train.csv
       hash: md5
-      md5: 2d13dee198c67dc9f9743b91b6615748
-      size: 576534
+      md5: 0456b331cbaac528bd84fba769ae5f41
+      size: 575371
     - path: src/clusterllm/datasets/massive_intent/large.jsonl
       hash: md5
-      md5: b36f799e5500f2322d737cce58ec4cb8
-      size: 1071391
+      md5: e77ba8c0f3b7e33820574e063d40f858
+      size: 1071126
   prepare_large@bank77:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh bank77 large 
       42
@@ -1153,8 +1185,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1175,13 +1207,17 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/bank77_large_eval.csv
+      hash: md5
+      md5: 74273141a32afa73e7498a14e362799b
+      size: 193584
     - path: data/raw/bank77_large_train.csv
       hash: md5
-      md5: c516feb2542bafbc31d9e8681f772b51
-      size: 636374
+      md5: cb05ab0f4032a9d45a337de75274700e
+      size: 622547
     - path: src/clusterllm/datasets/bank77/large.jsonl
       hash: md5
-      md5: 0f59d93a45d42cfc4c84069b448e065d
+      md5: cffc8b507b6768a8302a8c012a22ac55
       size: 1100472
   prepare_large@reddit:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh reddit large 
@@ -1194,8 +1230,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1216,14 +1252,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/reddit_large_eval.csv
+      hash: md5
+      md5: 4ebb8fe386dfde58195d91f3410aaa41
+      size: 255300
     - path: data/raw/reddit_large_train.csv
       hash: md5
-      md5: 0570ef5a3c0ca7877bd728ae2235f4db
-      size: 3979460
+      md5: 8e1ed603c291ba345a710cfe5946743f
+      size: 3979923
     - path: src/clusterllm/datasets/reddit/large.jsonl
       hash: md5
-      md5: 6790b7254ee47c42c3771f17b5e2df99
-      size: 5491294
+      md5: 9f6d02812ff565ebf98eb7cfff07bbde
+      size: 5488942
   prepare_large@arxiv:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh arxiv large 
       42
@@ -1235,8 +1275,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1257,14 +1297,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/arxiv_large_eval.csv
+      hash: md5
+      md5: 7ea08f46a1a2c7fbd47a1b1ad22f18e9
+      size: 3736453
     - path: data/raw/arxiv_large_train.csv
       hash: md5
-      md5: b74c1f58c27bdefcdd9a522eeea64dd7
-      size: 51007102
+      md5: 1e8f91d399fc13bf911e8e9b3c74dcc8
+      size: 50867454
     - path: src/clusterllm/datasets/arxiv/large.jsonl
       hash: md5
-      md5: 5d3b6dd8890aa8641825d09810019890
-      size: 56710014
+      md5: 3acf55d86f8e3432eb9802984ef76da5
+      size: 56581335
   prepare_large@massive_domain:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh 
       massive_domain large 42
@@ -1276,8 +1320,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1298,14 +1342,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/massive_domain_large_eval.csv
+      hash: md5
+      md5: 6e6464b771d61a210b63a29bd9ef6a2c
+      size: 113444
     - path: data/raw/massive_domain_large_train.csv
       hash: md5
-      md5: 3758592b0ff577f44658242029513ad6
-      size: 576704
+      md5: 444e9fdd5d9d8702dd708a95def11870
+      size: 441024
     - path: src/clusterllm/datasets/massive_domain/large.jsonl
       hash: md5
-      md5: be89299896901537e8eb2cac3c8a9c27
-      size: 1071657
+      md5: 01cf4e1a83a81b244a6dd120a480617a
+      size: 873182
   prepare_large@go_emotions:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh go_emotions 
       large 42
@@ -1317,8 +1365,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1339,14 +1387,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/go_emotions_large_eval.csv
+      hash: md5
+      md5: 0b1367085cb10e15dabc52b22770207b
+      size: 453777
     - path: data/raw/go_emotions_large_train.csv
       hash: md5
-      md5: e832fad2fd2952603cb053d7b565dafa
-      size: 1774767
+      md5: 317cb448f160912dc1586931cb95f583
+      size: 1769526
     - path: src/clusterllm/datasets/go_emotions/large.jsonl
       hash: md5
-      md5: 0c108c9d18b53fb24136d1a2b93a5f6f
-      size: 2803952
+      md5: 3e7780f118d5a468b2214bd08f08136e
+      size: 2856089
   prepare_large@clinc150:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh clinc150 
       large 42
@@ -1358,8 +1410,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1380,14 +1432,18 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/clinc150_large_eval.csv
+      hash: md5
+      md5: 6e2b3eaa209317850ac1212ff6de27e9
+      size: 199945
     - path: data/raw/clinc150_large_train.csv
       hash: md5
-      md5: a29bfe54c989649cd142204081e7696b
-      size: 665120
+      md5: 16bd11bad148fe8df8e62d9bdaaa1344
+      size: 665157
     - path: src/clusterllm/datasets/clinc150/large.jsonl
       hash: md5
-      md5: a6f2082bb4d5ab72fb3abc75e3d83d20
-      size: 1292397
+      md5: 97b52e15036aa01c8d4b5e8ed9a346b5
+      size: 1291786
   prepare_large@few_event:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh few_event 
       large 42
@@ -1399,8 +1455,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1421,17 +1477,21 @@ stages:
         - clinc_domain
         run.seed: 42
     outs:
+    - path: data/raw/few_event_large_eval.csv
+      hash: md5
+      md5: 080dc47319c13e138cf966527385d170
+      size: 1198427
     - path: data/raw/few_event_large_train.csv
       hash: md5
-      md5: d7cf2012e7d360f6f6f65866156f9b6c
-      size: 1198427
+      md5: 4b98c4886c55475c79031f6a050a0882
+      size: 4824697
     - path: src/clusterllm/datasets/few_event/large.jsonl
       hash: md5
-      md5: effa6f56a3f761459607a045be770fee
-      size: 2611036
+      md5: f27019021afb3cdb0360e2294bd11e56
+      size: 6558756
   full_pipeline_2llms:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh massive_domain 
-      small llama3.2:3b-instruct-q8_0 llama3.2:3b-instruct-q8_0 42
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms.sh bank77 small 
+      gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
       hash: md5
@@ -1439,13 +1499,13 @@ stages:
       size: 2390
     - path: scripts/run_full_pipeline_one_dataset_two_llms.sh
       hash: md5
-      md5: cc08099b9aa281d1ce381d1f7cce963c
-      size: 15406
+      md5: 8e17ef9e16f2c71dae229251e5031dc1
+      size: 16137
       isexec: true
-    - path: src/clusterllm/datasets/massive_domain/small.jsonl
+    - path: src/clusterllm/datasets/bank77/small.jsonl
       hash: md5
-      md5: fe83c6be5a1e2b4f8d310c557c40c2b4
-      size: 1071379
+      md5: cffc8b507b6768a8302a8c012a22ac55
+      size: 1100472
     - path: src/clusterllm/granularity/predict_num_clusters.py
       hash: md5
       md5: f32689d2d4df9e36473a28a64329c65b
@@ -1492,26 +1552,26 @@ stages:
       size: 4514
     params:
       params.yaml:
-        run.dataset: massive_domain
-        run.llm_pairs: llama3.2:3b-instruct-q8_0
-        run.llm_triplet: llama3.2:3b-instruct-q8_0
+        run.dataset: bank77
+        run.llm_pairs: llama3.3:70b-instruct-q2_K
+        run.llm_triplet: gemma:7b-instruct-q4_K_M
         run.scale: small
         run.seed: 42
     outs:
     - path: runs/granularity
       hash: md5
-      md5: 45893f38100b0d4b267823ab52076818.dir
-      size: 684925031
+      md5: f9da59f2e716aed6219a337eea4459a4.dir
+      size: 554393038
       nfiles: 8
     - path: runs/perspective
       hash: md5
-      md5: 645acbfeeea0266baabd6d895a0234fa.dir
-      size: 5635479086
+      md5: a06a4b2c0d995295f602c2ac7f76b8a7.dir
+      size: 5639215591
       nfiles: 17
-    - path: runs/summary/full_pipeline_2llms/massive_domain/small/summary.json
+    - path: runs/summary/full_pipeline_2llms/bank77/small/summary.json
       hash: md5
-      md5: b652da28ad376af82041510acee9f4ef
-      size: 703
+      md5: b38726343e91c78a77ecb91fbdf2e95e
+      size: 693
   prepare_small_cont@stackex:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh stackex small
       42 && cp -f src/clusterllm/datasets/stackex/small.jsonl 
@@ -1576,8 +1636,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1600,16 +1660,16 @@ stages:
     outs:
     - path: data/raw/clinc_domain_small_eval_cont.csv
       hash: md5
-      md5: 8eac3e71d28c1afcacceeda2d47587da
-      size: 228261
+      md5: 8eb1918a697f1d133c9ec1637eda677a
+      size: 229209
     - path: data/raw/clinc_domain_small_train_cont.csv
       hash: md5
       md5: d604e23f52794f0a549be6e5b7b37bbb
       size: 762599
     - path: src/clusterllm/datasets/clinc_domain/small_cont.jsonl
       hash: md5
-      md5: c2218320daa39c669bf4d203a70ebcf2
-      size: 1456382
+      md5: 03ec59c711b5180b9f81ed48dfa08d38
+      size: 1457302
   prepare_small_cont@massive_intent:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh 
       massive_intent small 42 && cp -f 
@@ -1675,8 +1735,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1699,15 +1759,15 @@ stages:
     outs:
     - path: data/raw/bank77_small_eval_cont.csv
       hash: md5
-      md5: f2e48ccb7eb8360f24db85516d847a7f
-      size: 179757
+      md5: 74273141a32afa73e7498a14e362799b
+      size: 193584
     - path: data/raw/bank77_small_train_cont.csv
       hash: md5
-      md5: c516feb2542bafbc31d9e8681f772b51
-      size: 636374
+      md5: cb05ab0f4032a9d45a337de75274700e
+      size: 622547
     - path: src/clusterllm/datasets/bank77/small_cont.jsonl
       hash: md5
-      md5: 0f59d93a45d42cfc4c84069b448e065d
+      md5: cffc8b507b6768a8302a8c012a22ac55
       size: 1100472
   prepare_small_cont@go_emotions:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh go_emotions 
@@ -1823,8 +1883,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1847,16 +1907,16 @@ stages:
     outs:
     - path: data/raw/arxiv_small_eval_cont.csv
       hash: md5
-      md5: c6268a48fd84e5a40bc6dc22e87ca789
-      size: 3720582
+      md5: 7ea08f46a1a2c7fbd47a1b1ad22f18e9
+      size: 3736453
     - path: data/raw/arxiv_small_train_cont.csv
       hash: md5
-      md5: b74c1f58c27bdefcdd9a522eeea64dd7
-      size: 51007102
+      md5: 1e8f91d399fc13bf911e8e9b3c74dcc8
+      size: 50867454
     - path: src/clusterllm/datasets/arxiv/small_cont.jsonl
       hash: md5
-      md5: 5d3b6dd8890aa8641825d09810019890
-      size: 56710014
+      md5: 3acf55d86f8e3432eb9802984ef76da5
+      size: 56581335
   prepare_small_cont@massive_domain:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh 
       massive_domain small 42 && cp -f 
@@ -1874,8 +1934,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -1898,16 +1958,16 @@ stages:
     outs:
     - path: data/raw/massive_domain_small_eval_cont.csv
       hash: md5
-      md5: 485a8cb5ba84e988fa4e72d65c517587
-      size: 147263
+      md5: 6e6464b771d61a210b63a29bd9ef6a2c
+      size: 113444
     - path: data/raw/massive_domain_small_train_cont.csv
       hash: md5
-      md5: 3758592b0ff577f44658242029513ad6
-      size: 576704
+      md5: 444e9fdd5d9d8702dd708a95def11870
+      size: 441024
     - path: src/clusterllm/datasets/massive_domain/small_cont.jsonl
       hash: md5
-      md5: be89299896901537e8eb2cac3c8a9c27
-      size: 1071657
+      md5: 01cf4e1a83a81b244a6dd120a480617a
+      size: 873182
   prepare_small_cont@mtop_intent:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh mtop_intent 
       small 42 && cp -f src/clusterllm/datasets/mtop_intent/small.jsonl 
@@ -2022,8 +2082,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -2046,16 +2106,16 @@ stages:
     outs:
     - path: data/raw/mtop_domain_small_eval_cont.csv
       hash: md5
-      md5: 5a47eef005d027b4cb557d7e9ac202ce
-      size: 175163
+      md5: 5270d30898f24740f969ade5b7882271
+      size: 174740
     - path: data/raw/mtop_domain_small_train_cont.csv
       hash: md5
-      md5: 2ce920e7638bddcaee45b040f1a91d54
-      size: 622070
+      md5: cc425ae9962796047b71e5591d114e3b
+      size: 621982
     - path: src/clusterllm/datasets/mtop_domain/small_cont.jsonl
       hash: md5
-      md5: 44d69f0ea0fe38b70f67732c1e44fd20
-      size: 1237337
+      md5: 134e5aa27b620888b0a898b9c2444773
+      size: 1236798
   prepare_small_cont@clinc_intent:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh clinc_intent 
       small 42 && cp -f src/clusterllm/datasets/clinc_intent/small.jsonl 
@@ -2171,8 +2231,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -2195,16 +2255,16 @@ stages:
     outs:
     - path: data/raw/few_rel_nat_small_eval_cont.csv
       hash: md5
-      md5: 3a5dd5dee8f197be290b75cd5884aff9
+      md5: 74f6b10c4c81055de4ecec004c9123c6
       size: 909080
     - path: data/raw/few_rel_nat_small_train_cont.csv
       hash: md5
-      md5: 3a5dd5dee8f197be290b75cd5884aff9
-      size: 909080
+      md5: 5ad86d1ca589c2d3d09780a38fd7b7c6
+      size: 8187361
     - path: src/clusterllm/datasets/few_rel_nat/small_cont.jsonl
       hash: md5
-      md5: 685d2a6afc71b9b23af4aa4047c46230
-      size: 2019036
+      md5: 1af60ec12f4fb444baa8906ed9eed363
+      size: 10100812
   prepare_small_cont@few_event:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh few_event 
       small 42 && cp -f src/clusterllm/datasets/few_event/small.jsonl 
@@ -2255,9 +2315,8 @@ stages:
       md5: effa6f56a3f761459607a045be770fee
       size: 2611036
   full_pipeline_2llms_cont:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh 
-      massive_domain small llama3.2:3b-instruct-q8_0 llama3.2:3b-instruct-q8_0 
-      42
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh bank77 
+      small gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
       hash: md5
@@ -2265,40 +2324,40 @@ stages:
       size: 2390
     - path: scripts/run_full_pipeline_one_dataset_two_llms_cont.sh
       hash: md5
-      md5: 48c43aa3b6d58b4fe4fbe43b8d3c37e4
-      size: 15695
-    - path: src/clusterllm/datasets/massive_domain/small_cont.jsonl
+      md5: 62e3caa37611bbf26bf9ac09ebfd2eca
+      size: 22136
+    - path: src/clusterllm/datasets/bank77/small_cont.jsonl
       hash: md5
-      md5: be89299896901537e8eb2cac3c8a9c27
-      size: 1071657
+      md5: cffc8b507b6768a8302a8c012a22ac55
+      size: 1100472
     - path: src/clusterllm/granularity/predict_num_clusters_cont.py
       hash: md5
-      md5: f32689d2d4df9e36473a28a64329c65b
-      size: 5621
+      md5: 898dbdcc5e72b9f9fb7721c7179f0a5e
+      size: 7814
     - path: src/clusterllm/granularity/predict_pairs_cont.py
       hash: md5
-      md5: 5e4d68473e59fab36d680bf34e83b50b
-      size: 11247
+      md5: d9d211eadc31fad1d477c1dc028bb1cb
+      size: 16490
     - path: src/clusterllm/granularity/sample_pairs_cont.py
       hash: md5
-      md5: ded7f444594a1851fa61f5c0b0353115
-      size: 5393
+      md5: 4aaef1a1cfbf0d8082b4c69bbfa8734d
+      size: 10560
     - path: src/clusterllm/granularity/sample_pairs_for_prompt_cont.py
       hash: md5
-      md5: d3c7ef559b70e51f931744abfcd33344
-      size: 8234
+      md5: 49fa8f05fbd971ee48e9d1e990b348d3
+      size: 13592
     - path: src/clusterllm/perspective/finetuning/convert_triplet_cont.py
       hash: md5
-      md5: 90c36b79e22427b0a0294579c6871e96
-      size: 4060
+      md5: d2b736e2b4cecb710a93ff535efab30e
+      size: 6613
     - path: src/clusterllm/perspective/finetuning/convert_triplet_self_cont.py
       hash: md5
-      md5: abf2fbf2ea83c0a7a38115f794e649ef
-      size: 2832
+      md5: c290bc0860cb4899952d7dacef491d1f
+      size: 5523
     - path: src/clusterllm/perspective/finetuning/finetune_cont.py
       hash: md5
-      md5: 1d2111805f9b7b13697081aac975ff72
-      size: 17317
+      md5: 1460109822b0570bb5278511169bcca8
+      size: 27720
     - path: src/clusterllm/perspective/finetuning/get_embedding_cont.py
       hash: md5
       md5: 7f8a6fb8b36e64ff3eff3081f66ecfdc
@@ -2309,62 +2368,57 @@ stages:
       size: 31495
     - path: src/clusterllm/perspective/predict_triplet/predict_cont.py
       hash: md5
-      md5: 0806f177630a76fac9d7ef97fa1c07c7
-      size: 6762
+      md5: 731167a4cbfa555d0db2ee6057d193d8
+      size: 16318
     - path: src/clusterllm/perspective/predict_triplet/triplet_sampling_cont.py
       hash: md5
-      md5: 0443c5ed9ca0ab8ac8cfe68b69cd7ef0
-      size: 4514
+      md5: 25352fba641d05bb743d1274d51fcc81
+      size: 8060
     params:
       params.yaml:
-        run2llms.dataset: massive_domain
-        run2llms.llm_pairs: llama3.2:3b-instruct-q8_0
-        run2llms.llm_triplet: llama3.2:3b-instruct-q8_0
+        run2llms.dataset: bank77
+        run2llms.llm_pairs: llama3.3:70b-instruct-q2_K
+        run2llms.llm_triplet: gemma:7b-instruct-q4_K_M
         run2llms.scale: small
         run2llms.seed: 42
     outs:
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/massive_domain/small/cluster_results_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/cluster_results_cont.json
       hash: md5
-      md5: 0707b9338ae51a9cea2621e70a0e7bcc
-      size: 685067304
+      md5: 78bf2a62b511238ab3113384a72a18b4
+      size: 552213445
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/massive_domain/small/num_clusters_cont.txt
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/num_clusters_cont.txt
       hash: md5
-      md5: d6ee2f4c1b429e1b0b82508f7e45e754
-      size: 588
+      md5: ca7ec7556ce2ffa73ea2f68b56c9b506
+      size: 564
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/massive_domain/small/pred_pairs_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/pred_pairs_cont.json
       hash: md5
-      md5: 00e7585be0c64f78512299f398ef1554
-      size: 875286
+      md5: c0184add6a1fbe104e0b9676588d5780
+      size: 1136848
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/massive_domain/small/pred_triplets_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/pred_triplets_cont.json
       hash: md5
-      md5: 9be4340ac3329eea7e26ee660003107c
-      size: 770351
-    - path: 
-        runs_cont/artifacts_contrib_2llms_cont/massive_domain/small/prompt_cont.json
+      md5: f4f87d5259c91926ecc6e0cdbda8b6dc
+      size: 1131039
+    - path: runs_cont/artifacts_contrib_2llms_cont/bank77/small/prompt_cont.json
       hash: md5
-      md5: 5feeb49e91c9a09dc43fa7e3d513bc68
-      size: 31260
-    - path: 
-        runs_cont/artifacts_contrib_2llms_cont/massive_domain/small/train_cont.json
+      md5: 9a480626fc916b76be0375f0a9db3bc5
+      size: 31163
+    - path: runs_cont/artifacts_contrib_2llms_cont/bank77/small/train_cont.json
       hash: md5
-      md5: 466754da5d378ba9b2ab11dc8c99ee9b
-      size: 4888340
-    - path: 
-        runs_cont/summary/contrib_2llms_cont/massive_domain/small/summary_cont.json
+      md5: 390b3a0cf91ebfa1fc8c03b5fee5dfec
+      size: 6729622
+    - path: runs_cont/summary/contrib_2llms_cont/bank77/small/summary_cont.json
       hash: md5
-      md5: d1c7c9868916602011bd24213aa1d6c3
-      size: 1450
-    - path: 
-        src/clusterllm/datasets/massive_domain/small_embeds_contrib_cont.hdf5
+      md5: 45d9083199e9e779dfa97f5a0164bd85
+      size: 1386
+    - path: src/clusterllm/datasets/bank77/small_embeds_contrib_cont.hdf5
       hash: md5
-      md5: 10a86c5cf745adfd10e3756b4957b5c2
-      size: 59344896
-    - path: 
-        src/clusterllm/datasets/massive_domain/small_embeds_ft_contrib_cont.hdf5
+      md5: db421cb7cdfa7d3702b52f36162da7c8
+      size: 53590016
+    - path: src/clusterllm/datasets/bank77/small_embeds_ft_contrib_cont.hdf5
       hash: md5
-      md5: 2c060e51ddbea78625164adfc176053e
-      size: 59344896
+      md5: 9f6b56b97010667bac668b905be66631
+      size: 53590016

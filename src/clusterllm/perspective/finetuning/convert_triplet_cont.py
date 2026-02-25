@@ -1,7 +1,40 @@
 # convert_triplet.py
-import json, os
+"""
+convert_triplet_cont.py
+
+CLUSTERLLM-style conversion: predicted triplet preferences -> INSTRUCTOR training triplets.
+
+Contribution #3 extension (uncertainty-aware supervision)
+--------------------------------------------------------
+This file STRICTLY PRESERVES the original conversion logic (pos/neg mapping and filtering),
+and ONLY EXTENDS the output schema by propagating soft supervision fields when available.
+
+Input (optional new fields per predicted item):
+  - p_choice1 : float in [0,1]  (empirical probability of choosing Choice 1 from self-consistency)
+  - weight    : float in [0,1]  (confidence weight, e.g., 1 - H/log(2))
+
+Output (added fields per training example):
+  - soft_pos_prob   : float in [0,1]  (probability that the chosen 'pos' is correct)
+  - example_weight  : float in [0,1]  (training weight)
+
+Mapping constraint:
+  - The original pos/neg logic MUST remain unchanged.
+  - soft_pos_prob MUST be consistent with that mapping:
+      if pick==1 -> pos corresponds to choice1 -> soft_pos_prob = p_choice1
+      if pick==2 -> pos corresponds to choice2 -> soft_pos_prob = p_choice2 = 1 - p_choice1
+
+Fallbacks (backward compatible):
+  - If p_choice1 or weight are missing/invalid:
+      soft_pos_prob = 1.0
+      example_weight = 1.0
+"""
+
+import json
+import os
 import argparse
 import random
+from typing import Any, Dict, Optional
+
 random.seed(0)
 
 parser = argparse.ArgumentParser()
@@ -13,7 +46,8 @@ parser.add_argument("--e5", action="store_true",
                     help="E5 does not allow instructions.")
 args = parser.parse_args()
 
-def get_text(ex):
+
+def get_text(ex: Dict[str, Any]) -> str:
     """Dataset-agnostic: try common fields."""
     for k in ("text", "input", "sentence", "utterance", "query"):
         if k in ex and isinstance(ex[k], str):
@@ -21,7 +55,8 @@ def get_text(ex):
     # last resort: stringify
     return str(ex)
 
-def normalize_choice(pred_val):
+
+def normalize_choice(pred_val: Any) -> Optional[int]:
     """
     Return 1 or 2 if we can parse a prediction, else None.
     Accepts:
@@ -66,6 +101,27 @@ def normalize_choice(pred_val):
         return 2
 
     return None
+
+
+def _safe_float(x: Any) -> Optional[float]:
+    """Parse float safely; return None if invalid."""
+    try:
+        v = float(x)
+    except Exception:
+        return None
+    if v != v:  # NaN
+        return None
+    return v
+
+
+def _clip01(v: float) -> float:
+    """Clip value to [0,1]."""
+    if v < 0.0:
+        return 0.0
+    if v > 1.0:
+        return 1.0
+    return v
+
 
 # load files
 with open(args.pred_path, 'r', encoding="utf-8") as f:
@@ -118,6 +174,28 @@ for pd in pred_data:
         pos = get_text(inp_data[c2])
         neg = get_text(inp_data[c1])
 
+    # -----------------------------
+    # Contribution #3 EXTENSION ONLY
+    # -----------------------------
+    # Read optional fields from prediction JSON and propagate to training JSON.
+    # Fallback to (1.0, 1.0) if missing or invalid.
+    p_choice1 = _safe_float(pd.get("p_choice1"))
+    weight = _safe_float(pd.get("weight"))
+
+    if p_choice1 is None or weight is None:
+        soft_pos_prob = 1.0
+        example_weight = 1.0
+    else:
+        p_choice1 = _clip01(p_choice1)
+        example_weight = _clip01(weight)
+
+        if pick == 1:
+            soft_pos_prob = p_choice1
+        else:
+            soft_pos_prob = 1.0 - p_choice1
+
+        soft_pos_prob = _clip01(soft_pos_prob)
+
     out_data.append({
         "query": [prompt, get_text(inp_data[q])],
         "pos": [prompt, pos],
@@ -125,7 +203,10 @@ for pd in pred_data:
         "task_name": args.dataset,
         "query_idx": q,
         "choice1_idx": c1,
-        "choice2_idx": c2
+        "choice2_idx": c2,
+        # Added fields (backward compatible)
+        "soft_pos_prob": soft_pos_prob,
+        "example_weight": example_weight,
     })
 
 

@@ -664,16 +664,16 @@ def build_tasks(
     tasks.append(Task("massive_intent", 11510, 2974, load_massive_intent))
 
     def load_massive_domain() -> pd.DataFrame:
-        hf_id = "mteb/amazon_massive_domain"
+        hf_id = "AmazonScience/massive"
         all_df = load_and_merge_splits(
-            hf_id, config="en",
+            hf_id, config="en-US",
             hf_token=hf_token,
             allow_remote_code=False,
             allow_remote_code_env=allow_remote_code_env,
             prefer_hf_files=True,
         )
         # MASSIVE domain: scenario as label (paper)
-        out = _normalize(all_df, "text", "scenario")
+        out = _normalize(all_df, "utt", "scenario")
         return out
 
     tasks.append(Task("massive_domain", 11514, 2974, load_massive_domain))

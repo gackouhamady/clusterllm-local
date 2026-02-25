@@ -1,9 +1,45 @@
 # convert_triplet_self.py
-import json, os
+"""
+convert_triplet_self_cont.py
+
+CLUSTERLLM-style self-training conversion: build triplets using embedding distances (self-labeling).
+
+STRICT RULE (respected):
+- The original self-labeling logic (pos/neg assignment by distance) is NOT modified.
+- Only EXTENDS the output schema to propagate soft supervision fields when available.
+
+Contribution #3 extension (uncertainty-aware supervision)
+--------------------------------------------------------
+Input (optional new fields per triplet item from pred_path JSON):
+  - p_choice1 : float in [0,1]  (empirical probability of choosing Choice 1)
+  - weight    : float in [0,1]  (confidence weight, e.g., 1 - H/log(2))
+
+Output (added fields per training example):
+  - soft_pos_prob   : float in [0,1]  (probability that the chosen 'pos' is correct)
+  - example_weight  : float in [0,1]  (training weight)
+
+Mapping requirement:
+- MUST preserve original pos/neg logic:
+    if choice1_dist <= choice2_dist: pos = choice1, neg = choice2
+    else:                            pos = choice2, neg = choice1
+- soft_pos_prob MUST be consistent with the chosen pos:
+    if pos == choice1 => soft_pos_prob = p_choice1
+    if pos == choice2 => soft_pos_prob = 1 - p_choice1
+
+Fallbacks (backward compatible):
+- If p_choice1 or weight is missing/invalid:
+    soft_pos_prob = 1.0
+    example_weight = 1.0
+"""
+
+import json
+import os
 import h5py
 import argparse
 import random
 import numpy as np
+from typing import Any, Dict, Optional
+
 random.seed(0)
 
 parser = argparse.ArgumentParser()
@@ -14,11 +50,33 @@ parser.add_argument("--output_path", default=None, type=str)
 parser.add_argument("--data_path", default=None, type=str)
 args = parser.parse_args()
 
-def get_text(ex):
+
+def get_text(ex: Dict[str, Any]) -> str:
     for k in ("text", "input", "sentence", "utterance", "query"):
         if k in ex and isinstance(ex[k], str):
             return ex[k]
     return str(ex)
+
+
+def _safe_float(x: Any) -> Optional[float]:
+    """Parse float safely; return None if invalid."""
+    try:
+        v = float(x)
+    except Exception:
+        return None
+    if v != v:  # NaN
+        return None
+    return v
+
+
+def _clip01(v: float) -> float:
+    """Clip value to [0,1]."""
+    if v < 0.0:
+        return 0.0
+    if v > 1.0:
+        return 1.0
+    return v
+
 
 with open(args.pred_path, 'r', encoding="utf-8") as f:
     triplets = json.load(f)
@@ -58,12 +116,33 @@ for pd in triplets:
     choice1_dist = float(((embeds[q] - embeds[c1]) ** 2).sum())
     choice2_dist = float(((embeds[q] - embeds[c2]) ** 2).sum())
 
+    # -----------------------------
+    # ORIGINAL SELF-LABELING LOGIC (UNCHANGED)
+    # -----------------------------
     if choice1_dist <= choice2_dist:
         pos = get_text(inp_data[c1])
         neg = get_text(inp_data[c2])
+        pos_is_choice1 = True
     else:
         pos = get_text(inp_data[c2])
         neg = get_text(inp_data[c1])
+        pos_is_choice1 = False
+
+    # -----------------------------
+    # Contribution #3 EXTENSION ONLY
+    # -----------------------------
+    # Propagate soft supervision if available on pd; otherwise fallback to 1.0/1.0.
+    p_choice1 = _safe_float(pd.get("p_choice1"))
+    weight = _safe_float(pd.get("weight"))
+
+    if p_choice1 is None or weight is None:
+        soft_pos_prob = 1.0
+        example_weight = 1.0
+    else:
+        p_choice1 = _clip01(p_choice1)
+        example_weight = _clip01(weight)
+        soft_pos_prob = p_choice1 if pos_is_choice1 else (1.0 - p_choice1)
+        soft_pos_prob = _clip01(soft_pos_prob)
 
     out_data.append({
         "query": [prompt, get_text(inp_data[q])],
@@ -72,7 +151,10 @@ for pd in triplets:
         "task_name": args.dataset,
         "query_idx": q,
         "choice1_idx": c1,
-        "choice2_idx": c2
+        "choice2_idx": c2,
+        # Added fields (backward compatible)
+        "soft_pos_prob": soft_pos_prob,
+        "example_weight": example_weight,
     })
 
 output_name = os.path.basename(args.pred_path).replace(".json", "-self-train.json")

@@ -6,17 +6,29 @@ set -euo pipefail
 # ------------------------------------------------------------
 
 MODELS=(
-  "llama3.3:70b-instruct-q2_K"
-  "qwen2.5:32b"
-  "deepseek-r1:32b"
+  # --- Modèles Très Petits & Ultra Rapides (< 4B paramètres) ---
+  "gemma2:2b"                   # Excellent ratio taille/performance, très fort en logique
+  "llama3.2:1b-instruct-q8_0"   # La version ultra-légère de Llama 3.2
+  "qwen2.5:1.5b"                # Très rapide, très bon respect des instructions
+  "qwen2.5:3b"                  # Un cran au-dessus du 1.5B, rivalise avec Llama 3.2 3B
+  "phi3.5:latest"               # 3.8B paramètres, développé par Microsoft, roi du raisonnement
+  "deepseek-r1:1.5b"            # Distillé pour exceller en logique mathématique et raisonnement
+  "smollm2:1.7b"                # Un modèle compact très récent et performant
+
+  # --- Modèles Petits/Moyens (~7B - 8B) ---
   "llama3.2:3b-instruct-q8_0"
+  "llama3.1:8b-instruct-q8_0"
+  "llama3:8b-instruct-q4_K_M"
   "llama3:latest"
   "qwen2.5:7b"
-  "mixtral:8x7b-instruct-v0.1-q4_0"
-  "llama3.1:8b-instruct-q8_0"
   "gemma:7b-instruct-q4_K_M"
   "mistral:7b-instruct-q4_K_M"
-  "llama3:8b-instruct-q4_K_M"
+
+  # --- Modèles Larges & Complexes (> 10B) ---
+  "mixtral:8x7b-instruct-v0.1-q4_0"
+  "qwen2.5:32b"
+  "deepseek-r1:32b"
+  "llama3.3:70b-instruct-q2_K"
 )
 
 # ---> MODIFIÉ ICI : Passage à 16 pour maximiser l'utilisation du GPU
