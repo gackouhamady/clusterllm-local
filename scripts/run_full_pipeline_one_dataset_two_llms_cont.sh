@@ -164,9 +164,9 @@ print(latest)
 PY
 }
 
-# -----------------------------
+# ------------------------------------------------------------------
 # Helper: check whether a python script supports a CLI flag
-# -----------------------------
+# ------------------------------------------------------------------
 supports_flag() {
   local script_path="$1"
   local flag="$2"
@@ -191,7 +191,7 @@ DATA_JSONL_CONT="$DATA_DIR/$ds/${sc}_cont.jsonl"
 test -f "$DATA_JSONL_CONT" || die "Missing $DATA_JSONL_CONT. Run DVC stage: prepare_${sc}_cont (or prepare_small_cont/prepare_large_cont)."
 
 # ------------------------------------------------------------------
-# STAGE 1) Baseline embeddings -> *_embeds_contrib_cont.hdf5
+# STAGE 1) Baseline embeddings -> *_embeds_contrib_cont.hdf5   
 # ------------------------------------------------------------------
 log "Stage 1: baseline embeddings (CONTRIB)"
 BASE_EMB_CONT="$DATA_DIR/$ds/${sc}_embeds_contrib_cont.hdf5"
@@ -230,7 +230,7 @@ python "$PRED_TRIPLET_DIR/triplet_sampling_cont.py" \
   --seed "$SEED"
 
 # ------------------------------------------------------------------
-# STAGE 3) Predict triplets (llm_triplet)
+# STAGE 3) Predict triplets (llm_triplet)    
 # ------------------------------------------------------------------
 log "Stage 3: predict triplets with ollama (CONTRIB llm_triplet=$llm_triplet)"
 TRIPLET_PRED_OUT="$WORK_DIR/triplet_preds_cont"
