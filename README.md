@@ -50,7 +50,55 @@ make install
 
 ```
 
-### 2. Data Setup (DVC)
+### 2. DVC
+
+#### Run first data pipelines   among  differentes configurations
+## Préparation des datasets (Small)
+
+```bash
+poetry run dvc repro prepare_small@bank77
+poetry run dvc repro prepare_small@clinc150
+poetry run dvc repro prepare_small@massive_intent
+poetry run dvc repro prepare_small@massive_domain
+poetry run dvc repro prepare_small@mtop_intent
+poetry run dvc repro prepare_small@mtop_domain
+poetry run dvc repro prepare_small@go_emotions
+poetry run dvc repro prepare_small@reddit
+poetry run dvc repro prepare_small@stackex
+poetry run dvc repro prepare_small@arxiv
+poetry run dvc repro prepare_small@few_event
+poetry run dvc repro prepare_small@few_nerd_nat
+poetry run dvc repro prepare_small@few_rel_nat
+poetry run dvc repro prepare_small@clinc_intent
+poetry run dvc repro prepare_small@clinc_domain
+
+```
+
+## Préparation des datasets (Large)
+
+```bash
+poetry run dvc repro prepare_large@bank77
+poetry run dvc repro prepare_large@clinc150
+poetry run dvc repro prepare_large@massive_intent
+poetry run dvc repro prepare_large@massive_domain
+poetry run dvc repro prepare_large@mtop_intent
+poetry run dvc repro prepare_large@mtop_domain
+poetry run dvc repro prepare_large@go_emotions
+poetry run dvc repro prepare_large@reddit
+poetry run dvc repro prepare_large@stackex
+poetry run dvc repro prepare_large@arxiv
+poetry run dvc repro prepare_large@few_event
+poetry run dvc repro prepare_large@few_nerd_nat
+poetry run dvc repro prepare_large@few_rel_nat
+poetry run dvc repro prepare_large@clinc_intent
+poetry run dvc repro prepare_large@clinc_domain
+```
+
+- all datasets  :
+ ```bash
+dvc repro prepare_small
+dvc repro prepare_large
+ ```
 
 We use DVC to version control datasets (Bank77, FewRel, etc.) and cached embeddings.
 ```bash
