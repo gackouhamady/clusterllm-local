@@ -44,7 +44,7 @@ Text clustering often lacks user-specified granularity and perspective. While **
 Clone the repo and install dependencies via Poetry or Docker:
 
 ```bash
-git clone [https://github.com/gackouhamady/clusterllm-local.git](https://github.com/gackouhamady/clusterllm-local.git)
+git clone https://github.com/gackouhamady/clusterllm-local.git
 cd clusterllm-local
 make install
 
@@ -53,7 +53,7 @@ make install
 ### 2. DVC
 
 #### Run first data pipelines   among  differentes configurations
-## Préparation des datasets (Small)
+##### Préparation des datasets (Small)
 
 ```bash
 poetry run dvc repro prepare_small@bank77
@@ -74,7 +74,7 @@ poetry run dvc repro prepare_small@clinc_domain
 
 ```
 
-## Préparation des datasets (Large)
+##### Préparation des datasets (Large)
 
 ```bash
 poetry run dvc repro prepare_large@bank77
@@ -94,95 +94,24 @@ poetry run dvc repro prepare_large@clinc_intent
 poetry run dvc repro prepare_large@clinc_domain
 ```
 
-- all datasets  :
+- all datasets prepare (small/large) :
  ```bash
-dvc repro prepare_small
-dvc repro prepare_large
+poetry  run dvc repro prepare_small
+poetry run dvc repro prepare_large
  ```
-
-We use DVC to version control datasets (Bank77, FewRel, etc.) and cached embeddings.
-```bash
-## Prepare data   from  source ( HF)
-
-chmod +x scripts/run_prepare_data_only.sh
-
-# single 
-ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh mtop_intent small
-## All small
-
-ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh all small 42
-
-## All large
-ALLOW_REMOTE_CODE=1 scripts/run_prepare_data_only.sh all large 42
-```
-##  Prepare Push Pull Sync
-```bash
-chmod +x scripts/dvc_prepare_and_sync.sh
-ALLOW_REMOTE_CODE=1 scripts/dvc_prepare_and_sync.sh push mtop_intent small 42
-ALLOW_REMOTE_CODE=1 scripts/dvc_prepare_and_sync.sh push all small 42
-ALLOW_REMOTE_CODE=1 scripts/dvc_prepare_and_sync.sh push all small 42
-scripts/dvc_prepare_and_sync.sh pull all small
-```
 ```bash
 # Push data to remote storage (Drive/S3)
 dvc push
 ```
-
 ```bash
 # Pull data from remote storage (Drive/S3)
 dvc pull
 ```
 
-
-
-
 # Run  :
+
 ## bash  
-```bash
-# Full pipeline (end-to-end) in ONE command
-# Args: <dataset> <scale> <llm_triplet> <llm_pairs> [seed]
-bash scripts/run_full_pipeline_one_dataset_two_llms.sh clinc150 small deepseek-r1:32b qwen2.5:32b 42
-
- 
-```
-
-To align with your preference for **`dvc repro`** while maintaining the **Poetry** environment and the parameters for the CLUSTERLLM framework, here is the updated command set.
-
-Note that `dvc repro` does not natively support the `--queue` or `-S` (parameter override) flags found in `dvc exp run`. To change parameters using `repro`, you typically modify the `params.yaml` file or use a script to inject them.
-
-### 1. Launch a Single Run
-
-This command executes the pipeline specifically for the `full_pipeline_2llms` stage as defined in your DVC project.
-
-```bash
-# Run a single reproduction through Poetry
-# Note: Ensure your params.yaml is set to clinc150/small/llama3.2/qwen2.5/42 first
-poetry run dvc repro full_pipeline_2llms
-
-```
-
-### 2. Run a Grid of 100 Configurations
-
-Since `dvc repro` executes immediately and doesn't use the experiment queue, we use a `while` loop to run them sequentially. This ensures you can process all 14 datasets and various granularities mentioned in the research.
-
-**Sequential Execution Loop**
-This script updates the configuration and runs the reproduction one after another.
-
-```bash
-# Run 100 reproductions sequentially
-while read -r ds sc lt lp seed; do
-  echo "Running: $ds $sc with $lt and $lp"
-  
-  # Optional: You can use 'yq' or 'sed' to update params.yaml here 
-  # to ensure dvc repro uses the new variables
-  
-  poetry run dvc repro full_pipeline_2llms
-done < configs/grid_100.txt
-
-```
-
 ## Pipeline de contribution (full_pipeline_2llms_cont)
-
 ```bash
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=bank77"
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc150"
@@ -199,11 +128,8 @@ poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=few_nerd_na
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=few_rel_nat"
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc_intent"
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc_domain"
-
 ```
-
 ## Pipeline réel (full_pipeline_2llms)
-
 ```bash
 poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=bank77"
 poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc150"
@@ -220,12 +146,8 @@ poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_nerd_nat"
 poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_rel_nat"
 poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc_intent"
 poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc_domain"
-
 ```
-
 ---
-
-
 
 ##  Methodology
 
