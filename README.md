@@ -148,6 +148,48 @@ done < configs/grid_100.txt
 
 ```
 
+## Pipeline de contribution (full_pipeline_2llms_cont)
+
+```bash
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=bank77"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc150"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=massive_intent"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=massive_domain"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=mtop_intent"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=mtop_domain"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=go_emotions"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=reddit"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=stackex"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=arxiv"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=few_event"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=few_nerd_nat"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=few_rel_nat"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc_intent"
+poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc_domain"
+
+```
+
+## Pipeline réel (full_pipeline_2llms)
+
+```bash
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=bank77"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc150"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=massive_intent"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=massive_domain"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=mtop_intent"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=mtop_domain"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=go_emotions"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=reddit"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=stackex"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=arxiv"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_event"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_nerd_nat"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_rel_nat"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc_intent"
+poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc_domain"
+
+```
+
 ---
 
 ###  Pipeline Logic & Memory Constraints
