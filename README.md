@@ -53,48 +53,104 @@ make install
 ### 2. DVC
 
 #### Run first data pipelines   among  differentes configurations
-##### Préparation des datasets (Small)
+##### Small
 
 ```bash
 poetry run dvc repro prepare_small@bank77
+```
+```bash
 poetry run dvc repro prepare_small@clinc150
+```
+```bash
 poetry run dvc repro prepare_small@massive_intent
+```
+```bash
 poetry run dvc repro prepare_small@massive_domain
+```
+```bash
 poetry run dvc repro prepare_small@mtop_intent
+```
+```bash
 poetry run dvc repro prepare_small@mtop_domain
+```
+```bash
 poetry run dvc repro prepare_small@go_emotions
+```
+```bash
 poetry run dvc repro prepare_small@reddit
+```
+```bash
 poetry run dvc repro prepare_small@stackex
+```
+```bash
 poetry run dvc repro prepare_small@arxiv
+```
+```bash
 poetry run dvc repro prepare_small@few_event
+```
+```bash
 poetry run dvc repro prepare_small@few_nerd_nat
+```
+```bash
 poetry run dvc repro prepare_small@few_rel_nat
+```
+```bash
 poetry run dvc repro prepare_small@clinc_intent
+```
+```bash
 poetry run dvc repro prepare_small@clinc_domain
 
 ```
 
-##### Préparation des datasets (Large)
+##### Large
 
 ```bash
 poetry run dvc repro prepare_large@bank77
+```
+```bash
 poetry run dvc repro prepare_large@clinc150
+```
+```bash
 poetry run dvc repro prepare_large@massive_intent
+```
+```bash
 poetry run dvc repro prepare_large@massive_domain
+```bash
+```
 poetry run dvc repro prepare_large@mtop_intent
+```
+```bash
 poetry run dvc repro prepare_large@mtop_domain
+```
+```bash
 poetry run dvc repro prepare_large@go_emotions
+```
+```bash
 poetry run dvc repro prepare_large@reddit
+```
+```bash
 poetry run dvc repro prepare_large@stackex
+```
+```bash
 poetry run dvc repro prepare_large@arxiv
+```
+```bash
 poetry run dvc repro prepare_large@few_event
+```
+```bash
 poetry run dvc repro prepare_large@few_nerd_nat
+```
+```bash
 poetry run dvc repro prepare_large@few_rel_nat
+```
+```bash
 poetry run dvc repro prepare_large@clinc_intent
+```
+```bash
 poetry run dvc repro prepare_large@clinc_domain
 ```
 
-- all datasets prepare (small/large) :
+- all datasets preparation (small/large) :
  ```bash
 poetry  run dvc repro prepare_small
 poetry run dvc repro prepare_large
@@ -111,7 +167,7 @@ dvc pull
 #### Run Models Pipelines ( contributions  / faithful reproduction) :
 
 
-##### Pipeline de contribution (full_pipeline_2llms_cont)
+##### full_pipeline_2llms_cont ( Contributions)
 ```bash
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=bank77"
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc150"
@@ -129,7 +185,7 @@ poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=few_rel_nat
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc_intent"
 poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc_domain"
 ```
-##### Pipeline réel (full_pipeline_2llms)
+##### full_pipeline_2llms (  Faithful  reproduction )  
 ```bash
 poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=bank77"
 poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc150"
