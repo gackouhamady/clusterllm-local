@@ -1,6 +1,10 @@
 [core]
     remote = myremote
     autostage = true
+[studio]
+    offline = false
+[exp]
+    auto_push = false
 ['remote "myremote"']
     url = gdrive://1YsCkh_UE62q3IAI96Uo_u94iVAEF4G2S
     gdrive_client_id = 949184945625-7jud0le4eklra4dnsks16nrbj53ct2v9.apps.googleusercontent.com

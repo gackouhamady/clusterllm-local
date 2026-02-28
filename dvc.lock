@@ -2315,8 +2315,8 @@ stages:
       md5: effa6f56a3f761459607a045be770fee
       size: 2611036
   full_pipeline_2llms_cont:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh 
-      clinc_intent small gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh bank77 
+      small phi3.5:latest llama3.3:70b-instruct-q2_K 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
       hash: md5
@@ -2326,10 +2326,10 @@ stages:
       hash: md5
       md5: 3cfb446f8d26e74fc50049f5ece759ff
       size: 22217
-    - path: src/clusterllm/datasets/clinc_intent/small_cont.jsonl
+    - path: src/clusterllm/datasets/bank77/small_cont.jsonl
       hash: md5
-      md5: 97b52e15036aa01c8d4b5e8ed9a346b5
-      size: 1291786
+      md5: cffc8b507b6768a8302a8c012a22ac55
+      size: 1100472
     - path: src/clusterllm/granularity/predict_num_clusters_cont.py
       hash: md5
       md5: 898dbdcc5e72b9f9fb7721c7179f0a5e
@@ -2376,53 +2376,49 @@ stages:
       size: 8060
     params:
       params.yaml:
-        run2llms.dataset: clinc_intent
+        run2llms.dataset: bank77
         run2llms.llm_pairs: llama3.3:70b-instruct-q2_K
-        run2llms.llm_triplet: gemma:7b-instruct-q4_K_M
+        run2llms.llm_triplet: phi3.5:latest
         run2llms.scale: small
         run2llms.seed: 42
     outs:
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/clinc_intent/small/cluster_results_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/cluster_results_cont.json
       hash: md5
-      md5: aa18a806066f0c5302ac5abc2a890051
-      size: 1258319645
+      md5: 6f0b2ebc6b6c8857b44571f315b1a0da
+      size: 552209608
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/clinc_intent/small/num_clusters_cont.txt
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/num_clusters_cont.txt
       hash: md5
-      md5: 96b9499239e2b083507b3f5b10b62407
-      size: 594
+      md5: 49a16a67f6f1da1e494a6374acd5bdcb
+      size: 564
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/clinc_intent/small/pred_pairs_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/pred_pairs_cont.json
       hash: md5
-      md5: 2d642e4c33a4028d340c776550ee0224
-      size: 918448
+      md5: 68201e5125213ab4f2a6e1e0f44579c5
+      size: 1191352
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/clinc_intent/small/pred_triplets_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/bank77/small/pred_triplets_cont.json
       hash: md5
-      md5: ef6924c027f8e3ede04a169653e5145a
-      size: 960227
-    - path: 
-        runs_cont/artifacts_contrib_2llms_cont/clinc_intent/small/prompt_cont.json
+      md5: aeb21495af602ef877d92ba0a375c220
+      size: 1077935
+    - path: runs_cont/artifacts_contrib_2llms_cont/bank77/small/prompt_cont.json
       hash: md5
-      md5: fe26bb0e4dabf16ee24c46485d1baaf8
-      size: 31128
-    - path: 
-        runs_cont/artifacts_contrib_2llms_cont/clinc_intent/small/train_cont.json
+      md5: 4880080da8072af9103a92f545015bb5
+      size: 31313
+    - path: runs_cont/artifacts_contrib_2llms_cont/bank77/small/train_cont.json
       hash: md5
-      md5: 05baf3bb051d203e92fe3bd2fcadbc4b
-      size: 5306005
-    - path: 
-        runs_cont/summary/contrib_2llms_cont/clinc_intent/small/summary_cont.json
+      md5: bc528de5bab8b0a4163814c6be550377
+      size: 6729622
+    - path: runs_cont/summary/contrib_2llms_cont/bank77/small/summary_cont.json
       hash: md5
-      md5: ba1e48e1ac588f3412fc6fabcc06ca01
-      size: 1446
-    - path: src/clusterllm/datasets/clinc_intent/small_embeds_contrib_cont.hdf5
+      md5: 2b6dff51c102e16f40d2a0a5d02ff959
+      size: 1375
+    - path: src/clusterllm/datasets/bank77/small_embeds_contrib_cont.hdf5
       hash: md5
-      md5: c9dcbcff16cad3c8a6f6a1687033213b
-      size: 79874048
-    - path: 
-        src/clusterllm/datasets/clinc_intent/small_embeds_ft_contrib_cont.hdf5
+      md5: db421cb7cdfa7d3702b52f36162da7c8
+      size: 53590016
+    - path: src/clusterllm/datasets/bank77/small_embeds_ft_contrib_cont.hdf5
       hash: md5
-      md5: 7983b25eb8d247304961171bab67e95f
-      size: 79874048
+      md5: 69ca352f1145efeec9aa74b7214592d3
+      size: 53590016

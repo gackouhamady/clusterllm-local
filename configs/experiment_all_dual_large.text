@@ -1,0 +1,14 @@
+bank77 large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+clinc150 large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+mtop_intent large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+massive_intent large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+few_rel_nat large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+few_nerd_nat large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+few_event large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+stackex large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+arxiv large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+reddit large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+go_emotions large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+clinc_domain large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+mtop_domain large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42
+massive_domain large gemma:7b-instruct-q4_K_M llama3.3:70b-instruct-q2_K 42

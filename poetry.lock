@@ -1563,6 +1563,46 @@ docs = ["mkdocs (>=1.5.2,<2)", "mkdocs-gen-files (>=0.5.0,<1)", "mkdocs-material
 tests = ["pytest (>=7,<9)", "pytest-celery (<1)", "pytest-cov (>=4.1.0)", "pytest-mock", "pytest-rerunfailures", "pytest-sugar", "pytest-test-utils (>=0.0.6)"]
 
 [[package]]
+name = "dvclive"
+version = "3.49.0"
+description = "Experiments logger for ML projects."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "dvclive-3.49.0-py3-none-any.whl", hash = "sha256:217ca54940098617ccecb280b1fe8d858711e957a65b04b384ffacaec252f90e"},
+    {file = "dvclive-3.49.0.tar.gz", hash = "sha256:e5316ffeeed2bab6ebc470d6e754954962d7252a88f97b206106a83841ba5291"},
+]
+
+[package.dependencies]
+dvc = ">=3.48.4"
+dvc-render = ">=1.0.0,<2"
+dvc-studio-client = ">=0.20,<1"
+funcy = "*"
+gto = "*"
+psutil = "*"
+pynvml = "*"
+"ruamel.yaml" = "*"
+scmrepo = ">=3,<4"
+
+[package.extras]
+all = ["dvclive[fastai,huggingface,image,lgbm,lightning,markdown,mmcv,optuna,plots,tf,xgb]"]
+dev = ["dvclive[fastai,huggingface,image,lgbm,lightning,markdown,optuna,plots,tests,tf,xgb]", "mypy (==1.17.1)", "types-PyYAML"]
+fastai = ["fastai"]
+huggingface = ["datasets", "transformers"]
+image = ["numpy", "pillow"]
+lgbm = ["lightgbm"]
+lightning = ["jsonargparse[signatures] (>=4.26.1)", "lightning (>=2.0)", "torch"]
+markdown = ["matplotlib"]
+mmcv = ["mmcv"]
+optuna = ["optuna"]
+plots = ["numpy", "pandas", "scikit-learn"]
+sklearn = ["scikit-learn (>=1.5.0)"]
+tests = ["dpath", "dvclive[image,markdown,plots]", "ipython", "pytest (>=7.2.0,<9.0)", "pytest-cov (>=3.0.0,<7.0)", "pytest-mock (>=3.8.2,<4.0)", "pytest-sugar (>=0.9.6,<2.0)", "pytest_voluptuous", "tf-keras", "transformers[torch]"]
+tf = ["tensorflow"]
+xgb = ["xgboost"]
+
+[[package]]
 name = "entrypoints"
 version = "0.4"
 description = "Discover and load entry points from installed packages."
@@ -2443,26 +2483,25 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "huggingface-hub"
-version = "1.4.1"
+version = "1.5.0"
 description = "Client library to download and publish models, datasets and other repos on the huggingface.co hub"
 optional = false
 python-versions = ">=3.9.0"
 groups = ["main"]
 files = [
-    {file = "huggingface_hub-1.4.1-py3-none-any.whl", hash = "sha256:9931d075fb7a79af5abc487106414ec5fba2c0ae86104c0c62fd6cae38873d18"},
-    {file = "huggingface_hub-1.4.1.tar.gz", hash = "sha256:b41131ec35e631e7383ab26d6146b8d8972abc8b6309b963b306fbcca87f5ed5"},
+    {file = "huggingface_hub-1.5.0-py3-none-any.whl", hash = "sha256:c9c0b3ab95a777fc91666111f3b3ede71c0cdced3614c553a64e98920585c4ee"},
+    {file = "huggingface_hub-1.5.0.tar.gz", hash = "sha256:f281838db29265880fb543de7a23b0f81d3504675de82044307ea3c6c62f799d"},
 ]
 
 [package.dependencies]
-filelock = "*"
+filelock = ">=3.10.0"
 fsspec = ">=2023.5.0"
 hf-xet = {version = ">=1.2.0,<2.0.0", markers = "platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"arm64\" or platform_machine == \"aarch64\""}
 httpx = ">=0.23.0,<1"
 packaging = ">=20.9"
 pyyaml = ">=5.1"
-shellingham = "*"
 tqdm = ">=4.42.1"
-typer-slim = "*"
+typer = "*"
 typing-extensions = ">=4.1.0"
 
 [package.extras]
@@ -2555,6 +2594,18 @@ groups = ["dev"]
 files = [
     {file = "iniconfig-2.3.0-py3-none-any.whl", hash = "sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12"},
     {file = "iniconfig-2.3.0.tar.gz", hash = "sha256:c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730"},
+]
+
+[[package]]
+name = "instructorembedding"
+version = "1.0.1"
+description = "Text embedding tool"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "InstructorEmbedding-1.0.1-py2.py3-none-any.whl", hash = "sha256:c8d0c11d0bab3ede023104e1f3de6a3471bf71208cc272d1ef72bae771e7d1a3"},
+    {file = "InstructorEmbedding-1.0.1.tar.gz", hash = "sha256:886495ddd561bad57e8e7d5e8ee44c4243b1d80b538a25d32d37350f6082ee62"},
 ]
 
 [[package]]
@@ -3757,6 +3808,18 @@ files = [
 ]
 
 [[package]]
+name = "nvidia-ml-py"
+version = "13.590.48"
+description = "Python Bindings for the NVIDIA Management Library"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "nvidia_ml_py-13.590.48-py3-none-any.whl", hash = "sha256:fd43d30ee9cd0b7940f5f9f9220b68d42722975e3992b6c21d14144c48760e43"},
+    {file = "nvidia_ml_py-13.590.48.tar.gz", hash = "sha256:8184d1be52914ac7f0991cd1c0d946c65dc88a840c754cd12c274b77b88760dd"},
+]
+
+[[package]]
 name = "nvidia-nccl-cu12"
 version = "2.27.5"
 description = "NVIDIA Collective Communication Library (NCCL) Runtime"
@@ -4807,14 +4870,14 @@ types = ["mypy"]
 
 [[package]]
 name = "pydrive2"
-version = "1.21.2"
+version = "1.21.1"
 description = "Google Drive API made easy. Maintained fork of PyDrive."
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "PyDrive2-1.21.2-py3-none-any.whl", hash = "sha256:a3b72e522b8f5ba4e93ab165bbf120544567583c61a6c7904ef1ff47afc005d6"},
-    {file = "pydrive2-1.21.2.tar.gz", hash = "sha256:2a21c8319a225943c70e7566eb13a1524d1d7193621de1eb8e5f95e037641508"},
+    {file = "PyDrive2-1.21.1-py3-none-any.whl", hash = "sha256:d24b3334bc5c242e5ec58ad6ee7efbd2216aa92098c3eed353ce644f27a7e97b"},
+    {file = "pydrive2-1.21.1.tar.gz", hash = "sha256:70da0244a29a6922e28620a32e251ac6ab018449f1bb0485e9a39114a069dde0"},
 ]
 
 [package.dependencies]
@@ -4823,7 +4886,7 @@ fsspec = {version = ">=2021.7.0", optional = true, markers = "extra == \"fsspec\
 funcy = {version = ">=1.14", optional = true, markers = "extra == \"fsspec\""}
 google-api-python-client = ">=1.12.5"
 oauth2client = ">=4.0.0"
-pyOpenSSL = ">=19.1.0,<=24.2.1"
+pyOpenSSL = ">=19.1.0"
 PyYAML = ">=3.0"
 tqdm = {version = ">=4.0.0", optional = true, markers = "extra == \"fsspec\""}
 
@@ -4940,23 +5003,42 @@ files = [
 ]
 
 [[package]]
-name = "pyopenssl"
-version = "22.0.0"
-description = "Python wrapper module around the OpenSSL library"
+name = "pynvml"
+version = "13.0.1"
+description = "Python utilities for the NVIDIA Management Library"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "pyOpenSSL-22.0.0-py2.py3-none-any.whl", hash = "sha256:ea252b38c87425b64116f808355e8da644ef9b07e429398bfece610f893ee2e0"},
-    {file = "pyOpenSSL-22.0.0.tar.gz", hash = "sha256:660b1b1425aac4a1bea1d94168a85d99f0b3144c869dd4390d27629d0087f1bf"},
+    {file = "pynvml-13.0.1-py3-none-any.whl", hash = "sha256:e2b20e0a501eeec951e2455b7ab444759cf048e0e13a57b08049fa2775266aa8"},
+    {file = "pynvml-13.0.1.tar.gz", hash = "sha256:1245991d9db786b4d2f277ce66869bd58f38ac654e38c9397d18f243c8f6e48f"},
 ]
 
 [package.dependencies]
-cryptography = ">=35.0"
+nvidia-ml-py = ">=12.0.0"
 
 [package.extras]
-docs = ["sphinx", "sphinx-rtd-theme"]
-test = ["flaky", "pretend", "pytest (>=3.0.1)"]
+test = ["pytest (>=3.6)", "pytest-cov", "pytest-runner"]
+
+[[package]]
+name = "pyopenssl"
+version = "25.3.0"
+description = "Python wrapper module around the OpenSSL library"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "pyopenssl-25.3.0-py3-none-any.whl", hash = "sha256:1fda6fc034d5e3d179d39e59c1895c9faeaf40a79de5fc4cbbfbe0d36f4a77b6"},
+    {file = "pyopenssl-25.3.0.tar.gz", hash = "sha256:c981cb0a3fd84e8602d7afc209522773b94c1c2446a3c710a75b06fe1beae329"},
+]
+
+[package.dependencies]
+cryptography = ">=45.0.7,<47"
+typing-extensions = {version = ">=4.9", markers = "python_version < \"3.13\" and python_version >= \"3.8\""}
+
+[package.extras]
+docs = ["sphinx (!=5.2.0,!=5.2.0.post0,!=7.2.5)", "sphinx_rtd_theme"]
+test = ["pretend", "pytest (>=3.0.1)", "pytest-rerunfailures"]
 
 [[package]]
 name = "pyparsing"
@@ -6380,14 +6462,14 @@ tutorials = ["matplotlib", "pandas", "tabulate"]
 
 [[package]]
 name = "typer"
-version = "0.24.0"
+version = "0.24.1"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "typer-0.24.0-py3-none-any.whl", hash = "sha256:5fc435a9c8356f6160ed6e85a6301fdd6e3d8b2851da502050d1f92c5e9eddc8"},
-    {file = "typer-0.24.0.tar.gz", hash = "sha256:f9373dc4eff901350694f519f783c29b6d7a110fc0dcc11b1d7e353b85ca6504"},
+    {file = "typer-0.24.1-py3-none-any.whl", hash = "sha256:112c1f0ce578bfb4cab9ffdabc68f031416ebcc216536611ba21f04e9aa84c9e"},
+    {file = "typer-0.24.1.tar.gz", hash = "sha256:e39b4732d65fbdcde189ae76cf7cd48aeae72919dea1fdfc16593be016256b45"},
 ]
 
 [package.dependencies]
@@ -6924,4 +7006,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.12"
-content-hash = "a53a4f6e34d52a9be0d3213b4d98aa3b0d8fc16e0e754ac29d3547ca0414d029"
+content-hash = "ee0b9394c456acf94b7584d2a85e1c028761054ab0c48e9ce2a329a5c16d4aed"

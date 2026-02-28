@@ -29,6 +29,7 @@ NOTE:
   - You should still use Trainer's built-in gradient clipping via --max_grad_norm.
 """
 
+
 import logging
 import os
 import sys
@@ -59,8 +60,12 @@ from transformers import (
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import check_min_version
 from transformers.utils.versions import require_version
+
 from torch.utils.data import SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
+
+from dvclive import Live
+from transformers.integrations import DVCLiveCallback
 
 
 # ---- transformers version compatibility (robust) ----
@@ -485,6 +490,24 @@ def main():
     training_args.remove_unused_columns = False
     os.makedirs(training_args.output_dir, exist_ok=True)
 
+        # -------------------------
+    # DVCLive (DVC Studio live metrics)
+    # -------------------------
+    dvclive_dir = os.path.join(training_args.output_dir, "dvclive")
+    os.makedirs(dvclive_dir, exist_ok=True)
+
+    try:
+        live = Live(dir=dvclive_dir)
+    except TypeError:
+        # compat DVCLive: certains acceptent Live(path) au lieu de Live(dir=...)
+        live = Live(dvclive_dir)
+
+    try:
+        dvclive_cb = DVCLiveCallback(live=live)
+    except TypeError:
+        # compat transformers: certains acceptent DVCLiveCallback(live)
+        dvclive_cb = DVCLiveCallback(live)
+
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -637,7 +660,15 @@ def main():
         eval_dataset=None,
         data_collator=data_collator,
         compute_metrics=None,
+        callbacks=[dvclive_cb],
     )
+
+    trainer.save_state()
+
+    try:
+        live.end()
+    except Exception:
+        pass
 
     checkpoint = None
     if training_args.resume_from_checkpoint is not None:
