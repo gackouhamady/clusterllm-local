@@ -1,12 +1,12 @@
 run:
-  dataset: reddit
+  dataset: bank77
   scale: small
-  llm_triplet:  phi3.5:latest
-  llm_pairs:  llama3.3:70b-instruct-q2_K
+  llm_triplet: gemma:7b-instruct-q4_K_M
+  llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 run2llms:
-  dataset: reddit
+  dataset: bank77
   scale: small
   llm_triplet: phi3.5:latest
   llm_pairs: llama3.3:70b-instruct-q2_K
@@ -14,18 +14,18 @@ run2llms:
 
 datasets:
   all:
-    - bank77
-    - clinc150
-    - massive_intent
-    - massive_domain
-    - mtop_intent
-    - mtop_domain
-    - go_emotions
-    - reddit
-    - stackex
-    - arxiv
-    - few_event
-    - few_nerd_nat
-    - few_rel_nat
-    - clinc_intent
-    - clinc_domain
+  - bank77
+  - clinc150
+  - massive_intent
+  - massive_domain
+  - mtop_intent
+  - mtop_domain
+  - go_emotions
+  - reddit
+  - stackex
+  - arxiv
+  - few_event
+  - few_nerd_nat
+  - few_rel_nat
+  - clinc_intent
+  - clinc_domain
