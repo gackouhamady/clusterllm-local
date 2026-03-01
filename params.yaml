@@ -1,14 +1,14 @@
 run:
   dataset: bank77
   scale: small
-  llm_triplet: gemma:7b-instruct-q4_K_M
+  llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 run2llms:
-  dataset: bank77
+  dataset: stackex
   scale: small
-  llm_triplet: gemma:7b-instruct-q4_K_M
+  llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 

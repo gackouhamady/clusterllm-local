@@ -7,5 +7,5 @@
     auto_push = false
 ['remote "myremote"']
     url = gdrive://1YsCkh_UE62q3IAI96Uo_u94iVAEF4G2S
-    gdrive_client_id = 949184945625-7jud0le4eklra4dnsks16nrbj53ct2v9.apps.googleusercontent.com
-    gdrive_client_secret = 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
+    gdrive_client_id = 42640418833-8pjsvbfggbbaeda87a4f1gqhn8k9gnrk.apps.googleusercontent.com
+    gdrive_client_secret = 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
