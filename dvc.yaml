@@ -7,15 +7,15 @@ stages:
         bash scripts/run_prepare_data_only.sh
         ${item} small ${run.seed}
       deps:
-        - scripts/run_prepare_data_only.sh
-        - src/data/prepare_data.py
+      - scripts/run_prepare_data_only.sh
+      - src/data/prepare_data.py
       params:
-        - run.seed
-        - datasets.all
+      - run.seed
+      - datasets.all
       outs:
-        - src/clusterllm/datasets/${item}/small.jsonl
-        - data/raw/${item}_small_train.csv
-        - data/raw/${item}_small_eval.csv
+      - src/clusterllm/datasets/${item}/small.jsonl
+      - data/raw/${item}_small_train.csv
+      - data/raw/${item}_small_eval.csv
 
   prepare_large:
     foreach: ${datasets.all}
@@ -25,15 +25,15 @@ stages:
         bash scripts/run_prepare_data_only.sh
         ${item} large ${run.seed}
       deps:
-        - scripts/run_prepare_data_only.sh
-        - src/data/prepare_data.py
+      - scripts/run_prepare_data_only.sh
+      - src/data/prepare_data.py
       params:
-        - run.seed
-        - datasets.all
+      - run.seed
+      - datasets.all
       outs:
-        - src/clusterllm/datasets/${item}/large.jsonl
-        - data/raw/${item}_large_train.csv
-        - data/raw/${item}_large_eval.csv
+      - src/clusterllm/datasets/${item}/large.jsonl
+      - data/raw/${item}_large_train.csv
+      - data/raw/${item}_large_eval.csv
 
   prepare_small_cont:
     foreach: ${datasets.all}
@@ -49,15 +49,15 @@ stages:
         &&
         cp -f data/raw/${item}_small_eval.csv  data/raw/${item}_small_eval_cont.csv
       deps:
-        - scripts/run_prepare_data_only.sh
-        - src/data/prepare_data.py
+      - scripts/run_prepare_data_only.sh
+      - src/data/prepare_data.py
       params:
-        - run.seed
-        - datasets.all
+      - run.seed
+      - datasets.all
       outs:
-        - src/clusterllm/datasets/${item}/small_cont.jsonl
-        - data/raw/${item}_small_train_cont.csv
-        - data/raw/${item}_small_eval_cont.csv
+      - src/clusterllm/datasets/${item}/small_cont.jsonl
+      - data/raw/${item}_small_train_cont.csv
+      - data/raw/${item}_small_eval_cont.csv
 
   prepare_large_cont:
     foreach: ${datasets.all}
@@ -73,49 +73,49 @@ stages:
         &&
         cp -f data/raw/${item}_large_eval.csv  data/raw/${item}_large_eval_cont.csv
       deps:
-        - scripts/run_prepare_data_only.sh
-        - src/data/prepare_data.py
+      - scripts/run_prepare_data_only.sh
+      - src/data/prepare_data.py
       params:
-        - run.seed
-        - datasets.all
+      - run.seed
+      - datasets.all
       outs:
-        - src/clusterllm/datasets/${item}/large_cont.jsonl
-        - data/raw/${item}_large_train_cont.csv
-        - data/raw/${item}_large_eval_cont.csv
+      - src/clusterllm/datasets/${item}/large_cont.jsonl
+      - data/raw/${item}_large_train_cont.csv
+      - data/raw/${item}_large_eval_cont.csv
 
   full_pipeline_2llms:
-    cmd: >- 
+    cmd: >-
       bash scripts/run_full_pipeline_one_dataset_two_llms.sh
       ${run.dataset} ${run.scale} ${run.llm_triplet} ${run.llm_pairs} ${run.seed}
     deps:
-      - scripts/run_full_pipeline_one_dataset_two_llms.sh
-      - scripts/patch_get_embedding_safetensors.py
-      - src/clusterllm/datasets/${run.dataset}/${run.scale}.jsonl
-      - src/clusterllm/perspective/predict_triplet/triplet_sampling.py
-      - src/clusterllm/perspective/predict_triplet/predict.py
-      - src/clusterllm/perspective/finetuning/convert_triplet.py
-      - src/clusterllm/perspective/finetuning/convert_triplet_self.py
-      - src/clusterllm/perspective/finetuning/finetune.py
-      - src/clusterllm/perspective/finetuning/get_embedding.py
-      - src/clusterllm/perspective/finetuning/prompts.json
-      - src/clusterllm/granularity/sample_pairs.py
-      - src/clusterllm/granularity/sample_pairs_for_prompt.py
-      - src/clusterllm/granularity/predict_pairs.py
-      - src/clusterllm/granularity/predict_num_clusters.py
+    - scripts/run_full_pipeline_one_dataset_two_llms.sh
+    - scripts/patch_get_embedding_safetensors.py
+    - src/clusterllm/datasets/${run.dataset}/${run.scale}.jsonl
+    - src/clusterllm/perspective/predict_triplet/triplet_sampling.py
+    - src/clusterllm/perspective/predict_triplet/predict.py
+    - src/clusterllm/perspective/finetuning/convert_triplet.py
+    - src/clusterllm/perspective/finetuning/convert_triplet_self.py
+    - src/clusterllm/perspective/finetuning/finetune.py
+    - src/clusterllm/perspective/finetuning/get_embedding.py
+    - src/clusterllm/perspective/finetuning/prompts.json
+    - src/clusterllm/granularity/sample_pairs.py
+    - src/clusterllm/granularity/sample_pairs_for_prompt.py
+    - src/clusterllm/granularity/predict_pairs.py
+    - src/clusterllm/granularity/predict_num_clusters.py
     params:
-      - run.dataset
-      - run.scale
-      - run.llm_triplet
-      - run.llm_pairs
-      - run.seed
+    - run.dataset
+    - run.scale
+    - run.llm_triplet
+    - run.llm_pairs
+    - run.seed
     outs:
-      - runs/perspective:
-          cache: false
-      - runs/granularity:
-          cache: false
+    - runs/perspective:
+        cache: false
+    - runs/granularity:
+        cache: false
     metrics:
-      - runs/summary/full_pipeline_2llms/${run.dataset}/${run.scale}/summary.json:
-          cache: false
+    - runs/summary/full_pipeline_2llms/${run.dataset}/${run.scale}/summary.json:
+        cache: false
 
   # ============================================================
   ## CONTRIBUTION
@@ -123,37 +123,77 @@ stages:
   full_pipeline_2llms_cont:
     cmd: >-
       bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh
-      ${run2llms.dataset} ${run2llms.scale} ${run2llms.llm_triplet} ${run2llms.llm_pairs} ${run2llms.seed}
+      ${run2llms.dataset} ${run2llms.scale} ${run2llms.llm_triplet} ${run2llms.llm_pairs}
+      ${run2llms.seed}
     deps:
-      - scripts/run_full_pipeline_one_dataset_two_llms_cont.sh
-      - scripts/patch_get_embedding_safetensors.py
-      - src/clusterllm/datasets/${run2llms.dataset}/${run2llms.scale}_cont.jsonl
-      - src/clusterllm/perspective/finetuning/get_embedding_cont.py
-      - src/clusterllm/perspective/predict_triplet/triplet_sampling_cont.py
-      - src/clusterllm/perspective/predict_triplet/predict_cont.py
-      - src/clusterllm/perspective/finetuning/convert_triplet_cont.py
-      - src/clusterllm/perspective/finetuning/convert_triplet_self_cont.py
-      - src/clusterllm/perspective/finetuning/finetune_cont.py
-      - src/clusterllm/perspective/finetuning/prompts.json
-      - src/clusterllm/granularity/sample_pairs_cont.py
-      - src/clusterllm/granularity/sample_pairs_for_prompt_cont.py
-      - src/clusterllm/granularity/predict_pairs_cont.py
-      - src/clusterllm/granularity/predict_num_clusters_cont.py
+    - scripts/run_full_pipeline_one_dataset_two_llms_cont.sh
+    - scripts/patch_get_embedding_safetensors.py
+    - src/clusterllm/datasets/${run2llms.dataset}/${run2llms.scale}_cont.jsonl
+    - src/clusterllm/perspective/finetuning/get_embedding_cont.py
+    - src/clusterllm/perspective/predict_triplet/triplet_sampling_cont.py
+    - src/clusterllm/perspective/predict_triplet/predict_cont.py
+    - src/clusterllm/perspective/finetuning/convert_triplet_cont.py
+    - src/clusterllm/perspective/finetuning/convert_triplet_self_cont.py
+    - src/clusterllm/perspective/finetuning/finetune_cont.py
+    - src/clusterllm/perspective/finetuning/prompts.json
+    - src/clusterllm/granularity/sample_pairs_cont.py
+    - src/clusterllm/granularity/sample_pairs_for_prompt_cont.py
+    - src/clusterllm/granularity/predict_pairs_cont.py
+    - src/clusterllm/granularity/predict_num_clusters_cont.py
     params:
-      - run2llms.dataset
-      - run2llms.scale
-      - run2llms.llm_triplet
-      - run2llms.llm_pairs
-      - run2llms.seed
+    - run2llms.dataset
+    - run2llms.scale
+    - run2llms.llm_triplet
+    - run2llms.llm_pairs
+    - run2llms.seed
     outs:
-      - src/clusterllm/datasets/${run2llms.dataset}/${run2llms.scale}_embeds_contrib_cont.hdf5
-      - src/clusterllm/datasets/${run2llms.dataset}/${run2llms.scale}_embeds_ft_contrib_cont.hdf5
-      - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/pred_triplets_cont.json
-      - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/train_cont.json
-      - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/cluster_results_cont.json
-      - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/prompt_cont.json
-      - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/pred_pairs_cont.json
-      - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/num_clusters_cont.txt
+    - src/clusterllm/datasets/${run2llms.dataset}/${run2llms.scale}_embeds_contrib_cont.hdf5
+    - src/clusterllm/datasets/${run2llms.dataset}/${run2llms.scale}_embeds_ft_contrib_cont.hdf5
+    - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/pred_triplets_cont.json
+    - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/train_cont.json
+    - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/cluster_results_cont.json
+    - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/prompt_cont.json
+    - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/pred_pairs_cont.json
+    - runs_cont/artifacts_contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/num_clusters_cont.txt
     metrics:
-      - runs_cont/summary/contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/summary_cont.json:
-          cache: false
+    - runs_cont/summary/contrib_2llms_cont/${run2llms.dataset}/${run2llms.scale}/summary_cont.json:
+        cache: false
+params:
+- runs_cont/_work_contrib_2llms/clinc150/small/t=gemma__7b-instruct-q4_K_M__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/massive_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/bank77/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/mtop_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/reddit/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/stackex/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+metrics:
+- runs_cont/_work_contrib_2llms/clinc150/small/t=gemma__7b-instruct-q4_K_M__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/massive_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/bank77/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/mtop_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/reddit/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/stackex/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+plots:
+- ? runs_cont/_work_contrib_2llms/clinc150/small/t=gemma__7b-instruct-q4_K_M__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/massive_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/bank77/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/mtop_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/reddit/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
+- ? runs_cont/_work_contrib_2llms/stackex/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+  : x: step
