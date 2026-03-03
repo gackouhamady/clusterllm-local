@@ -237,7 +237,7 @@ test -f "${standard_train_json:-}" || die "convert_triplet did not create a trai
     --feat_path "$DATA_DIR/$ds/${sc}_embeds.hdf5" \
     --output_path "$CONV_DIR" \
     --data_path "$DATA_DIR/$ds/$sc.jsonl" \
-    || true
+  || true
 )
 
 self_train_json="$(newest_file "$CONV_DIR"/*self*train*.json)"
@@ -252,15 +252,12 @@ log "train_json=$train_json"
 # ------------------------------------------------------------------
 # STAGE 5) Finetune Instructor
 # ------------------------------------------------------------------
-export PYTORCH_ALLOC_CONF="expandable_segments:True"
-export CUDA_VISIBLE_DEVICES="0"
+export PYTORCH_ALLOC_CONF="${PYTORCH_ALLOC_CONF:-expandable_segments:True}"
+export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 log "Stage 5: finetune instructor"
 OUT_CKPT="$ROOT/runs/perspective/checkpoints/$ds/$sc/$run_tag/$llm_triplet_dir"
 rm -rf "$OUT_CKPT"
 mkdir -p "$OUT_CKPT"
-
-export PYTORCH_ALLOC_CONF="${PYTORCH_ALLOC_CONF:-expandable_segments:True}"
-export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 
 python "$FT_DIR/finetune.py" \
   --model_name_or_path "hkunlp/instructor-large" \
@@ -378,8 +375,6 @@ touch "$MARKER"
     --ollama-num-predict "$OLLAMA_NUM_PREDICT"
 )
 
-
-
 free_gpu_ollama "$llm_pairs" # <-- NOUVEAU
 
 # find newest json after marker (predictions)
@@ -440,17 +435,17 @@ SUMMARY_JSON="$SUMMARY_DIR/summary.json"
 python - <<PY
 import json, os
 
-ds = ${ds@Q}
-sc = ${sc@Q}
-llm_triplet = ${llm_triplet@Q}
-llm_pairs = ${llm_pairs@Q}
-seed = int(${SEED@Q})
-run_tag = ${run_tag@Q}
+ds = '${ds}'
+sc = '${sc}'
+llm_triplet = '${llm_triplet}'
+llm_pairs = '${llm_pairs}'
+seed = int('${SEED}')
+run_tag = '${run_tag}'
 
-num_clusters_txt = ${NC_OUT@Q} + "/num_clusters.txt"
+num_clusters_txt = '${NC_OUT}' + "/num_clusters.txt"
+real_k = None
 estimated_k = None
 top10 = None
-real_k = None
 
 if os.path.exists(num_clusters_txt):
     lines = open(num_clusters_txt, "r", encoding="utf-8", errors="ignore").read().splitlines()
@@ -469,24 +464,24 @@ if os.path.exists(num_clusters_txt):
                 top10 = rhs
 
 out = {
-  "dataset": ds,
-  "scale": sc,
-  "llm_triplet": llm_triplet,
-  "llm_pairs": llm_pairs,
-  "seed": seed,
-  "run_tag": run_tag,
-  "ollama_base_url": ${OLLAMA_BASE_URL@Q},
-  "triplet_temperature": float(${TRIPLET_TEMPERATURE@Q}),
-  "pairs_temperature": float(${PAIRS_TEMPERATURE@Q}),
-  "num_clusters_txt": num_clusters_txt,
-  "real_k": real_k,
-  "estimated_k": estimated_k,
-  "top10_candidates": top10,
+    "dataset": ds,
+    "scale": sc,
+    "llm_triplet": llm_triplet,
+    "llm_pairs": llm_pairs,
+    "seed": seed,
+    "run_tag": run_tag,
+    "ollama_base_url": '${OLLAMA_BASE_URL}',
+    "triplet_temperature": float('${TRIPLET_TEMPERATURE}'),
+    "pairs_temperature": float('${PAIRS_TEMPERATURE}'),
+    "num_clusters_txt": num_clusters_txt,
+    "real_k": real_k,
+    "estimated_k": estimated_k,
+    "top10_candidates": top10,
 }
 
-os.makedirs(os.path.dirname(${SUMMARY_JSON@Q}), exist_ok=True)
-with open(${SUMMARY_JSON@Q}, "w", encoding="utf-8") as f:
+os.makedirs(os.path.dirname('${SUMMARY_JSON}'), exist_ok=True)
+with open('${SUMMARY_JSON}', "w", encoding="utf-8") as f:
     json.dump(out, f, indent=2, ensure_ascii=False)
 
-print("WROTE_SUMMARY:", ${SUMMARY_JSON@Q})
+print("WROTE_SUMMARY:", '${SUMMARY_JSON}')
 PY
