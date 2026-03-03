@@ -1,21 +1,20 @@
 run:
-  dataset: bank77
+  dataset: few_nerd_nat
   scale: small
-  llm_triplet: qwen2.5:3b
+  llm_triplet: phi3.5:latest
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 run2llms:
-  dataset: stackex
+  dataset: reddit
   scale: small
-  llm_triplet: qwen2.5:3b
+  llm_triplet: phi3.5:latest
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 datasets:
   all:
   - bank77
-  - clinc150
   - massive_intent
   - massive_domain
   - mtop_intent
