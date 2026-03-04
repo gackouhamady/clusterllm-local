@@ -6,7 +6,7 @@ run:
   seed: 42
 
 run2llms:
-  dataset: stackex
+  dataset: few_nerd_nat
   scale: small
   llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K
