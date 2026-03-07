@@ -14,7 +14,7 @@ url = "https://download.pytorch.org/whl/cu121"
 priority = "explicit"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12"
+python = ">=3.11.0rc1,<3.12"
 
 # Core scientific stack
 numpy = "1.26.4"

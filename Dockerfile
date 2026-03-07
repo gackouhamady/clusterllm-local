@@ -22,8 +22,6 @@ RUN python -m pip install "poetry==1.8.3"
 
 WORKDIR /workspace
 COPY pyproject.toml poetry.lock ./
-RUN poetry env use 3.11
-RUN poetry lock
 RUN poetry install --no-root --no-ansi
 
 COPY src ./src
