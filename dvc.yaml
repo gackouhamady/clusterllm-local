@@ -162,42 +162,32 @@ params:
 - runs_cont/_work_contrib_2llms/clinc150/small/t=gemma__7b-instruct-q4_K_M__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
 - runs_cont/_work_contrib_2llms/massive_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
 - runs_cont/_work_contrib_2llms/bank77/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
-- runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
 - runs_cont/_work_contrib_2llms/mtop_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
-- runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
-- runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
 - runs_cont/_work_contrib_2llms/reddit/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
 - runs_cont/_work_contrib_2llms/stackex/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
 - runs_cont/_work_contrib_2llms/few_nerd_nat/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/few_event/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/few_nerd_nat/large/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
+- runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/params.yaml
 metrics:
 - runs_cont/_work_contrib_2llms/clinc150/small/t=gemma__7b-instruct-q4_K_M__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
 - runs_cont/_work_contrib_2llms/massive_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
 - runs_cont/_work_contrib_2llms/bank77/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
-- runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
 - runs_cont/_work_contrib_2llms/mtop_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
-- runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
-- runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
 - runs_cont/_work_contrib_2llms/reddit/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
 - runs_cont/_work_contrib_2llms/stackex/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
 - runs_cont/_work_contrib_2llms/few_nerd_nat/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/few_event/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/few_nerd_nat/large/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
+- runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/metrics.json
 plots:
-- ? runs_cont/_work_contrib_2llms/clinc150/small/t=gemma__7b-instruct-q4_K_M__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
-  : x: step
-- ? runs_cont/_work_contrib_2llms/massive_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
-  : x: step
-- ? runs_cont/_work_contrib_2llms/bank77/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
+- ? runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
   : x: step
 - ? runs_cont/_work_contrib_2llms/massive_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
   : x: step
-- ? runs_cont/_work_contrib_2llms/mtop_intent/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
-  : x: step
-- ? runs_cont/_work_contrib_2llms/mtop_domain/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
-  : x: step
 - ? runs_cont/_work_contrib_2llms/go_emotions/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
-  : x: step
-- ? runs_cont/_work_contrib_2llms/reddit/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
-  : x: step
-- ? runs_cont/_work_contrib_2llms/stackex/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
-  : x: step
-- ? runs_cont/_work_contrib_2llms/few_nerd_nat/small/t=qwen2.5__3b__p=llama3.3__70b-instruct-q2_K__cont/checkpoint_contrib_cont/dvclive/plots/metrics
   : x: step

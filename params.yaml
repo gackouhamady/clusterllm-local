@@ -1,12 +1,12 @@
 run:
-  dataset: bank77
+  dataset: arxiv
   scale: small
   llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 run2llms:
-  dataset: few_nerd_nat
+  dataset: reddit
   scale: small
   llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K

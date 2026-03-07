@@ -88,3 +88,4 @@ src/clusterllm/granularity/sampled_pair_results/
 prompts.json*.json
 runs_cont/
 runs/
+*.log
