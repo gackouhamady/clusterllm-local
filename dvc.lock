@@ -1825,7 +1825,7 @@ stages:
       src/clusterllm/datasets/few_nerd_nat/small_cont.jsonl && cp -f 
       data/raw/few_nerd_nat_small_train.csv 
       data/raw/few_nerd_nat_small_train_cont.csv && cp -f 
-      data/raw/few_nerd_nat_small_eval.csv  
+      data/raw/few_nerd_nat_small_eval.csv 
       data/raw/few_nerd_nat_small_eval_cont.csv
     deps:
     - path: scripts/run_prepare_data_only.sh
@@ -2270,7 +2270,7 @@ stages:
       small 42 && cp -f src/clusterllm/datasets/few_event/small.jsonl 
       src/clusterllm/datasets/few_event/small_cont.jsonl && cp -f 
       data/raw/few_event_small_train.csv data/raw/few_event_small_train_cont.csv
-      && cp -f data/raw/few_event_small_eval.csv 
+      && cp -f data/raw/few_event_small_eval.csv  
       data/raw/few_event_small_eval_cont.csv
     deps:
     - path: scripts/run_prepare_data_only.sh
@@ -2280,8 +2280,8 @@ stages:
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 1c00330657dda0013d17d228afd53d95
-      size: 31020
+      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
+      size: 32539
     params:
       params.yaml:
         datasets.all:
@@ -2304,16 +2304,16 @@ stages:
     outs:
     - path: data/raw/few_event_small_eval_cont.csv
       hash: md5
-      md5: d7cf2012e7d360f6f6f65866156f9b6c
+      md5: 080dc47319c13e138cf966527385d170
       size: 1198427
     - path: data/raw/few_event_small_train_cont.csv
       hash: md5
-      md5: d7cf2012e7d360f6f6f65866156f9b6c
-      size: 1198427
+      md5: 4b98c4886c55475c79031f6a050a0882
+      size: 4824697
     - path: src/clusterllm/datasets/few_event/small_cont.jsonl
       hash: md5
-      md5: effa6f56a3f761459607a045be770fee
-      size: 2611036
+      md5: f27019021afb3cdb0360e2294bd11e56
+      size: 6558756
   full_pipeline_2llms_cont:
     cmd: bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh go_emotions
       small qwen2.5:3b llama3.3:70b-instruct-q2_K 42
