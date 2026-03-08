@@ -46,7 +46,8 @@ Clone the repo and install dependencies via Poetry or Docker:
 ```bash
 git clone https://github.com/gackouhamady/clusterllm-local.git
 cd clusterllm-local
-make install
+# First  install  Poetry , and   then :
+poetry install   #  install  the   dependancies  of  the  project
 
 ```
 
