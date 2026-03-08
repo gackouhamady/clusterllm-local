@@ -1581,13 +1581,13 @@ stages:
     deps:
     - path: scripts/run_prepare_data_only.sh
       hash: md5
-      md5: 928adcecc6406f0c69d58f628e6d94f0
-      size: 4358
+      md5: 5b9fce68accb254a75993b45c0b55c35
+      size: 1157
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
-      size: 32539
+      md5: 8039ac2a6f13112cb5f1bc7ef5ab8d2b
+      size: 45787
     params:
       params.yaml:
         datasets.all:
@@ -1618,8 +1618,8 @@ stages:
       size: 4455069
     - path: src/clusterllm/datasets/stackex/small_cont.jsonl
       hash: md5
-      md5: 321aa1c346ecb0b95add98a288d89ca3
-      size: 6109338
+      md5: d2d7f2e748293276e4d136b413d45c80
+      size: 468103
   prepare_small_cont@clinc_domain:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh clinc_domain 
       small 42 && cp -f src/clusterllm/datasets/clinc_domain/small.jsonl 
@@ -1730,13 +1730,13 @@ stages:
     deps:
     - path: scripts/run_prepare_data_only.sh
       hash: md5
-      md5: 928adcecc6406f0c69d58f628e6d94f0
-      size: 4358
+      md5: 5b9fce68accb254a75993b45c0b55c35
+      size: 1157
       isexec: true
     - path: src/data/prepare_data.py
       hash: md5
-      md5: 017f7b4dc441cbe22dc0aa65cc7d34f8
-      size: 32539
+      md5: 8039ac2a6f13112cb5f1bc7ef5ab8d2b
+      size: 45787
     params:
       params.yaml:
         datasets.all:
@@ -1767,8 +1767,8 @@ stages:
       size: 622547
     - path: src/clusterllm/datasets/bank77/small_cont.jsonl
       hash: md5
-      md5: cffc8b507b6768a8302a8c012a22ac55
-      size: 1100472
+      md5: 19776cf5605d671a02d5a9880a817f73
+      size: 252910
   prepare_small_cont@go_emotions:
     cmd: ALLOW_REMOTE_CODE=1 bash scripts/run_prepare_data_only.sh go_emotions 
       small 42 && cp -f src/clusterllm/datasets/go_emotions/small.jsonl 
@@ -2315,7 +2315,7 @@ stages:
       md5: f27019021afb3cdb0360e2294bd11e56
       size: 6558756
   full_pipeline_2llms_cont:
-    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh go_emotions
+    cmd: bash scripts/run_full_pipeline_one_dataset_two_llms_cont.sh stackex 
       small qwen2.5:3b llama3.3:70b-instruct-q2_K 42
     deps:
     - path: scripts/patch_get_embedding_safetensors.py
@@ -2326,10 +2326,10 @@ stages:
       hash: md5
       md5: 3cfb446f8d26e74fc50049f5ece759ff
       size: 22217
-    - path: src/clusterllm/datasets/go_emotions/small_cont.jsonl
+    - path: src/clusterllm/datasets/stackex/small_cont.jsonl
       hash: md5
-      md5: 913cafd352d39d2a249e5dd2f63f9f3c
-      size: 562629
+      md5: d2d7f2e748293276e4d136b413d45c80
+      size: 468103
     - path: src/clusterllm/granularity/predict_num_clusters_cont.py
       hash: md5
       md5: 898dbdcc5e72b9f9fb7721c7179f0a5e
@@ -2376,53 +2376,50 @@ stages:
       size: 8060
     params:
       params.yaml:
-        run2llms.dataset: go_emotions
+        run2llms.dataset: stackex
         run2llms.llm_pairs: llama3.3:70b-instruct-q2_K
         run2llms.llm_triplet: qwen2.5:3b
         run2llms.scale: small
         run2llms.seed: 42
     outs:
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/go_emotions/small/cluster_results_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/stackex/small/cluster_results_cont.json
       hash: md5
-      md5: e6d455d065a1de754684d2d856030271
-      size: 104950102
+      md5: fbd09d4c45b0e6fae5c4d5609424a93e
+      size: 50807488
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/go_emotions/small/num_clusters_cont.txt
+        runs_cont/artifacts_contrib_2llms_cont/stackex/small/num_clusters_cont.txt
       hash: md5
-      md5: aa01a9ec1055a91a8ef8b8f6e64d4c4d
-      size: 573
+      md5: dad299ad11e41a640979dcb9c69e58fd
+      size: 579
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/go_emotions/small/pred_pairs_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/stackex/small/pred_pairs_cont.json
       hash: md5
-      md5: bf2de034e4b94f17c4a034cb27795cce
-      size: 967550
+      md5: 03538eacd7bd9f82d1414352f1ca4a07
+      size: 1168262
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/go_emotions/small/pred_triplets_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/stackex/small/pred_triplets_cont.json
       hash: md5
-      md5: a03f4676421837956721550c50c7e48f
-      size: 1182904
+      md5: 721f00087ae6dd9951e0e1d2f25e40c3
+      size: 1003131
     - path: 
-        runs_cont/artifacts_contrib_2llms_cont/go_emotions/small/prompt_cont.json
+        runs_cont/artifacts_contrib_2llms_cont/stackex/small/prompt_cont.json
       hash: md5
-      md5: 3f5f4eb72fd44b5678723e32e5f41418
-      size: 30902
-    - path: 
-        runs_cont/artifacts_contrib_2llms_cont/go_emotions/small/train_cont.json
+      md5: 5bf95babf625b70e042aa401d77259d3
+      size: 31275
+    - path: runs_cont/artifacts_contrib_2llms_cont/stackex/small/train_cont.json
       hash: md5
-      md5: 4be86322d367342e7da9c7c4f789cc81
-      size: 36778
-    - path: 
-        runs_cont/summary/contrib_2llms_cont/go_emotions/small/summary_cont.json
+      md5: 9626d2719b5955755aec3b36d89a95ac
+      size: 6643978
+    - path: runs_cont/summary/contrib_2llms_cont/stackex/small/summary_cont.json
       hash: md5
-      md5: a37db675d44ef4612178785e6e37abb8
-      size: 1406
-    - path: src/clusterllm/datasets/go_emotions/small_embeds_contrib_cont.hdf5
+      md5: ea7dd7c10869ee6d469858106b09ed94
+      size: 1392
+    - path: src/clusterllm/datasets/stackex/small_embeds_contrib_cont.hdf5
       hash: md5
-      md5: 8c77f2aeab81758ddd1939815bb80f8b
-      size: 24332288
-    - path: 
-        src/clusterllm/datasets/go_emotions/small_embeds_ft_contrib_cont.hdf5
+      md5: 639fc7f4996ad06ab40f2fca98d9c633
+      size: 17025024
+    - path: src/clusterllm/datasets/stackex/small_embeds_ft_contrib_cont.hdf5
       hash: md5
-      md5: 3dc5bdf67ec1909e95eb5d16668e2354
-      size: 24332288
+      md5: c0499f16265211f333c46f67ea00a63d
+      size: 17025024
