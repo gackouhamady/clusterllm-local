@@ -52,6 +52,10 @@ instructorembedding = "^1.0.1"
 dvclive = "^3.49.0"
 pyopenssl = "^25.3.0"
 cryptography = "^46.0.5"
+jupyter = "^1.1.1"
+notebook = "^7.5.4"
+matplotlib = "^3.10.8"
+seaborn = "^0.13.2"
 
 
 [tool.poetry.group.dev.dependencies]

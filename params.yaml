@@ -1,13 +1,15 @@
 run:
-  dataset: bank77
-  scale: small
+  dataset: arxiv
+  scale: large
   llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 run2llms:
-  dataset: stackex
+  dataset: few_event
   scale: small
+  dataset: few_nerd_nat
+  scale: large
   llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
