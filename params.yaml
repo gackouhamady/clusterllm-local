@@ -6,7 +6,6 @@ run:
   seed: 42
 
 run2llms:
-  dataset: stackex
   dataset: few_event
   scale: small
   dataset: few_nerd_nat

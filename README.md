@@ -51,6 +51,14 @@ poetry install   #  install  the   dependancies  of  the  project
 
 ```
 
+- To  have  the   env  like  us  :  
+```bash
+git clone https://github.com/gackouhamady/clusterllm-local.git
+cd clusterllm-local
+docker build -f docker/Dockerfile -t clusterllm .
+docker run --rm clusterllm
+```
+
 ### 2. DVC
 
 #### Run first data pipelines   among  differentes configurations
@@ -188,21 +196,21 @@ poetry run dvc exp run full_pipeline_2llms_cont -S "run2llms.dataset=clinc_domai
 ```
 ##### full_pipeline_2llms (  Faithful  reproduction )  
 ```bash
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=bank77"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc150"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=massive_intent"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=massive_domain"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=mtop_intent"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=mtop_domain"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=go_emotions"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=reddit"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=stackex"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=arxiv"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_event"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_nerd_nat"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=few_rel_nat"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc_intent"
-poetry run dvc exp run full_pipeline_2llms -S "run2llms.dataset=clinc_domain"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=bank77"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=clinc150"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=massive_intent"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=massive_domain"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=mtop_intent"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=mtop_domain"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=go_emotions"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=reddit"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=stackex"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=arxiv"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=few_event"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=few_nerd_nat"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=few_rel_nat"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=clinc_intent"
+poetry run dvc exp run full_pipeline_2llms -S "run.dataset=clinc_domain"
 ```
 ---
 
