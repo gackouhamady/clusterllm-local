@@ -12,14 +12,6 @@ src.clusterllm.granularity.hierarchy.kmeans\_agglomerative module
    :undoc-members:
    :show-inheritance:
 
-src.clusterllm.granularity.hierarchy.kmeans\_agglomerative\_cont module
------------------------------------------------------------------------
-
-.. automodule:: src.clusterllm.granularity.hierarchy.kmeans_agglomerative_cont
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 src.clusterllm.granularity.hierarchy.setup module
 -------------------------------------------------
 

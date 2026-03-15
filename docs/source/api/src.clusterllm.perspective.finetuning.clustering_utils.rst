@@ -12,14 +12,6 @@ src.clusterllm.perspective.finetuning.clustering\_utils.evaluator module
    :undoc-members:
    :show-inheritance:
 
-src.clusterllm.perspective.finetuning.clustering\_utils.evaluator\_cont module
-------------------------------------------------------------------------------
-
-.. automodule:: src.clusterllm.perspective.finetuning.clustering_utils.evaluator_cont
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

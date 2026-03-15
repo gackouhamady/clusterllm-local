@@ -3,8 +3,20 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
+
+
 project = "ClusterLLM-Local"
 author = "Hamady Gackou"
+
+
+# Mocker les imports problématiques pour que Sphinx ne crashe pas en lisant le code
+autodoc_mock_imports = [
+    "tools",
+    "clustering_utils",
+    "e5_utils",
+    "hierarchy",
+    "transformers",  # Évite l'erreur transformers.utils
+]
 
 extensions = [
     "sphinx.ext.autodoc",

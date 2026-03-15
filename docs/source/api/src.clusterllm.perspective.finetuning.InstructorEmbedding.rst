@@ -12,14 +12,6 @@ src.clusterllm.perspective.finetuning.InstructorEmbedding.instructor module
    :undoc-members:
    :show-inheritance:
 
-src.clusterllm.perspective.finetuning.InstructorEmbedding.instructor\_cont module
----------------------------------------------------------------------------------
-
-.. automodule:: src.clusterllm.perspective.finetuning.InstructorEmbedding.instructor_cont
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
