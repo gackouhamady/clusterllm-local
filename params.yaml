@@ -1,12 +1,20 @@
 run:
   dataset: arxiv
+<<<<<<< HEAD
+  scale: small
+=======
   scale: large
+>>>>>>> main
   llm_triplet: qwen2.5:3b
   llm_pairs: llama3.3:70b-instruct-q2_K
   seed: 42
 
 run2llms:
+<<<<<<< HEAD
+  dataset: stackex
+=======
   dataset: few_event
+>>>>>>> main
   scale: small
   dataset: few_nerd_nat
   scale: large

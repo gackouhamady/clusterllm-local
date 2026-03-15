@@ -1,6 +1,8 @@
 # ==========================================
 # 1. Python, OS & Environnement
 # ==========================================
+
+.ipynb_checkpoints/
 __pycache__/
 *.py[cod]
 *.pyd
