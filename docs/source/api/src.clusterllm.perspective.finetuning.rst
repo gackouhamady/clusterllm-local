@@ -37,14 +37,6 @@ src.clusterllm.perspective.finetuning.finetune\_e5 module
    :undoc-members:
    :show-inheritance:
 
-src.clusterllm.perspective.finetuning.get\_embedding module
------------------------------------------------------------
-
-.. automodule:: src.clusterllm.perspective.finetuning.get_embedding
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
